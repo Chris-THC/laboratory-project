@@ -6,17 +6,19 @@ An Electron application with React and TypeScript
 
 - [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 
-### Instalar NODE
+### Instalar Node JS
 
 ### Ubuntu
-Si tienes instalado node js en tu sistema desinstálalo puede ser una versión obsoleta:
+Si tienes instalado node js en tu sistema desinstálalo puede ser una versión obsoleta
 
 ```bash
 $ sudo apt remove nodejs
 ```
 Después de haber desinstalado node
+
 Abrir otra terminal (Importante)
-*Aquí no es necesario entrar como super usuario, ya que, si entrar como super usuario por alguna razón solo puedes usar node como usuario root, lo cual causa problemas, (me paso).
+
+*Aquí no es necesario entrar como super usuario, ya que, si entrar como super usuario por alguna razón solo puedes usar node como usuario root, lo cual causa problemas, (me paso)
 
 Tipear los siguientes comandos:
 Instalar NVM (Node Version Manager) en Ubuntu
@@ -32,8 +34,9 @@ Verifica que se haya instalado:
 $ nvm --version
 ```
 
-##Instalar Node.js 20.11.1 con nvm 
-Una vez que nvm esté instalado, puedes instalar la versión deseada de Node.js. Ejecuta los siguientes comandos en la terminal:
+## Instalar Node.js 20.11.1 con nvm 
+
+Una vez que nvm esté instalado, puedes instalar la versión deseada de Node.js. Ejecuta los siguientes comandos en la terminal
 
 ```bash
 $ nvm install 20.11.1
@@ -44,15 +47,25 @@ Asigna como la versión predeterminada para futuras sesiones con:
 $ nvm alias default 20.11.1
 ```
 
-Una vez tenido instalado y actualizado node
+## Windows 
 
-## Instalar Globalmente Electron
+Solo entrar a la página de 
+- [Node JS](https://nodejs.org/en)
+
+Descargar el instalador en la versión 20.11.1 LTS , dar siguiente y listo.
+
+
+Una vez tenido instalado y actualizado Node Js tanto en Ubuntu y Windows seguir los siguientes pasos
+
+
+## Instalar Globalmente Electron (Ubuntu/Windows)
 
 *En una nueva terminal
 
 ```bash
 $ npm install -g electron 
 ```
+
 
 
 ## Hora solo clona el repositorio y sigue los siguientes pasos
