@@ -13,8 +13,11 @@ import { Button } from '@/components/ui/button'
 import LogoImage from '../../assets/img/logo.png'
 
 import { UserPlus } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 export const NavBar: React.FC = () => {
+  const navigateTo = useNavigate()
+
   return (
     <div className="bg-slate-900 h-16 flex justify-between px-5">
       <div className="flex flex-row justify-between align-middle">
@@ -22,7 +25,14 @@ export const NavBar: React.FC = () => {
           <img src={LogoImage} alt="logo" className="w-12 h-12 m-1" />
         </div>
         <div className="flex flex-col justify-center align-middle  ml-8">
-          <h1 className="text-white font-bold text-2xl font-inter">LABORATORIO “ELISA”</h1>
+          <h1
+            onClick={() => {
+              navigateTo('/')
+            }}
+            className="text-white font-bold text-2xl font-inter cursor-pointer"
+          >
+            LABORATORIO “ELISA”
+          </h1>
         </div>
       </div>
       <div className="flex flex-row justify-center align-middle mr-1">
@@ -31,13 +41,15 @@ export const NavBar: React.FC = () => {
             <li>
               <Menubar className="bg-inherit border-none">
                 <MenubarMenu>
-                  <MenubarTrigger className="text-white font-semibold text-sm bg-transparent border-none font-inter">
+                  <MenubarTrigger className="text-white font-semibold text-sm bg-transparent border-none font-inter cursor-pointer">
                     Clentes
                   </MenubarTrigger>
                   <MenubarContent>
-                    <MenubarItem className="font-inter">Nuevo Cliente</MenubarItem>
+                    <MenubarItem className="font-inter cursor-pointer	">Nuevo Cliente</MenubarItem>
                     <MenubarSeparator />
-                    <MenubarItem className="font-inter">Lista de Cliente</MenubarItem>
+                    <MenubarItem className="font-inter cursor-pointer	">
+                      Lista de Cliente
+                    </MenubarItem>
                   </MenubarContent>
                 </MenubarMenu>
               </Menubar>
@@ -45,11 +57,11 @@ export const NavBar: React.FC = () => {
             <li>
               <Menubar className="bg-inherit border-none">
                 <MenubarMenu>
-                  <MenubarTrigger className="text-white font-semibold text-sm bg-transparent border-none font-inter">
+                  <MenubarTrigger className="text-white font-semibold text-sm bg-transparent border-none font-inter cursor-pointer">
                     Más Opciones
                   </MenubarTrigger>
                   <MenubarContent>
-                    <MenubarItem className="font-inter">Caja</MenubarItem>
+                    <MenubarItem className="font-inter cursor-pointer	">Caja</MenubarItem>
                   </MenubarContent>
                 </MenubarMenu>
               </Menubar>

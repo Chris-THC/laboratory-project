@@ -17,17 +17,18 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export const UserDropMenu: React.FC = () => {
+  const navigateTo = useNavigate()
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar>
+        <Avatar className="cursor-pointer">
           <AvatarImage src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F0a%2F42%2F4c%2F0a424cdfc9f93b5685ecd711e6591446.jpg&f=1&nofb=1&ipt=041a80d49f56cf00307a4b00dc96d0af1aa4e180c7cfb0cd771ae126bbff07ac&ipo=images" />
           <AvatarFallback>CR</AvatarFallback>
         </Avatar>
-
-        {/* <Button variant="outline">Open</Button> */}
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 mx-2">
         <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
@@ -50,7 +51,11 @@ export const UserDropMenu: React.FC = () => {
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    navigateTo('/add/user')
+                  }}
+                >
                   <UserPlus className="mr-2 h-4 w-4" />
                   <span>Agregar</span>
                 </DropdownMenuItem>
