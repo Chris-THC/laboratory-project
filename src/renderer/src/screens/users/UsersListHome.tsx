@@ -21,7 +21,7 @@ import { MoreHorizontal, UserPlus } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 export const UsersListHome = (): JSX.Element => {
-  const { data, isLoading } = useGetAllUsers()
+  const { data, isLoading, isError } = useGetAllUsers()
   const navigateTo = useNavigate()
   const onCreateNewUser = (): void => {
     navigateTo('/users/create')
@@ -33,11 +33,17 @@ export const UsersListHome = (): JSX.Element => {
         <h1>Is loading...</h1>
       </div>
     )
+  } else if (isError) {
+    return (
+      <div>
+        <h1>Hya un error xd</h1>
+      </div>
+    )
   }
 
   return (
     <div>
-      <div className="m-9 flex flex-row justify-around">
+      <div className="mt-9 mx-9 mb-3 flex flex-row justify-around">
         <div>
           <h2 className="text-2xl font-inter font-bold">USUARIOS REGISTRADOS EN EL SISTEMA</h2>
         </div>
@@ -48,6 +54,9 @@ export const UsersListHome = (): JSX.Element => {
           </Button>
         </div>
       </div>
+
+      <hr />
+
       {!data ? (
         <div></div>
       ) : (
