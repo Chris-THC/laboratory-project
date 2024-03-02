@@ -164,7 +164,7 @@ export const AddNewUser: React.FC = () => {
                   variant={'destructive'}
                   type="button"
                   onClick={() => {
-                    navigateTo('/')
+                    navigateTo('/users')
                   }}
                 >
                   Cancelar

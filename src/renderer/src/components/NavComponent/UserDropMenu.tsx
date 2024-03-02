@@ -1,4 +1,4 @@
-import { LogOut, User, UserCog, UserPlus, UserX } from 'lucide-react'
+import { LogOut, User, UserPlus } from 'lucide-react'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
@@ -8,11 +8,9 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuPortal,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuSub,
-  DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
@@ -45,31 +43,14 @@ export const UserDropMenu: React.FC = () => {
 
         <DropdownMenuGroup>
           <DropdownMenuSub>
-            <DropdownMenuSubTrigger>
+            <DropdownMenuSubTrigger
+              onClick={() => {
+                navigateTo('/users')
+              }}
+            >
               <UserPlus className="mr-2 h-4 w-4" />
-              <span>Agregar Usuario</span>
+              <span>Gestionar Usuarios</span>
             </DropdownMenuSubTrigger>
-            <DropdownMenuPortal>
-              <DropdownMenuSubContent>
-                <DropdownMenuItem
-                  onClick={() => {
-                    navigateTo('/add/user')
-                  }}
-                >
-                  <UserPlus className="mr-2 h-4 w-4" />
-                  <span>Agregar</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <UserCog className="mr-2 h-4 w-4" />
-                  <span>Editar</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <UserX className="mr-2 h-4 w-4" />
-                  <span>Eliminar</span>
-                </DropdownMenuItem>
-              </DropdownMenuSubContent>
-            </DropdownMenuPortal>
           </DropdownMenuSub>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
