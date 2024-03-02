@@ -102,7 +102,7 @@ export const AddNewUser: React.FC = () => {
       >
         Agregar nuevo usuario
       </Label>
-      <div className="flex justify-center align-middle m-3 ">
+      <div className="flex justify-center align-middle m-3">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
             <div>
@@ -130,13 +130,13 @@ export const AddNewUser: React.FC = () => {
               })}
             </div>
 
-            <div>
+            <div className="mx-2">
               <FormField
                 control={form.control}
                 name="role"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>Rol del usuario</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
