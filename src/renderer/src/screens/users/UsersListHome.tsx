@@ -1,12 +1,4 @@
 import { Button } from '@/components/ui/button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
 import { Separator } from '@/components/ui/separator'
 import {
   Table,
@@ -18,11 +10,14 @@ import {
 } from '@/components/ui/table'
 import { useUserIdSelected } from '@renderer/context/userContext/UserContext'
 import { useGetAllUsers } from '@renderer/hooks/res/usersRes/UseUsersAPI'
-import { MoreHorizontal, UserPlus } from 'lucide-react'
+import { UserCog, UserPlus } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { DelateUserModal } from './DeleteUser'
 
 export const UsersListHome = (): JSX.Element => {
   const { data, isLoading } = useGetAllUsers()
+  const { setUserObjectInfo, setIsCreate } = useUserIdSelected()
+
   const navigateTo = useNavigate()
   const onCreateNewUser = (): void => {
     navigateTo('/users/form')
@@ -79,29 +74,26 @@ export const UsersListHome = (): JSX.Element => {
                     <TableCell className="text-center m-0 p-2">{userInfo.address}</TableCell>
                     <TableCell className="text-center m-0 p-2">{userInfo.role}</TableCell>
                     <TableCell className="flex justify-center items-center m-0 p-2">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" className="h-8 w-8 p-0">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>Opciones</DropdownMenuLabel>
-                          <DropdownMenuItem
-                            onClick={() => {
-                              const { setIdUser } = useUserIdSelected()
+                      <Button
+                        className="bg-cyan-600 mr-1"
+                        onClick={() => {
+                          setIsCreate(false)
+                          setUserObjectInfo(userInfo)
+                          navigateTo('/users/form')
+                        }}
+                      >
+                        <UserCog />
+                      </Button>
 
-                              setIdUser(userInfo.idUser ? userInfo.idUser : -1)
-
-                              navigateTo('/users/form')
-                            }}
-                          >
-                            Editar
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem>Eliminar</DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                      <Button
+                        onClick={() => {
+                          setUserObjectInfo(userInfo)
+                        }}
+                        className="p-0 m-0"
+                        variant={'destructive'}
+                      >
+                        <DelateUserModal />
+                      </Button>
                     </TableCell>
                   </TableRow>
                 )

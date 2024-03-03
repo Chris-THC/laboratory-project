@@ -1,13 +1,13 @@
 import { UsersInterface } from '@renderer/interfaces/users/user'
 import {
   UseMutationResult,
-  useQuery,
   UseQueryResult,
-  useQueryClient,
-  useMutation
+  useMutation,
+  useQuery,
+  useQueryClient
 } from '@tanstack/react-query'
 import apiConection from '../../../api/ConnectionAPI'
-import { useUserIdSelected } from '@renderer/context/userContext/UserContext'
+import { HttpStatusCode } from 'axios'
 
 //Here we get all users list data
 const getAllUsersFromApi = async (): Promise<UsersInterface[]> => {
@@ -23,18 +23,19 @@ export const useGetAllUsers = (): UseQueryResult<UsersInterface[]> => {
 }
 
 // TODO: Get user by id
-const getUsersById = async (): Promise<UsersInterface> => {
-  const { idUser } = useUserIdSelected()
-  const { data } = await apiConection.get<UsersInterface>(`/user/${idUser}`)
-  return data
-}
+// const getUsersById = async (idUser: number): Promise<UsersInterface> => {
+//   const { data } = await apiConection.get<UsersInterface>(`/user/${idUser}`)
+//   return data
+// }
 
-export const useGetuserById = (): UseQueryResult<UsersInterface> => {
-  return useQuery({
-    queryKey: ['userById'],
-    queryFn: getUsersById
-  })
-}
+// export const useGetuserById = (idUser: number): UseQueryResult<UsersInterface> => {
+//   return useQuery({
+//     queryKey: ['userById'],
+//     queryFn: () => {
+//       return getUsersById(idUser)
+//     }
+//   })
+// }
 
 // TODO: Create a new user
 export const postNewUser = async (newUserInfo: UsersInterface): Promise<UsersInterface> => {
@@ -59,21 +60,34 @@ export const useCreateNewUser = (): UseMutationResult<
 }
 
 //TODO: Update user
-const updateUerById = async (userInfo: UsersInterface): Promise<UsersInterface> => {
-  const { idUser } = useUserIdSelected()
-  const { data } = await apiConection.patch<UsersInterface>(`/user/${idUser}`, userInfo)
+export const useUpdateUserById = (): UseMutationResult<UsersInterface, Error,{ userInfo: UsersInterface; idUser: number },unknown> => {
+  const queryClient = useQueryClient()
+  const updateUser = async ({ userInfo, idUser }: { userInfo: UsersInterface; idUser: number }):Promise<UsersInterface> => {
+    const { data } = await apiConection.patch<UsersInterface>(`/user/${idUser}`, userInfo)
+    return data
+  }
+
+  return useMutation({
+    mutationFn: (variables: { userInfo: UsersInterface; idUser: number }) => updateUser(variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries('userInfoAPI')
+    },
+    onError: () => {
+      alert("Hay un error")
+    }
+  })
+}
+
+//TODO: Delete user
+export const deletUserFuntion = async (idUser: number): Promise<HttpStatusCode> => {
+  const { data } = await apiConection.delete<HttpStatusCode>(`/user/${idUser}`)
   return data
 }
 
-export const useUpdateTasksByuseUsers = (): UseMutationResult<
-  UsersInterface,
-  Error,
-  UsersInterface,
-  unknown
-> => {
+export const useDelateUser = (): UseMutationResult<HttpStatusCode, Error, number, unknown> => {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: updateUerById,
+    mutationFn: deletUserFuntion,
     onSuccess: () => {
       queryClient.invalidateQueries('userInfoAPI')
     }

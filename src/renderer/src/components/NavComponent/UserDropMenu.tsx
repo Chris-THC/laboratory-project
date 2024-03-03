@@ -14,9 +14,11 @@ import {
 } from '@/components/ui/dropdown-menu'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useUserIdSelected } from '@renderer/context/userContext/UserContext'
 
 export const UserDropMenu: React.FC = () => {
   const navigateTo = useNavigate()
+  const { setIsCreate } = useUserIdSelected()
 
   return (
     <DropdownMenu>
@@ -42,6 +44,7 @@ export const UserDropMenu: React.FC = () => {
         <DropdownMenuGroup>
           <DropdownMenuItem
             onClick={() => {
+              setIsCreate(true)
               navigateTo('/users')
             }}
           >

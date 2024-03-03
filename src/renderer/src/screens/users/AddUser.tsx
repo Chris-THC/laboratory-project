@@ -1,20 +1,19 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
+import React from 'react'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
-  FormDescription
+  FormLabel
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import {
   Select,
   SelectContent,
@@ -22,11 +21,13 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import { useUserIdSelected } from '@renderer/context/userContext/UserContext'
+import { useCreateNewUser, useUpdateUserById } from '@renderer/hooks/res/usersRes/UseUsersAPI'
 import { UsersInterface } from '@renderer/interfaces/users/user'
-import { useCreateNewUser } from '@renderer/hooks/res/usersRes/UseUsersAPI'
 
 const FormSchema = z.object({
   name: z.string().min(2, {
@@ -57,21 +58,32 @@ const FormSchema = z.object({
 
 export const AddUser: React.FC = () => {
   const navigateTo = useNavigate()
-  const { mutate } = useCreateNewUser()
+  const creteNewUser = useCreateNewUser()
+  const { userObjectInfo, isCreate, setIsCreate } = useUserIdSelected()
+  const updateUser = useUpdateUserById()
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
-      name: '',
-      age: '',
-      phoneNumber: '',
-      address: '',
-      password: ''
-    }
+    defaultValues: !userObjectInfo
+      ? {
+          name: '',
+          age: '',
+          phoneNumber: '',
+          address: '',
+          password: ''
+        }
+      : {
+          name: userObjectInfo.name,
+          age: userObjectInfo.age.toString(),
+          phoneNumber: userObjectInfo.phoneNumber,
+          address: userObjectInfo.address,
+          password: '',
+          role: userObjectInfo.role.toString() === 'Admin' ? '0' : '1'
+        }
   })
 
   const onSubmit = (data: z.infer<typeof FormSchema>): void => {
-    const createNewUser: UsersInterface = {
+    const infoUser: UsersInterface = {
       name: data.name,
       age: parseInt(data.age),
       phoneNumber: data.phoneNumber,
@@ -79,9 +91,19 @@ export const AddUser: React.FC = () => {
       password: data.password,
       role: parseInt(data.role)
     }
-    // TODO: Add a new user
-    mutate(createNewUser)
-    console.log(createNewUser)
+
+    // Todo: Create a new User
+    if (isCreate === true) {
+      creteNewUser.mutate(infoUser)
+      setIsCreate(!isCreate)
+    } else {
+    // Todo: Editar a un usuario
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const UserId: any = userObjectInfo?.idUser
+      updateUser.mutate({ userInfo: infoUser, idUser: UserId })
+      setIsCreate(!isCreate)
+    }
+
     navigateTo('/users')
   }
 
@@ -191,7 +213,10 @@ export const AddUser: React.FC = () => {
               render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel>Rol del usuario</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value === 'Admin' ? '0' : '1'}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Selecciona el rol del usuario" />
@@ -213,7 +238,7 @@ export const AddUser: React.FC = () => {
 
             <div className="flex flex-row justify-center align-middle">
               <div className="mx-3">
-                <Button type="submit">Agregar</Button>
+                <Button type="submit">{!userObjectInfo ? 'Agregar' : 'Editar'}</Button>
               </div>
               <div className="mx-3">
                 <Button

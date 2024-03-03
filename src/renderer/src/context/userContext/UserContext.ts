@@ -1,14 +1,24 @@
+import { UsersInterface } from '@renderer/interfaces/users/user'
 import { create } from 'zustand'
 
 interface UserSelectedById {
-  idUser?: number | null | undefined
-  setIdUser: (idUser: number) => void
+  isCreate: boolean
+  setIsCreate: (isCreate: boolean) => void
+  userObjectInfo?: UsersInterface | null
+  setUserObjectInfo: (user: UsersInterface) => void
 }
 
 export const useUserIdSelected = create<UserSelectedById>((set) => ({
-  idUser: 0,
-  setIdUser: (idUserProp: number): void =>
+  isCreate: true,
+  setIsCreate: (isCreate: boolean): void =>
     set(() => ({
-      idUser: idUserProp
+      isCreate: isCreate
+    })),
+
+  userObjectInfo: null,
+  setUserObjectInfo: (user: UsersInterface): void => {
+    return set(() => ({
+      userObjectInfo: user
     }))
+  }
 }))
