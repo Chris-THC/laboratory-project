@@ -3,8 +3,8 @@ import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { UserAdmin } from '../clients/UserAdmin'
 import { UserEmployee } from '../clients/UserEmployee'
+import { AddUser } from '../users/AddUser'
 import { UsersListHome } from '../users/UsersListHome'
-import { AddNewUser } from '../users/AddNewUser'
 
 export const HomeScreen: React.FC = () => {
   return (
@@ -14,7 +14,7 @@ export const HomeScreen: React.FC = () => {
         <Route path="/" element={<UserAdmin />} />
         <Route path="/employee" element={<UserEmployee />} />
         <Route path="/users" element={<UsersListHome />} />
-        <Route path="/users/create" element={<AddNewUser />} />
+        <Route path="/users/form" element={<AddUser />} />
 
         {/* Here you can add new screens */}
         {/* <Route path="/add/task" element={<AddTask />} /> */}

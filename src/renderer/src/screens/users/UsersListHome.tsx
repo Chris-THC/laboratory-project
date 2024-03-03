@@ -1,15 +1,5 @@
 import { Button } from '@/components/ui/button'
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from '@/components/ui/table'
-import { useGetAllUsers } from '@renderer/hooks/res/usersRes/UseUsersAPI'
-// import { useUpdateTasksByuseUsers } from '@renderer/hooks/useUpdate'
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -17,26 +7,31 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
+import { Separator } from '@/components/ui/separator'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from '@/components/ui/table'
+import { useUserIdSelected } from '@renderer/context/userContext/UserContext'
+import { useGetAllUsers } from '@renderer/hooks/res/usersRes/UseUsersAPI'
 import { MoreHorizontal, UserPlus } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 export const UsersListHome = (): JSX.Element => {
-  const { data, isLoading, isError } = useGetAllUsers()
+  const { data, isLoading } = useGetAllUsers()
   const navigateTo = useNavigate()
   const onCreateNewUser = (): void => {
-    navigateTo('/users/create')
+    navigateTo('/users/form')
   }
 
   if (isLoading) {
     return (
       <div>
         <h1>Is loading...</h1>
-      </div>
-    )
-  } else if (isError) {
-    return (
-      <div>
-        <h1>Hya un error xd</h1>
       </div>
     )
   }
@@ -55,7 +50,7 @@ export const UsersListHome = (): JSX.Element => {
         </div>
       </div>
 
-      <hr />
+      <Separator />
 
       {!data ? (
         <div></div>
@@ -92,7 +87,17 @@ export const UsersListHome = (): JSX.Element => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel>Opciones</DropdownMenuLabel>
-                          <DropdownMenuItem>Editar</DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => {
+                              const { setIdUser } = useUserIdSelected()
+
+                              setIdUser(userInfo.idUser ? userInfo.idUser : -1)
+
+                              navigateTo('/users/form')
+                            }}
+                          >
+                            Editar
+                          </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem>Eliminar</DropdownMenuItem>
                         </DropdownMenuContent>
