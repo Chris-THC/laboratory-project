@@ -97,8 +97,8 @@ export const AddUser: React.FC = () => {
       creteNewUser.mutate(infoUser)
       setIsCreate(!isCreate)
     } else {
-    // Todo: Editar a un usuario
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // Todo: Editar a un usuario
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const UserId: any = userObjectInfo?.idUser
       updateUser.mutate({ userInfo: infoUser, idUser: UserId })
       setIsCreate(!isCreate)
@@ -110,7 +110,9 @@ export const AddUser: React.FC = () => {
   return (
     <Card className="mx-40 my-10">
       <CardHeader className="flex flex-col justify-center align-middle">
-        <CardTitle className="text-center">Agregar nuevo usuario</CardTitle>
+        <CardTitle className="text-center">
+          {!userObjectInfo ? 'Agregar Nuevo Usuario' : 'Editar Usuario'}
+        </CardTitle>
         <Separator />
       </CardHeader>
 
