@@ -2,7 +2,7 @@ export interface ClientsInterface {
     idClient?: number | undefined | null
     name: string
     age: number
-    dateOfBirth: date
+    dateOfBirth?: string
     phoneNumber: string
     address: string
     doctor:string
