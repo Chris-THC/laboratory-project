@@ -6,8 +6,21 @@ import {
   useQuery,
   useQueryClient
 } from '@tanstack/react-query'
-import apiConection from '../../../api/ConnectionAPI'
 import { HttpStatusCode } from 'axios'
+import toast from 'react-hot-toast'
+import apiConection from '../../../api/ConnectionAPI'
+
+const notifyCreatedSucces = (): string => {
+  return toast.success('Usuario agregado exitosamente!')
+}
+
+const notifyUpdatedSucces = (): string => {
+  return toast.success('Usuario editado exitosamente!')
+}
+
+const notifyDeleteSucces = (): string => {
+  return toast.error('Usuario eliminado')
+}
 
 //Here we get all users list data
 const getAllUsersFromApi = async (): Promise<UsersInterface[]> => {
@@ -55,14 +68,29 @@ export const useCreateNewUser = (): UseMutationResult<
     mutationFn: postNewUser,
     onSuccess: () => {
       queryClient.invalidateQueries('userInfoAPI')
+      notifyCreatedSucces()
+    },
+    onError: () => {
+      toast.error('No se pudo crear al usuario')
     }
   })
 }
 
 //TODO: Update user
-export const useUpdateUserById = (): UseMutationResult<UsersInterface, Error,{ userInfo: UsersInterface; idUser: number },unknown> => {
+export const useUpdateUserById = (): UseMutationResult<
+  UsersInterface,
+  Error,
+  { userInfo: UsersInterface; idUser: number },
+  unknown
+> => {
   const queryClient = useQueryClient()
-  const updateUser = async ({ userInfo, idUser }: { userInfo: UsersInterface; idUser: number }):Promise<UsersInterface> => {
+  const updateUser = async ({
+    userInfo,
+    idUser
+  }: {
+    userInfo: UsersInterface
+    idUser: number
+  }): Promise<UsersInterface> => {
     const { data } = await apiConection.patch<UsersInterface>(`/user/${idUser}`, userInfo)
     return data
   }
@@ -70,10 +98,11 @@ export const useUpdateUserById = (): UseMutationResult<UsersInterface, Error,{ u
   return useMutation({
     mutationFn: (variables: { userInfo: UsersInterface; idUser: number }) => updateUser(variables),
     onSuccess: () => {
-      queryClient.invalidateQueries('userInfoAPI')
+      queryClient.invalidateQueries('userInfoAPI');
+      notifyUpdatedSucces()
     },
     onError: () => {
-      alert("Hay un error")
+      toast.error('No se pudo actualizar al usuario')
     }
   })
 }
@@ -89,7 +118,11 @@ export const useDelateUser = (): UseMutationResult<HttpStatusCode, Error, number
   return useMutation({
     mutationFn: deletUserFuntion,
     onSuccess: () => {
-      queryClient.invalidateQueries('userInfoAPI')
+      queryClient.invalidateQueries('userInfoAPI');
+      notifyDeleteSucces()
+    },
+    onError: () => {
+      toast.error('No se pudo eliminar al usuario')
     }
   })
 }
