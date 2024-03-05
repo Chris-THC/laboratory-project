@@ -13,6 +13,7 @@ import { useGetAllUsers } from '@renderer/hooks/res/usersRes/UseUsersAPI'
 import { UserCog, UserPlus } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { DelateUserModal } from './DeleteUser'
+import { Toaster } from 'react-hot-toast'
 
 export const UsersListHome = (): JSX.Element => {
   const { data, isLoading } = useGetAllUsers()
@@ -100,6 +101,7 @@ export const UsersListHome = (): JSX.Element => {
               })}
             </TableBody>
           </Table>
+          <Toaster />
         </div>
       )}
     </div>
