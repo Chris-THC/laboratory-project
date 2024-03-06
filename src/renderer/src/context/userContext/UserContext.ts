@@ -5,7 +5,7 @@ interface UserSelectedById {
   isCreate: boolean
   setIsCreate: (isCreate: boolean) => void
   userObjectInfo?: UsersInterface | null
-  setUserObjectInfo: (user: UsersInterface) => void
+  setUserObjectInfo: (user: UsersInterface | null) => void
 }
 
 export const useUserIdSelected = create<UserSelectedById>((set) => ({
@@ -16,7 +16,7 @@ export const useUserIdSelected = create<UserSelectedById>((set) => ({
     })),
 
   userObjectInfo: null,
-  setUserObjectInfo: (user: UsersInterface): void => {
+  setUserObjectInfo: (user: UsersInterface | null): void => {
     return set(() => ({
       userObjectInfo: user
     }))
