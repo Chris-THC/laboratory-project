@@ -104,31 +104,38 @@ export const AddUser: React.FC = () => {
           age: userObjectInfo.age.toString(),
           phoneNumber: userObjectInfo.phoneNumber,
           address: userObjectInfo.address,
-          password: '',
+          password: userObjectInfo.address,
           role: userObjectInfo.role.toString() === 'Admin' ? '0' : '1'
         },
     mode: 'all'
   })
 
   const onSubmit = (data: z.infer<typeof FormSchema>): void => {
-    const infoUser: UsersInterface = {
-      name: data.name,
-      age: parseInt(data.age),
-      phoneNumber: data.phoneNumber,
-      address: data.address,
-      password: data.password,
-      role: parseInt(data.role)
-    }
-
     // Todo: Create a new User
     if (isCreate === true) {
-      creteNewUser.mutate(infoUser)
+      const infoUserCreate: UsersInterface = {
+        name: data.name,
+        age: parseInt(data.age),
+        phoneNumber: data.phoneNumber,
+        address: data.address,
+        password: data.password,
+        role: parseInt(data.role)
+      }
+      creteNewUser.mutate(infoUserCreate)
       setIsCreate(!isCreate)
     } else {
       // Todo: Editar a un usuario
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const UserId: any = userObjectInfo?.idUser
-      updateUser.mutate({ userInfo: infoUser, idUser: UserId })
+      const infoUserUpdate: UsersInterface = {
+        name: data.name,
+        age: parseInt(data.age),
+        phoneNumber: data.phoneNumber,
+        address: data.address,
+        role: parseInt(data.role)
+      }
+
+      updateUser.mutate({ userInfo: infoUserUpdate, idUser: UserId })
       setIsCreate(!isCreate)
     }
     setUserObjectInfo(null)
@@ -219,23 +226,29 @@ export const AddUser: React.FC = () => {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>Contrseña</FormLabel>
-                  <FormControl>
-                    <Input type="password" placeholder="Agrega una contraseña" {...field} />
-                  </FormControl>
-                  {fieldState.error && (
-                    <FormDescription className="text-red-500">
-                      {fieldState.error.message}
-                    </FormDescription>
+            <div>
+              {!isCreate ? (
+                <div></div>
+              ) : (
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field, fieldState }) => (
+                    <FormItem>
+                      <FormLabel>Contrseña</FormLabel>
+                      <FormControl>
+                        <Input type="password" placeholder="Agrega una contraseña" {...field} />
+                      </FormControl>
+                      {fieldState.error && (
+                        <FormDescription className="text-red-500">
+                          {fieldState.error.message}
+                        </FormDescription>
+                      )}
+                    </FormItem>
                   )}
-                </FormItem>
+                />
               )}
-            />
+            </div>
 
             <FormField
               control={form.control}
@@ -269,7 +282,9 @@ export const AddUser: React.FC = () => {
 
             <div className="flex flex-row justify-center align-middle">
               <div className="mx-3">
-                <Button variant={'default'} className='bg-sky-600' type="submit">{!userObjectInfo ? 'Agregar' : 'Editar'}</Button>
+                <Button variant={'default'} className="bg-sky-600" type="submit">
+                  {!userObjectInfo ? 'Agregar' : 'Editar'}
+                </Button>
               </div>
               <div className="mx-3">
                 <Button

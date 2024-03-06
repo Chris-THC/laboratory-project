@@ -1,14 +1,13 @@
 import axios from 'axios'
 const urlAPI: string = 'http://localhost:8081/lab'
-//TODO: se usara cuando spring security este listo
-// const jwtToken: string =
-//   'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpc3JhQGdtYWlsLmNvbSIsImlhdCI6MTcwODgzMTM4NCwiZXhwIjoxNzA4ODQ5Mzg0fQ.SwG4wdapd6-GmwxKS7bnycnrWWDeFIcvVP5UgFOt0gs'
+
+const jwtToken: string =
+  'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJKdWFuIExvcGV6IEhlcm5hbmRleiIsImlkVXNlciI6MiwidXNlck5hbWUiOiJKdWFuIExvcGV6IEhlcm5hbmRleiIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTcwOTc0OTg1NiwiZXhwIjoxNzA5NzUxMjk2fQ.SOK_F3bUtlBPLvkt-fTwoJdLEBo-1Dp3RHDXhL1lG7g'
 
 const api = axios.create({
   baseURL: urlAPI,
   headers: {
-    //TODO: se usara cuando spring security este listo
-    //   Authorization: `Bearer ${jwtToken}`,
+    Authorization: `Bearer ${jwtToken}`,
     'Content-Type': 'application/json'
   }
 })

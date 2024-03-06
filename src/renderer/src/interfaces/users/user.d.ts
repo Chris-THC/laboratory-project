@@ -4,6 +4,6 @@ export interface UsersInterface {
   age: number
   phoneNumber: string
   address: string
-  password: string
+  password?: string
   role: number
 }

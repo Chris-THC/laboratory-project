@@ -70,11 +70,11 @@ export const UsersListHome = (): JSX.Element => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="text-center w-[180px]">Nombre</TableHead>
+                <TableHead className="text-center w-[220px]">Nombre</TableHead>
                 <TableHead className="text-center max-w-[50px]">Edad</TableHead>
                 <TableHead className="text-center min-w-[60px]">Teléfono</TableHead>
                 <TableHead className="text-center min-w-[200px]">Direccion</TableHead>
-                <TableHead className="text-center max-w-[50px]">Rol</TableHead>
+                <TableHead className="text-center max-w-[40px]">Rol</TableHead>
                 <TableHead className="text-center">Acciones</TableHead>
               </TableRow>
             </TableHeader>
