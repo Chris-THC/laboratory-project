@@ -21,6 +21,8 @@ export const UsersListHome = (): JSX.Element => {
 
   const navigateTo = useNavigate()
   const onCreateNewUser = (): void => {
+    setIsCreate(true)
+    setUserObjectInfo(null)
     navigateTo('/users/form')
   }
 

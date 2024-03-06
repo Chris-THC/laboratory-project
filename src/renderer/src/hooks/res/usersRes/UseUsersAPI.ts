@@ -67,7 +67,7 @@ export const useCreateNewUser = (): UseMutationResult<
   return useMutation({
     mutationFn: postNewUser,
     onSuccess: () => {
-      queryClient.invalidateQueries('userInfoAPI')
+      queryClient.invalidateQueries({ queryKey: ['userInfoAPI'] })
       notifyCreatedSucces()
     },
     onError: () => {
@@ -98,7 +98,7 @@ export const useUpdateUserById = (): UseMutationResult<
   return useMutation({
     mutationFn: (variables: { userInfo: UsersInterface; idUser: number }) => updateUser(variables),
     onSuccess: () => {
-      queryClient.invalidateQueries('userInfoAPI');
+      queryClient.invalidateQueries({ queryKey: ['userInfoAPI'] })
       notifyUpdatedSucces()
     },
     onError: () => {
@@ -118,7 +118,7 @@ export const useDelateUser = (): UseMutationResult<HttpStatusCode, Error, number
   return useMutation({
     mutationFn: deletUserFuntion,
     onSuccess: () => {
-      queryClient.invalidateQueries('userInfoAPI');
+      queryClient.invalidateQueries({ queryKey: ['userInfoAPI'] })
       notifyDeleteSucces()
     },
     onError: () => {
