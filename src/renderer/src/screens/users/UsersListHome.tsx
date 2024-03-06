@@ -15,6 +15,17 @@ import { useNavigate } from 'react-router-dom'
 import { DelateUserModal } from './DeleteUser'
 import { Toaster } from 'react-hot-toast'
 
+const ErrorPage: React.FC = () => {
+  return (
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="max-w-md p-8 bg-white rounded-lg shadow-lg">
+        <h2 className="text-2xl font-bold mb-4">No se pudo conectar con el servidor</h2>
+        <p className="text-gray-700">Por favor, inténtelo de nuevo más tarde.</p>
+      </div>
+    </div>
+  )
+}
+
 export const UsersListHome = (): JSX.Element => {
   const { data, isLoading } = useGetAllUsers()
   const { setUserObjectInfo, setIsCreate } = useUserIdSelected()
@@ -51,17 +62,19 @@ export const UsersListHome = (): JSX.Element => {
       <Separator />
 
       {!data ? (
-        <div></div>
+        <div>
+          <ErrorPage />
+        </div>
       ) : (
         <div className="flex justify-center align-middle mx-8 my-5">
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead className="text-center w-[180px]">Nombre</TableHead>
-                <TableHead className="text-center max-w-[300px]">Edad</TableHead>
-                <TableHead className="text-center max-w-[100px]">Número de Teléfono</TableHead>
-                <TableHead className="text-center max-w-[100px]">Direccion</TableHead>
-                <TableHead className="text-center">Rol</TableHead>
+                <TableHead className="text-center max-w-[50px]">Edad</TableHead>
+                <TableHead className="text-center min-w-[60px]">Teléfono</TableHead>
+                <TableHead className="text-center min-w-[200px]">Direccion</TableHead>
+                <TableHead className="text-center max-w-[50px]">Rol</TableHead>
                 <TableHead className="text-center">Acciones</TableHead>
               </TableRow>
             </TableHeader>
@@ -75,7 +88,9 @@ export const UsersListHome = (): JSX.Element => {
                     <TableCell className="text-center m-0 p-2">{userInfo.age}</TableCell>
                     <TableCell className="text-center m-0 p-2">{userInfo.phoneNumber}</TableCell>
                     <TableCell className="text-center m-0 p-2">{userInfo.address}</TableCell>
-                    <TableCell className="text-center m-0 p-2">{userInfo.role}</TableCell>
+                    <TableCell className="text-center m-0 p-2">
+                      {userInfo.role.toString() === 'Admin' ? 'Administrador' : 'Empleado'}
+                    </TableCell>
                     <TableCell className="flex justify-center items-center m-0 p-2">
                       <Button
                         className="bg-cyan-600 mr-1"

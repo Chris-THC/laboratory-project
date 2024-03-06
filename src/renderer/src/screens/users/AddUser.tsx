@@ -70,21 +70,23 @@ const FormSchema = z.object({
   })
 })
 
-const getFieldValue = (value: string): string => {
-  let fieldValue
-  if (value === 'Admin') {
-    fieldValue = '0'
-  } else {
-    fieldValue = '1'
-  }
-  return fieldValue
-}
-
 export const AddUser: React.FC = () => {
   const navigateTo = useNavigate()
   const creteNewUser = useCreateNewUser()
   const { userObjectInfo, isCreate, setIsCreate, setUserObjectInfo } = useUserIdSelected()
   const updateUser = useUpdateUserById()
+
+  const getFieldValue = (value: string): string => {
+    let fieldValue
+    if (value === 'Admin') {
+      fieldValue = '0'
+    } else if (value === 'Receptionist') {
+      fieldValue = '1'
+    } else {
+      fieldValue = ''
+    }
+    return fieldValue
+  }
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -243,7 +245,7 @@ export const AddUser: React.FC = () => {
                   <FormLabel>Rol del usuario</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    value={isCreate === true ? '' : getFieldValue(field.value)}
+                    defaultValue={isCreate === true ? '' : getFieldValue(field.value)}
                   >
                     <SelectTrigger className="w-[280px]">
                       <SelectValue placeholder="Selecciona el rol del usuario" />
@@ -267,7 +269,7 @@ export const AddUser: React.FC = () => {
 
             <div className="flex flex-row justify-center align-middle">
               <div className="mx-3">
-                <Button type="submit">{!userObjectInfo ? 'Agregar' : 'Editar'}</Button>
+                <Button variant={'default'} className='bg-sky-600' type="submit">{!userObjectInfo ? 'Agregar' : 'Editar'}</Button>
               </div>
               <div className="mx-3">
                 <Button
