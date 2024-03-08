@@ -3,7 +3,6 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
-import { format } from 'date-fns'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -27,11 +26,8 @@ import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { useClientIdSelected } from '@renderer/context/clientContext/clientContext'
-import { useCreateNewClient, useUpdateClientById } from '@renderer/hooks/res/clientRes/UseClientAPI'
+import { useUpdateClientById } from '@renderer/hooks/res/clientRes/UseClientAPI'
 import { ClientsInterface } from '@renderer/interfaces/clients/clients'
-import { Calendar } from '@/components/ui/calendar'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { CalendarIcon } from 'lucide-react'
 
 const FormSchema = z.object({
   name: z.string().min(2, {
@@ -69,8 +65,8 @@ const FormSchema = z.object({
 
 export const AddClients: React.FC = () => {
   const navigateTo = useNavigate()
-  const creteNewUser = useCreateNewClient()
-  const { clientObjectInfo, isClientCreate, setIsClientCreate } = useClientIdSelected()
+  // const creteNewUser = useCreateNewClient()
+  const { clientObjectInfo } = useClientIdSelected()
   const updateUser = useUpdateClientById()
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -99,16 +95,16 @@ export const AddClients: React.FC = () => {
   })
 
   const onSubmit = (data: z.infer<typeof FormSchema>): void => {
-    const infoClient: ClientsInterface = {
-      name: data.name,
-      age: parseInt(data.age),
-      phoneNumber: data.phoneNumber,
-      dateOfBirth: data.dateOfBirth.toString(),
-      address: data.address,
-      doctor: data.doctor,
-      exam: parseInt(data.exam),
-      status: parseInt(data.status)
-    }
+    // const infoClient: ClientsInterface = {
+    //   name: data.name,
+    //   age: parseInt(data.age),
+    //   phoneNumber: data.phoneNumber,
+    //   dateOfBirth: data.dateOfBirth.toString(),
+    //   address: data.address,
+    //   doctor: data.doctor,
+    //   exam: parseInt(data.exam),
+    //   status: parseInt(data.status)
+    // }
 
     console.log(data)
 
@@ -193,7 +189,7 @@ export const AddClients: React.FC = () => {
               )}
             />
 
-            <FormField
+            {/* <FormField
               control={form.control}
               name="dateOfBirth"
               render={({ field }) => (
@@ -225,7 +221,9 @@ export const AddClients: React.FC = () => {
                   </FormDescription>
                 </FormItem>
               )}
-            />
+            /> */}
+
+
             <FormField
               control={form.control}
               name="address"

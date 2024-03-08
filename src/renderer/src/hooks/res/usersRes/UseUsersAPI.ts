@@ -67,11 +67,7 @@ export const useCreateNewUser = (): UseMutationResult<
   return useMutation({
     mutationFn: postNewUser,
     onSuccess: () => {
-<<<<<<< HEAD
-      queryClient.invalidateQueries('userInfoAPI')
-=======
       queryClient.invalidateQueries({ queryKey: ['userInfoAPI'] })
->>>>>>> 12ae55fe847d822a403937460ccae1de40c83a8f
       notifyCreatedSucces()
     },
     onError: () => {
@@ -102,11 +98,7 @@ export const useUpdateUserById = (): UseMutationResult<
   return useMutation({
     mutationFn: (variables: { userInfo: UsersInterface; idUser: number }) => updateUser(variables),
     onSuccess: () => {
-<<<<<<< HEAD
-      queryClient.invalidateQueries('userInfoAPI');
-=======
       queryClient.invalidateQueries({ queryKey: ['userInfoAPI'] })
->>>>>>> 12ae55fe847d822a403937460ccae1de40c83a8f
       notifyUpdatedSucces()
     },
     onError: () => {
@@ -126,11 +118,7 @@ export const useDelateUser = (): UseMutationResult<HttpStatusCode, Error, number
   return useMutation({
     mutationFn: deletUserFuntion,
     onSuccess: () => {
-<<<<<<< HEAD
-      queryClient.invalidateQueries('userInfoAPI');
-=======
       queryClient.invalidateQueries({ queryKey: ['userInfoAPI'] })
->>>>>>> 12ae55fe847d822a403937460ccae1de40c83a8f
       notifyDeleteSucces()
     },
     onError: () => {

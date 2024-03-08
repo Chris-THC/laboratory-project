@@ -45,18 +45,7 @@ export const NavBar: React.FC = () => {
                     Clentes
                   </MenubarTrigger>
                   <MenubarContent>
-<<<<<<< HEAD
-                    <MenubarItem
-                      onClick={() => {
-                        navigateTo('/customer/customer')
-                      }}
-                      className="font-inter cursor-pointer	"
-                    >
-                      Nuevo Cliente
-                    </MenubarItem>
-=======
                     <MenubarItem className="font-inter cursor-pointer	">Nuevo Cliente</MenubarItem>
->>>>>>> 12ae55fe847d822a403937460ccae1de40c83a8f
                     <MenubarSeparator />
                     <MenubarItem className="font-inter cursor-pointer	">
                       Lista de Cliente

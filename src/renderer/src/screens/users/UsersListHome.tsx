@@ -15,8 +15,6 @@ import { useNavigate } from 'react-router-dom'
 import { DelateUserModal } from './DeleteUser'
 import { Toaster } from 'react-hot-toast'
 
-<<<<<<< HEAD
-=======
 const ErrorPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
@@ -28,18 +26,14 @@ const ErrorPage: React.FC = () => {
   )
 }
 
->>>>>>> 12ae55fe847d822a403937460ccae1de40c83a8f
 export const UsersListHome = (): JSX.Element => {
   const { data, isLoading } = useGetAllUsers()
   const { setUserObjectInfo, setIsCreate } = useUserIdSelected()
 
   const navigateTo = useNavigate()
   const onCreateNewUser = (): void => {
-<<<<<<< HEAD
-=======
     setIsCreate(true)
     setUserObjectInfo(null)
->>>>>>> 12ae55fe847d822a403937460ccae1de40c83a8f
     navigateTo('/users/form')
   }
 
@@ -68,31 +62,19 @@ export const UsersListHome = (): JSX.Element => {
       <Separator />
 
       {!data ? (
-<<<<<<< HEAD
-        <div></div>
-=======
         <div>
           <ErrorPage />
         </div>
->>>>>>> 12ae55fe847d822a403937460ccae1de40c83a8f
       ) : (
         <div className="flex justify-center align-middle mx-8 my-5">
           <Table>
             <TableHeader>
               <TableRow>
-<<<<<<< HEAD
-                <TableHead className="text-center w-[180px]">Nombre</TableHead>
-                <TableHead className="text-center max-w-[300px]">Edad</TableHead>
-                <TableHead className="text-center max-w-[100px]">Número de Teléfono</TableHead>
-                <TableHead className="text-center max-w-[100px]">Direccion</TableHead>
-                <TableHead className="text-center">Rol</TableHead>
-=======
                 <TableHead className="text-center w-[220px]">Nombre</TableHead>
                 <TableHead className="text-center max-w-[50px]">Edad</TableHead>
                 <TableHead className="text-center min-w-[60px]">Teléfono</TableHead>
                 <TableHead className="text-center min-w-[200px]">Direccion</TableHead>
                 <TableHead className="text-center max-w-[40px]">Rol</TableHead>
->>>>>>> 12ae55fe847d822a403937460ccae1de40c83a8f
                 <TableHead className="text-center">Acciones</TableHead>
               </TableRow>
             </TableHeader>
@@ -106,13 +88,9 @@ export const UsersListHome = (): JSX.Element => {
                     <TableCell className="text-center m-0 p-2">{userInfo.age}</TableCell>
                     <TableCell className="text-center m-0 p-2">{userInfo.phoneNumber}</TableCell>
                     <TableCell className="text-center m-0 p-2">{userInfo.address}</TableCell>
-<<<<<<< HEAD
-                    <TableCell className="text-center m-0 p-2">{userInfo.role}</TableCell>
-=======
                     <TableCell className="text-center m-0 p-2">
                       {userInfo.role.toString() === 'Admin' ? 'Administrador' : 'Empleado'}
                     </TableCell>
->>>>>>> 12ae55fe847d822a403937460ccae1de40c83a8f
                     <TableCell className="flex justify-center items-center m-0 p-2">
                       <Button
                         className="bg-cyan-600 mr-1"
