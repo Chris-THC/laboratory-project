@@ -5,6 +5,7 @@ import { Route, Routes } from 'react-router-dom'
 import { AddUser } from '../users/AddUser'
 import { UsersListHome } from '../users/UsersListHome'
 import { AddClients } from '../clients/AddClients'
+import { ClientsListHome } from '../clients/ClientsListHome'
 
 export const HomeScreen: React.FC = () => {
   return (
@@ -21,7 +22,8 @@ export const HomeScreen: React.FC = () => {
         />
         <Route path="/users" element={<UsersListHome />} />
         <Route path="/users/form" element={<AddUser />} />
-        <Route path="/customer/customer" element={<AddClients />} />
+        <Route path="/customer" element={<ClientsListHome />} />
+        <Route path="/customer/add" element={<AddClients />} />
 
         {/* Here you can add new screens */}
         {/* <Route path="/add/task" element={<AddTask />} /> */}

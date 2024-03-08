@@ -47,7 +47,9 @@ export const NavBar: React.FC = () => {
                   <MenubarContent>
                     <MenubarItem className="font-inter cursor-pointer	">Nuevo Cliente</MenubarItem>
                     <MenubarSeparator />
-                    <MenubarItem className="font-inter cursor-pointer	">
+                    <MenubarItem onClick={()=>{
+                      navigateTo('/customer')
+                    }} className="font-inter cursor-pointer	">
                       Lista de Cliente
                     </MenubarItem>
                   </MenubarContent>

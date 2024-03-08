@@ -1,4 +1,4 @@
-import { ClientsInterface } from "@renderer/interfaces/clients/clients";
+import { ClientsInterface } from '@renderer/interfaces/clients/clients'
 import {
   UseMutationResult,
   UseQueryResult,
@@ -8,6 +8,19 @@ import {
 } from '@tanstack/react-query'
 import apiConection from '../../../api/ConnectionAPI'
 import { HttpStatusCode } from 'axios'
+import toast from 'react-hot-toast'
+
+const notifyCreatedSucces = (): string => {
+  return toast.success('Cliente se ha agregado exitosamente!')
+}
+
+const notifyUpdatedSucces = (): string => {
+  return toast.success('Cliente editado exitosamente!')
+}
+
+const notifyDeleteSucces = (): string => {
+  return toast.error('Cliente eliminado')
+}
 
 //Here we get all users list data
 const getAllClientFromApi = async (): Promise<ClientsInterface[]> => {
@@ -22,8 +35,7 @@ export const useGetAllClient = (): UseQueryResult<ClientsInterface[]> => {
   })
 }
 
-
-// TODO: Create a new user
+// TODO: Create a new client
 export const postNewClient = async (newClientInfo: ClientsInterface): Promise<ClientsInterface> => {
   const { data } = await apiConection.post<ClientsInterface>('/customer', newClientInfo)
   return data
@@ -40,26 +52,43 @@ export const useCreateNewClient = (): UseMutationResult<
   return useMutation({
     mutationFn: postNewClient,
     onSuccess: () => {
-      queryClient.invalidateQueries('clientInfoAPI')
+      queryClient.invalidateQueries({ queryKey: ['clientInfoAPI'] })
+      notifyCreatedSucces()
+    },
+    onError: () => {
+      toast.error('No se pudo crear al usuario')
     }
   })
 }
 
 //TODO: Update user
-export const useUpdateClientById = (): UseMutationResult<ClientsInterface, Error,{ ClientInfo: ClientsInterface; idClient: number },unknown> => {
+export const useUpdateClientById = (): UseMutationResult<
+  ClientsInterface,
+  Error,
+  { ClientInfo: ClientsInterface; idClient: number },
+  unknown
+> => {
   const queryClient = useQueryClient()
-  const updateClient = async ({ ClientInfo, idClient }: { ClientInfo: ClientsInterface; idClient: number }):Promise<ClientsInterface> => {
+  const updateClient = async ({
+    ClientInfo,
+    idClient
+  }: {
+    ClientInfo: ClientsInterface
+    idClient: number
+  }): Promise<ClientsInterface> => {
     const { data } = await apiConection.patch<ClientsInterface>(`/customer/${idClient}`, ClientInfo)
     return data
   }
 
   return useMutation({
-    mutationFn: (variables: { ClientInfo: ClientsInterface; idClient: number }) => updateClient(variables),
+    mutationFn: (variables: { ClientInfo: ClientsInterface; idClient: number }) =>
+      updateClient(variables),
     onSuccess: () => {
-      queryClient.invalidateQueries('clientInfoAPI')
+      queryClient.invalidateQueries({ queryKey: ['clientInfoAPI'] })
+      notifyUpdatedSucces()
     },
     onError: () => {
-      alert("Hay un error")
+      toast.error('No se pudo actualizar al cliente')
     }
   })
 }
@@ -75,7 +104,11 @@ export const useDelateClient = (): UseMutationResult<HttpStatusCode, Error, numb
   return useMutation({
     mutationFn: deleteClientFuntion,
     onSuccess: () => {
-      queryClient.invalidateQueries('clientInfoAPI')
+      queryClient.invalidateQueries({ queryKey: ['clientInfoAPI'] })
+      notifyDeleteSucces()
+    },
+    onError: () => {
+      toast.error('No se pudo eliminar al cliente')
     }
   })
 }

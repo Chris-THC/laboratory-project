@@ -1,13 +1,13 @@
 export interface ClientsInterface {
-    idClient?: number | undefined | null
-    name: string
-    age: number
-    dateOfBirth?: string
-    phoneNumber: string
-    address: string
-    doctor:string
-    exam:number
-    status: number
-  }
-  
-  
+  idCustomer?: number | undefined | null
+  name: string
+  age: number
+  phoneNumber: string
+  address: string
+  dateOfBirth?: string
+  status: number
+  pdfTimestamp: string
+  doctorName: string
+  idTests: string
+  notes: string
+}

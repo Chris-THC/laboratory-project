@@ -17,7 +17,9 @@ import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
@@ -26,39 +28,59 @@ import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { useClientIdSelected } from '@renderer/context/clientContext/clientContext'
-import { useUpdateClientById } from '@renderer/hooks/res/clientRes/UseClientAPI'
 import { ClientsInterface } from '@renderer/interfaces/clients/clients'
+import { DateTime } from 'luxon'
 
 const FormSchema = z.object({
-  name: z.string().min(2, {
-    message: 'El nombre debe de tener al menos 2 caracteres'
-  }),
+  name: z
+    .string()
+    .min(2, {
+      message: 'El nombre debe de tener al menos 2 caracteres'
+    })
+    .regex(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$/, {
+      message: 'El nombre solo puede contener letras y espacios'
+    }),
   age: z
     .string()
     .min(1, {
       message: 'La edad no debe de tener al menos 1 digito'
     })
-    .max(2, { message: 'La edad no puede tener más de 3 dígitos' }),
+    .max(2, { message: 'La edad no puede tener más de 3 dígitos' })
+    .regex(/^[0-9]+$/, {
+      message: 'Este campo solo puede contener números'
+    }),
+
   phoneNumber: z
     .string()
     .min(10, {
       message: 'El número de teléfono debe de tener al menos 10 dígitos'
     })
-    .max(10, { message: 'El número de teléfono no debe de tener más de 10 dígitos' }),
+    .max(10, { message: 'El número de teléfono no debe de tener más de 10 dígitos' })
+    .regex(/^[0-9]+$/, {
+      message: 'Este campo solo puede contener números'
+    }),
   address: z.string().min(2, {
     message: 'La direccion debe de tener al menos 2 caracteres'
   }),
 
-  dateOfBirth: z.date({
+  dateOfBirth: z.string({
     required_error: 'A date of birth is required.'
   }),
-  doctor: z.string({
-    required_error: 'El nombre del doctor es requerido'
-  }),
-  exam: z.string({
+  doctorName: z
+    .string()
+    .min(2, {
+      message: 'El nombre debe de tener al menos 2 caracteres'
+    })
+    .regex(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$/, {
+      message: 'El nombre solo puede contener letras y espacios'
+    }),
+  idTests: z.string({
     required_error: 'El valor es requerido'
   }),
   status: z.string({
+    required_error: 'El valor es requerido'
+  }),
+  notes: z.string({
     required_error: 'El valor es requerido'
   })
 })
@@ -67,7 +89,7 @@ export const AddClients: React.FC = () => {
   const navigateTo = useNavigate()
   // const creteNewUser = useCreateNewClient()
   const { clientObjectInfo } = useClientIdSelected()
-  const updateUser = useUpdateClientById()
+  // const updateUser = useUpdateClientById()
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -76,37 +98,45 @@ export const AddClients: React.FC = () => {
           name: '',
           age: '',
           phoneNumber: '',
-          dateOfBirth: new Date(),
+          dateOfBirth: '',
           address: '',
-          doctor: '',
-          exam: '',
-          status: ''
+          doctorName: '',
+          idTests: '',
+          status: '',
+          notes: ''
         }
       : {
           name: clientObjectInfo.name,
           age: clientObjectInfo.age.toString(),
           phoneNumber: clientObjectInfo.phoneNumber,
-          dateOfBirth: new Date('2024-01-01'),
+          dateOfBirth: clientObjectInfo.dateOfBirth,
           address: clientObjectInfo.address,
-          doctor: clientObjectInfo.doctor,
-          exam: clientObjectInfo.exam.toString() === 'Sangre' ? '0' : '1',
-          status: '1'
-        }
+          doctorName: clientObjectInfo.doctorName,
+          idTests: clientObjectInfo.idTests,
+          status: '1',
+          notes: clientObjectInfo.notes
+        },
+    mode: 'all'
   })
 
   const onSubmit = (data: z.infer<typeof FormSchema>): void => {
-    // const infoClient: ClientsInterface = {
-    //   name: data.name,
-    //   age: parseInt(data.age),
-    //   phoneNumber: data.phoneNumber,
-    //   dateOfBirth: data.dateOfBirth.toString(),
-    //   address: data.address,
-    //   doctor: data.doctor,
-    //   exam: parseInt(data.exam),
-    //   status: parseInt(data.status)
-    // }
+    const dateNow: DateTime = DateTime.now()
 
-    console.log(data)
+    const createNewClient: ClientsInterface = {
+      name: data.name,
+      age: parseInt(data.age),
+      phoneNumber: data.phoneNumber,
+      address: data.address,
+      dateOfBirth: data.dateOfBirth,
+      status: parseInt(data.status),
+      pdfTimestamp: dateNow.toISODate(),
+      doctorName: data.doctorName,
+      idTests: data.idTests,
+      notes: data.notes
+    }
+
+    // alert(JSON.stringify(createNewClient))
+    console.log(createNewClient)
 
     // Todo: Create a new User
     // if (isClientCreate === true) {
@@ -120,14 +150,14 @@ export const AddClients: React.FC = () => {
     //   setIsClientCreate(!isClientCreate)
     // }
 
-    // navigateTo('/users')
-  } 
+    // navigateTo('/costumer')
+  }
 
   return (
     <Card className="mx-40 my-10">
       <CardHeader className="flex flex-col justify-center align-middle">
         <CardTitle className="text-center">
-          {!clientObjectInfo ? 'Agregar Nuevo Usuario' : 'Editar Usuario'}
+          {!clientObjectInfo ? 'Agregar Nuevo Cliente' : 'Editar Cliente'}
         </CardTitle>
         <Separator />
       </CardHeader>
@@ -178,7 +208,25 @@ export const AddClients: React.FC = () => {
                 <FormItem>
                   <FormLabel>Número de teléfono</FormLabel>
                   <FormControl>
-                    <Input type="number" placeholder="Agregar un número de teléfono" {...field} />
+                    <Input type="text" placeholder="Agregar un número de teléfono" {...field} />
+                  </FormControl>
+                  {fieldState.error && (
+                    <FormDescription className="text-red-500">
+                      {fieldState.error.message}
+                    </FormDescription>
+                  )}
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="dateOfBirth"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>Fecha de nacimiento</FormLabel>
+                  <FormControl>
+                    <Input type="date" placeholder="Agregar fecha de nacimiento" {...field} />
                   </FormControl>
                   {fieldState.error && (
                     <FormDescription className="text-red-500">
@@ -223,7 +271,6 @@ export const AddClients: React.FC = () => {
               )}
             /> */}
 
-
             <FormField
               control={form.control}
               name="address"
@@ -243,7 +290,7 @@ export const AddClients: React.FC = () => {
             />
 
             <FormField
-              name="doctor"
+              name="doctorName"
               control={form.control}
               render={({ field, fieldState }) => (
                 <FormItem>
@@ -261,23 +308,25 @@ export const AddClients: React.FC = () => {
             />
 
             <FormField
-              name="status"
               control={form.control}
+              name="status"
               render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel>Estatus</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value === 'Liquido' ? '0' : '1'}
+                    // defaultValue={isCreate === true ? '' : getFieldValue(field.value)}
                   >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecciona el tipo de examen" />
-                      </SelectTrigger>
-                    </FormControl>
+                    <SelectTrigger className="w-[280px]">
+                      <SelectValue placeholder="Selecciona el status" />
+                    </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="0">Liquido</SelectItem>
-                      <SelectItem value="1">Solido</SelectItem>
+                      <SelectGroup>
+                        <SelectLabel>Estatus</SelectLabel>
+                        <SelectItem value="0">Reportado</SelectItem>
+                        <SelectItem value="1">Impreso</SelectItem>
+                        <SelectItem value="2">Entregado</SelectItem>
+                      </SelectGroup>
                     </SelectContent>
                   </Select>
                   {fieldState.error && (
@@ -290,25 +339,44 @@ export const AddClients: React.FC = () => {
             />
 
             <FormField
-              name="exam"
               control={form.control}
+              name="idTests"
               render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel>Examen</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value === 'Sangre' ? '0' : '1'}
+                    // defaultValue={isCreate === true ? '' : getFieldValue(field.value)}
                   >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecciona el tipo de examen" />
-                      </SelectTrigger>
-                    </FormControl>
+                    <SelectTrigger className="w-[280px]">
+                      <SelectValue placeholder="Selecciona el examen" />
+                    </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="0">Sangre</SelectItem>
-                      <SelectItem value="1">Orina</SelectItem>
+                      <SelectGroup>
+                        <SelectLabel>Examenes Disponibles</SelectLabel>
+                        <SelectItem value="0">Orina</SelectItem>
+                        <SelectItem value="1">Glucosa</SelectItem>
+                      </SelectGroup>
                     </SelectContent>
                   </Select>
+                  {fieldState.error && (
+                    <FormDescription className="text-red-500">
+                      {fieldState.error.message}
+                    </FormDescription>
+                  )}
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="notes"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>Notas</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Agregue una nota" {...field} />
+                  </FormControl>
                   {fieldState.error && (
                     <FormDescription className="text-red-500">
                       {fieldState.error.message}
@@ -327,7 +395,7 @@ export const AddClients: React.FC = () => {
                   variant={'destructive'}
                   type="button"
                   onClick={() => {
-                    navigateTo('/users')
+                    navigateTo('/uscustomerers')
                   }}
                 >
                   Cancelar
