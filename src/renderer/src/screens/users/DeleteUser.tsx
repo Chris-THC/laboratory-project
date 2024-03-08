@@ -18,7 +18,12 @@ import { useUserIdSelected } from '@renderer/context/userContext/UserContext'
 
 export const DelateUserModal: React.FC = () => {
   const navigateTo = useNavigate()
+<<<<<<< HEAD
   const { userObjectInfo } = useUserIdSelected()
+=======
+  const { userObjectInfo, setUserObjectInfo, setIsCreate } = useUserIdSelected()
+
+>>>>>>> 12ae55fe847d822a403937460ccae1de40c83a8f
   const deleteUser = useDelateUser()
   const onDeleteUser = (): void => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -26,6 +31,11 @@ export const DelateUserModal: React.FC = () => {
     console.log(idUser)
 
     deleteUser.mutate(idUser)
+<<<<<<< HEAD
+=======
+    setUserObjectInfo(null)
+    setIsCreate(true)
+>>>>>>> 12ae55fe847d822a403937460ccae1de40c83a8f
     navigateTo('/users')
   }
 
@@ -48,7 +58,21 @@ export const DelateUserModal: React.FC = () => {
             <AlertDialogAction onClick={onDeleteUser} className="bg-red-600 mx-3">
               Eliminar
             </AlertDialogAction>
+<<<<<<< HEAD
             <AlertDialogCancel className="mx-3">Cancel</AlertDialogCancel>
+=======
+            <AlertDialogCancel
+              onClick={() => {
+                setIsCreate(true)
+                setUserObjectInfo(null)
+                console.log("NO se elimino");
+                
+              }}
+              className="mx-3"
+            >
+              Cancel
+            </AlertDialogCancel>
+>>>>>>> 12ae55fe847d822a403937460ccae1de40c83a8f
           </div>
         </AlertDialogFooter>
       </AlertDialogContent>

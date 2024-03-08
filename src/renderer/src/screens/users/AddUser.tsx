@@ -17,7 +17,9 @@ import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
@@ -30,21 +32,33 @@ import { useCreateNewUser, useUpdateUserById } from '@renderer/hooks/res/usersRe
 import { UsersInterface } from '@renderer/interfaces/users/user'
 
 const FormSchema = z.object({
-  name: z.string().min(2, {
-    message: 'El nombre debe de tener al menos 2 caracteres'
-  }),
+  name: z
+    .string()
+    .min(2, {
+      message: 'El nombre debe de tener al menos 2 caracteres'
+    })
+    .regex(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$/, {
+      message: 'El nombre solo puede contener letras y espacios'
+    }),
   age: z
     .string()
     .min(1, {
       message: 'La edad no debe de tener al menos 1 digito'
     })
-    .max(2, { message: 'La edad no puede tener más de 3 dígitos' }),
+    .max(2, { message: 'La edad no puede tener más de 3 dígitos' })
+    .regex(/^[0-9]+$/, {
+      message: 'Este campo solo puede contener números'
+    }),
+
   phoneNumber: z
     .string()
     .min(10, {
       message: 'El número de teléfono debe de tener al menos 10 dígitos'
     })
-    .max(10, { message: 'El número de teléfono no debe de tener más de 10 dígitos' }),
+    .max(10, { message: 'El número de teléfono no debe de tener más de 10 dígitos' })
+    .regex(/^[0-9]+$/, {
+      message: 'Este campo solo puede contener números'
+    }),
   address: z.string().min(2, {
     message: 'La direccion debe de tener al menos 2 caracteres'
   }),
@@ -59,8 +73,20 @@ const FormSchema = z.object({
 export const AddUser: React.FC = () => {
   const navigateTo = useNavigate()
   const creteNewUser = useCreateNewUser()
-  const { userObjectInfo, isCreate, setIsCreate } = useUserIdSelected()
+  const { userObjectInfo, isCreate, setIsCreate, setUserObjectInfo } = useUserIdSelected()
   const updateUser = useUpdateUserById()
+
+  const getFieldValue = (value: string): string => {
+    let fieldValue
+    if (value === 'Admin') {
+      fieldValue = '0'
+    } else if (value === 'Receptionist') {
+      fieldValue = '1'
+    } else {
+      fieldValue = ''
+    }
+    return fieldValue
+  }
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -70,47 +96,58 @@ export const AddUser: React.FC = () => {
           age: '',
           phoneNumber: '',
           address: '',
-          password: ''
+          password: '',
+          role: ''
         }
       : {
           name: userObjectInfo.name,
           age: userObjectInfo.age.toString(),
           phoneNumber: userObjectInfo.phoneNumber,
           address: userObjectInfo.address,
-          password: '',
+          password: userObjectInfo.address,
           role: userObjectInfo.role.toString() === 'Admin' ? '0' : '1'
-        }
+        },
+    mode: 'all'
   })
 
   const onSubmit = (data: z.infer<typeof FormSchema>): void => {
-    const infoUser: UsersInterface = {
-      name: data.name,
-      age: parseInt(data.age),
-      phoneNumber: data.phoneNumber,
-      address: data.address,
-      password: data.password,
-      role: parseInt(data.role)
-    }
-
     // Todo: Create a new User
     if (isCreate === true) {
-      creteNewUser.mutate(infoUser)
+      const infoUserCreate: UsersInterface = {
+        name: data.name,
+        age: parseInt(data.age),
+        phoneNumber: data.phoneNumber,
+        address: data.address,
+        password: data.password,
+        role: parseInt(data.role)
+      }
+      creteNewUser.mutate(infoUserCreate)
       setIsCreate(!isCreate)
     } else {
-    // Todo: Editar a un usuario
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // Todo: Editar a un usuario
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const UserId: any = userObjectInfo?.idUser
-      updateUser.mutate({ userInfo: infoUser, idUser: UserId })
+      const infoUserUpdate: UsersInterface = {
+        name: data.name,
+        age: parseInt(data.age),
+        phoneNumber: data.phoneNumber,
+        address: data.address,
+        role: parseInt(data.role)
+      }
+
+      updateUser.mutate({ userInfo: infoUserUpdate, idUser: UserId })
       setIsCreate(!isCreate)
     }
-
+    setUserObjectInfo(null)
     navigateTo('/users')
   }
 
   return (
     <Card className="mx-40 my-10">
       <CardHeader className="flex flex-col justify-center align-middle">
-        <CardTitle className="text-center">Agregar nuevo usuario</CardTitle>
+        <CardTitle className="text-center">
+          {!userObjectInfo ? 'Agregar Nuevo Usuario' : 'Editar Usuario'}
+        </CardTitle>
         <Separator />
       </CardHeader>
 
@@ -142,7 +179,7 @@ export const AddUser: React.FC = () => {
                 <FormItem>
                   <FormLabel>Edad</FormLabel>
                   <FormControl>
-                    <Input type="number" placeholder="Agregar un número de teléfono" {...field} />
+                    <Input type="text" placeholder="Agregar un número de teléfono" {...field} />
                   </FormControl>
                   {fieldState.error && (
                     <FormDescription className="text-red-500">
@@ -160,7 +197,7 @@ export const AddUser: React.FC = () => {
                 <FormItem>
                   <FormLabel>Número de teléfono</FormLabel>
                   <FormControl>
-                    <Input type="number" placeholder="Agregar un número de teléfono" {...field} />
+                    <Input type="text" placeholder="Agregar un número de teléfono" {...field} />
                   </FormControl>
                   {fieldState.error && (
                     <FormDescription className="text-red-500">
@@ -189,23 +226,29 @@ export const AddUser: React.FC = () => {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>Contrseña</FormLabel>
-                  <FormControl>
-                    <Input type="password" placeholder="Agrega una contraseña" {...field} />
-                  </FormControl>
-                  {fieldState.error && (
-                    <FormDescription className="text-red-500">
-                      {fieldState.error.message}
-                    </FormDescription>
+            <div>
+              {!isCreate ? (
+                <div></div>
+              ) : (
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field, fieldState }) => (
+                    <FormItem>
+                      <FormLabel>Contrseña</FormLabel>
+                      <FormControl>
+                        <Input type="password" placeholder="Agrega una contraseña" {...field} />
+                      </FormControl>
+                      {fieldState.error && (
+                        <FormDescription className="text-red-500">
+                          {fieldState.error.message}
+                        </FormDescription>
+                      )}
+                    </FormItem>
                   )}
-                </FormItem>
+                />
               )}
-            />
+            </div>
 
             <FormField
               control={form.control}
@@ -215,16 +258,17 @@ export const AddUser: React.FC = () => {
                   <FormLabel>Rol del usuario</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value === 'Admin' ? '0' : '1'}
+                    defaultValue={isCreate === true ? '' : getFieldValue(field.value)}
                   >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecciona el rol del usuario" />
-                      </SelectTrigger>
-                    </FormControl>
+                    <SelectTrigger className="w-[280px]">
+                      <SelectValue placeholder="Selecciona el rol del usuario" />
+                    </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="0">Administrador</SelectItem>
-                      <SelectItem value="1">Empleado</SelectItem>
+                      <SelectGroup>
+                        <SelectLabel>Roles Disponibles</SelectLabel>
+                        <SelectItem value="0">Administrador</SelectItem>
+                        <SelectItem value="1">Empleado</SelectItem>
+                      </SelectGroup>
                     </SelectContent>
                   </Select>
                   {fieldState.error && (
@@ -238,13 +282,16 @@ export const AddUser: React.FC = () => {
 
             <div className="flex flex-row justify-center align-middle">
               <div className="mx-3">
-                <Button type="submit">{!userObjectInfo ? 'Agregar' : 'Editar'}</Button>
+                <Button variant={'default'} className="bg-sky-600" type="submit">
+                  {!userObjectInfo ? 'Agregar' : 'Editar'}
+                </Button>
               </div>
               <div className="mx-3">
                 <Button
                   variant={'destructive'}
                   type="button"
                   onClick={() => {
+                    setUserObjectInfo(null)
                     navigateTo('/users')
                   }}
                 >
