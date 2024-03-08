@@ -31,6 +31,7 @@ import { useClientIdSelected } from '@renderer/context/clientContext/clientConte
 import { ClientsInterface } from '@renderer/interfaces/clients/clients'
 import { DateTime } from 'luxon'
 import { useCreateNewClient, useUpdateClientById } from '@renderer/hooks/res/clientRes/UseClientAPI'
+import { changeStatus, changeExamIndex } from '@renderer/context/clientContext/EnumClients'
 
 const FormSchema = z.object({
   name: z
@@ -38,7 +39,7 @@ const FormSchema = z.object({
     .min(2, {
       message: 'El nombre debe de tener al menos 2 caracteres'
     })
-    .regex(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$/, {
+    .regex(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s.,]+$/, {
       message: 'El nombre solo puede contener letras y espacios'
     }),
   age: z
@@ -72,7 +73,7 @@ const FormSchema = z.object({
     .min(2, {
       message: 'El nombre debe de tener al menos 2 caracteres'
     })
-    .regex(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$/, {
+    .regex(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s.,]+$/, {
       message: 'El nombre solo puede contener letras y espacios'
     }),
   idTests: z.string({
@@ -89,7 +90,9 @@ const FormSchema = z.object({
 export const AddClients: React.FC = () => {
   const navigateTo = useNavigate()
   const creteNewUser = useCreateNewClient()
-  const { clientObjectInfo, isClientCreate, setIsClientCreate, setClientObjectInfo} = useClientIdSelected()
+  const { clientObjectInfo, isClientCreate, setIsClientCreate, setClientObjectInfo } =
+    useClientIdSelected()
+
   const updateUser = useUpdateClientById()
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -123,7 +126,7 @@ export const AddClients: React.FC = () => {
   const onSubmit = (data: z.infer<typeof FormSchema>): void => {
     const dateNow: DateTime = DateTime.now()
 
-    if(isClientCreate === true){
+    if (isClientCreate === true) {
       const createNewClient: ClientsInterface = {
         name: data.name,
         age: parseInt(data.age),
@@ -138,10 +141,10 @@ export const AddClients: React.FC = () => {
       }
       creteNewUser.mutate(createNewClient)
       setIsClientCreate(!isClientCreate)
-    }else{
+    } else {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const clientId: any = clientObjectInfo?.idCustomer
-      const infoClientUpdate: ClientsInterface={
+      const infoClientUpdate: ClientsInterface = {
         name: data.name,
         age: parseInt(data.age),
         phoneNumber: data.phoneNumber,
@@ -153,30 +156,11 @@ export const AddClients: React.FC = () => {
         idTests: data.idTests,
         notes: data.notes
       }
-      updateUser.mutate({ClientInfo:infoClientUpdate, idClient:clientId})
+      updateUser.mutate({ ClientInfo: infoClientUpdate, idClient: clientId })
       setIsClientCreate(!isClientCreate)
     }
     setClientObjectInfo(null)
-    navigateTo('/customers')
-
-    
-
-    // alert(JSON.stringify(createNewClient))
-    
-
-    // Todo: Create a new User
-    //if (isClientCreate === true) {
-    //   creteNewUser.mutate(infoClient)
-    //   setIsClientCreate(!isClientCreate)
-    // } else {
-    //   // Todo: Editar a un usuario
-    //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    //   const clientId: any = clientObjectInfo?.idClient
-    //   updateUser.mutate({ ClientInfo: infoClient, idClient: clientId })
-    //   setIsClientCreate(!isClientCreate)
-    //}
-
-    // navigateTo('/costumer')
+    navigateTo('/customer')
   }
 
   return (
@@ -263,40 +247,6 @@ export const AddClients: React.FC = () => {
               )}
             />
 
-            {/* <FormField
-              control={form.control}
-              name="dateOfBirth"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>Date of birth</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button variant={'outline'}>
-                          {field.value ? format(field.value, 'PPP') : <span>Pick a date</span>}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        disabled={(date: Date) =>
-                          date > new Date() || date < new Date('1900-01-01')
-                        }
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  <FormDescription>
-                    Your date of birth is used to calculate your age.
-                  </FormDescription>
-                </FormItem>
-              )}
-            /> */}
-
             <FormField
               control={form.control}
               name="address"
@@ -341,9 +291,13 @@ export const AddClients: React.FC = () => {
                   <FormLabel>Estatus</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    // defaultValue={isCreate === true ? '' : getFieldValue(field.value)}
+                    defaultValue={
+                      clientObjectInfo === null
+                        ? ''
+                        : changeStatus(clientObjectInfo?.status.toString()) ?? ''
+                    }
                   >
-                    <SelectTrigger className="w-[280px]">
+                    <SelectTrigger className="w-[290px]">
                       <SelectValue placeholder="Selecciona el status" />
                     </SelectTrigger>
                     <SelectContent>
@@ -372,16 +326,20 @@ export const AddClients: React.FC = () => {
                   <FormLabel>Examen</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    // defaultValue={isCreate === true ? '' : getFieldValue(field.value)}
+                    defaultValue={
+                      clientObjectInfo === null
+                        ? ''
+                        : changeExamIndex(clientObjectInfo?.idTests.toString()) ?? ''
+                    }
                   >
-                    <SelectTrigger className="w-[280px]">
-                      <SelectValue placeholder="Selecciona el examen" />
+                    <SelectTrigger className="w-[290px]">
+                      <SelectValue placeholder="Selecciona un examen" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
                         <SelectLabel>Examenes Disponibles</SelectLabel>
-                        <SelectItem value="0">Orina</SelectItem>
-                        <SelectItem value="1">Glucosa</SelectItem>
+                        <SelectItem value="0">Formato único adultos</SelectItem>
+                        <SelectItem value="1">Química sanguínea 35 elementos</SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>
@@ -414,14 +372,18 @@ export const AddClients: React.FC = () => {
 
             <div className="flex flex-row justify-center align-middle">
               <div className="mx-3">
-                <Button type="submit">{!clientObjectInfo ? 'Agregar' : 'Editar'}</Button>
+                <Button className="bg-[#4472c4]" type="submit">
+                  {!clientObjectInfo ? 'Agregar' : 'Editar'}
+                </Button>
               </div>
               <div className="mx-3">
                 <Button
                   variant={'destructive'}
                   type="button"
+                  className='bg-[#e32940]'
                   onClick={() => {
-                    navigateTo('/uscustomerers')
+                    setClientObjectInfo(null)
+                    navigateTo('/customer')
                   }}
                 >
                   Cancelar

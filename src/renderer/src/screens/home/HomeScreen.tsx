@@ -23,7 +23,7 @@ export const HomeScreen: React.FC = () => {
         <Route path="/users" element={<UsersListHome />} />
         <Route path="/users/form" element={<AddUser />} />
         <Route path="/customer" element={<ClientsListHome />} />
-        <Route path="/customer/add" element={<AddClients />} />
+        <Route path="/customer/form" element={<AddClients />} />
 
         {/* Here you can add new screens */}
         {/* <Route path="/add/task" element={<AddTask />} /> */}

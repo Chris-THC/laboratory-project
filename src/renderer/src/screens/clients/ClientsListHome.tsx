@@ -11,6 +11,11 @@ import {
 import { UserCog, UserPlus } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 // import { DelateUserModal } from './DeleteUser'
+import {
+  changeExamIndexTable,
+  changeStatusTable
+} from '@renderer/context/clientContext/EnumClients'
+import { useClientIdSelected } from '@renderer/context/clientContext/clientContext'
 import { useGetAllClient } from '@renderer/hooks/res/clientRes/UseClientAPI'
 import { Toaster } from 'react-hot-toast'
 import { DelateClientsModal } from './DelteClients'
@@ -28,10 +33,13 @@ const ErrorPage: React.FC = () => {
 
 export const ClientsListHome = (): JSX.Element => {
   const { data, isLoading } = useGetAllClient()
+  const { setClientObjectInfo, setIsClientCreate } = useClientIdSelected()
 
   const navigateTo = useNavigate()
   const onCreateNewUser = (): void => {
-    navigateTo('/customer/add')
+    setIsClientCreate(true)
+    setClientObjectInfo(null)
+    navigateTo('/customer/form')
   }
 
   if (isLoading) {
@@ -43,13 +51,13 @@ export const ClientsListHome = (): JSX.Element => {
   }
 
   return (
-    <div>
+    <div className='bg-[#f9f9f9] min-h-lvh'>
       <div className="mt-9 mx-9 mb-3 flex flex-row justify-around">
         <div>
           <h2 className="text-2xl font-inter font-bold">CLIENTES REGISTRADOS EN EL SISTEMA</h2>
         </div>
         <div>
-          <Button onClick={onCreateNewUser} className="bg-sky-700 text-white" variant={'ghost'}>
+          <Button onClick={onCreateNewUser} className="bg-[#00CAEF] text-white" variant={'ghost'}>
             <UserPlus className="mr-2" />
             Cliente
           </Button>
@@ -70,9 +78,11 @@ export const ClientsListHome = (): JSX.Element => {
                 <TableHead className="text-center w-[220px]">Nombre</TableHead>
                 <TableHead className="text-center max-w-[50px]">Edad</TableHead>
                 <TableHead className="text-center min-w-[60px]">Teléfono</TableHead>
-                <TableHead className="text-center min-w-[200px]">Direccion</TableHead>
+                <TableHead className="text-center min-w-[150px]">Direccion</TableHead>
+                <TableHead className="text-center min-w-[100px]">Doctor</TableHead>
+                <TableHead className="text-center min-w-[100px]">Tipo de Examen</TableHead>
                 <TableHead className="text-center max-w-[40px]">Estatus</TableHead>
-                <TableHead className="text-center">Acciones</TableHead>
+                <TableHead className="text-center max-w-[40px]">Acciones</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -82,27 +92,34 @@ export const ClientsListHome = (): JSX.Element => {
                     <TableCell className="text-center font-medium m-0 p-2">
                       {clientInfo.name}
                     </TableCell>
-                    <TableCell className="text-center m-0 p-2">{clientInfo.age}</TableCell>
+                    <TableCell className="text-left m-0 p-2">{clientInfo.age}</TableCell>
                     <TableCell className="text-center m-0 p-2">{clientInfo.phoneNumber}</TableCell>
                     <TableCell className="text-center Fm-0 p-2">{clientInfo.address}</TableCell>
-                    <TableCell className="text-center m-0 p-2">{clientInfo.status}</TableCell>
+                    <TableCell className="text-center m-0 p-2">{clientInfo.doctorName}</TableCell>
+                    <TableCell className="text-center m-0 p-2">
+                      {changeExamIndexTable(clientInfo.idTests)}
+                    </TableCell>
+                    <TableCell className="text-center m-0 p-2">
+                      {changeStatusTable(clientInfo.status.toString())}
+                    </TableCell>
+
                     <TableCell className="flex justify-center items-center m-0 p-2">
                       <Button
-                        className="bg-cyan-600 mr-1"
-                        // onClick={() => {
-                        //   setIsCreate(false)
-                        //   setUserObjectInfo(userInfo)
-                        //   navigateTo('/users/form')
-                        // }}
+                        className="bg-[#00c9b7] mr-1"
+                        onClick={() => {
+                          setIsClientCreate(false)
+                          setClientObjectInfo(clientInfo)
+                          navigateTo('/customer/form')
+                        }}
                       >
                         <UserCog />
                       </Button>
 
                       <Button
                         onClick={() => {
-                          //   setUserObjectInfo(userInfo)
+                          setClientObjectInfo(clientInfo)
                         }}
-                        className="p-0 m-0"
+                        className="bg-[#e32940] p-0 m-0"
                         variant={'destructive'}
                       >
                         <DelateClientsModal />
