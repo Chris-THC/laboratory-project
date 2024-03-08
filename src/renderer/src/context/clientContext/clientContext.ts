@@ -5,7 +5,7 @@ interface ClientSelectedById {
   isClientCreate: boolean
   setIsClientCreate: (isClientCreate: boolean) => void
   clientObjectInfo?: ClientsInterface | null
-  setClientObjectInfo: (client: ClientsInterface) => void
+  setClientObjectInfo: (client: ClientsInterface | null) => void
 }
 
 export const useClientIdSelected = create<ClientSelectedById>((set) => ({

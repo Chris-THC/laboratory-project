@@ -30,6 +30,7 @@ import { Separator } from '@/components/ui/separator'
 import { useClientIdSelected } from '@renderer/context/clientContext/clientContext'
 import { ClientsInterface } from '@renderer/interfaces/clients/clients'
 import { DateTime } from 'luxon'
+import { useCreateNewClient, useUpdateClientById } from '@renderer/hooks/res/clientRes/UseClientAPI'
 
 const FormSchema = z.object({
   name: z
@@ -87,9 +88,9 @@ const FormSchema = z.object({
 
 export const AddClients: React.FC = () => {
   const navigateTo = useNavigate()
-  // const creteNewUser = useCreateNewClient()
-  const { clientObjectInfo } = useClientIdSelected()
-  // const updateUser = useUpdateClientById()
+  const creteNewUser = useCreateNewClient()
+  const { clientObjectInfo, isClientCreate, setIsClientCreate, setClientObjectInfo} = useClientIdSelected()
+  const updateUser = useUpdateClientById()
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -122,24 +123,49 @@ export const AddClients: React.FC = () => {
   const onSubmit = (data: z.infer<typeof FormSchema>): void => {
     const dateNow: DateTime = DateTime.now()
 
-    const createNewClient: ClientsInterface = {
-      name: data.name,
-      age: parseInt(data.age),
-      phoneNumber: data.phoneNumber,
-      address: data.address,
-      dateOfBirth: data.dateOfBirth,
-      status: parseInt(data.status),
-      pdfTimestamp: dateNow.toISODate(),
-      doctorName: data.doctorName,
-      idTests: data.idTests,
-      notes: data.notes
+    if(isClientCreate === true){
+      const createNewClient: ClientsInterface = {
+        name: data.name,
+        age: parseInt(data.age),
+        phoneNumber: data.phoneNumber,
+        address: data.address,
+        dateOfBirth: data.dateOfBirth,
+        status: parseInt(data.status),
+        pdfTimestamp: dateNow.toISODate(),
+        doctorName: data.doctorName,
+        idTests: data.idTests,
+        notes: data.notes
+      }
+      creteNewUser.mutate(createNewClient)
+      setIsClientCreate(!isClientCreate)
+    }else{
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const clientId: any = clientObjectInfo?.idCustomer
+      const infoClientUpdate: ClientsInterface={
+        name: data.name,
+        age: parseInt(data.age),
+        phoneNumber: data.phoneNumber,
+        address: data.address,
+        dateOfBirth: data.dateOfBirth,
+        status: parseInt(data.status),
+        pdfTimestamp: dateNow.toISODate(),
+        doctorName: data.doctorName,
+        idTests: data.idTests,
+        notes: data.notes
+      }
+      updateUser.mutate({ClientInfo:infoClientUpdate, idClient:clientId})
+      setIsClientCreate(!isClientCreate)
     }
+    setClientObjectInfo(null)
+    navigateTo('/customers')
+
+    
 
     // alert(JSON.stringify(createNewClient))
-    console.log(createNewClient)
+    
 
     // Todo: Create a new User
-    // if (isClientCreate === true) {
+    //if (isClientCreate === true) {
     //   creteNewUser.mutate(infoClient)
     //   setIsClientCreate(!isClientCreate)
     // } else {
@@ -148,7 +174,7 @@ export const AddClients: React.FC = () => {
     //   const clientId: any = clientObjectInfo?.idClient
     //   updateUser.mutate({ ClientInfo: infoClient, idClient: clientId })
     //   setIsClientCreate(!isClientCreate)
-    // }
+    //}
 
     // navigateTo('/costumer')
   }
