@@ -14,12 +14,14 @@ import LogoImage from '../../assets/img/logo.png'
 
 import { UserPlus } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { useClientIdSelected } from '@renderer/context/clientContext/clientContext'
 
 export const NavBar: React.FC = () => {
   const navigateTo = useNavigate()
+  const { setClientObjectInfo, setIsClientCreate } = useClientIdSelected()
 
   return (
-    <div className="bg-slate-900 h-16 flex justify-between px-5">
+    <div className="bg-[#513b9c] h-16 flex justify-between px-5">
       <div className="flex flex-row justify-between align-middle">
         <div className="flex flex-col justify-center align-middle">
           <img src={LogoImage} alt="logo" className="w-12 h-12 m-1" />
@@ -45,9 +47,23 @@ export const NavBar: React.FC = () => {
                     Clentes
                   </MenubarTrigger>
                   <MenubarContent>
-                    <MenubarItem className="font-inter cursor-pointer	">Nuevo Cliente</MenubarItem>
+                    <MenubarItem
+                      className="font-inter cursor-pointer"
+                      onClick={() => {
+                        setIsClientCreate(true)
+                        setClientObjectInfo(null)
+                        navigateTo('/customer/form')
+                      }}
+                    >
+                      Nuevo Cliente
+                    </MenubarItem>
                     <MenubarSeparator />
-                    <MenubarItem className="font-inter cursor-pointer	">
+                    <MenubarItem
+                      onClick={() => {
+                        navigateTo('/customer')
+                      }}
+                      className="font-inter cursor-pointer	"
+                    >
                       Lista de Cliente
                     </MenubarItem>
                   </MenubarContent>
