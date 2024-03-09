@@ -52,7 +52,7 @@ export const UsersListHome = (): JSX.Element => {
           <h2 className="text-2xl font-inter font-bold">USUARIOS REGISTRADOS EN EL SISTEMA</h2>
         </div>
         <div>
-          <Button onClick={onCreateNewUser} className="bg-sky-700 text-white" variant={'ghost'}>
+          <Button onClick={onCreateNewUser} className="bg-[#00CAEF] text-white" variant={'ghost'}>
             <UserPlus className="mr-2" />
             Usuario
           </Button>
@@ -93,7 +93,7 @@ export const UsersListHome = (): JSX.Element => {
                     </TableCell>
                     <TableCell className="flex justify-center items-center m-0 p-2">
                       <Button
-                        className="bg-cyan-600 mr-1"
+                        className="bg-[#00c9b7] mr-1"
                         onClick={() => {
                           setIsCreate(false)
                           setUserObjectInfo(userInfo)
@@ -107,7 +107,7 @@ export const UsersListHome = (): JSX.Element => {
                         onClick={() => {
                           setUserObjectInfo(userInfo)
                         }}
-                        className="p-0 m-0"
+                        className="bg-[#e32940] p-0 m-0"
                         variant={'destructive'}
                       >
                         <DelateUserModal />

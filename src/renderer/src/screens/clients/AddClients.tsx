@@ -117,7 +117,7 @@ export const AddClients: React.FC = () => {
           address: clientObjectInfo.address,
           doctorName: clientObjectInfo.doctorName,
           idTests: clientObjectInfo.idTests,
-          status: '1',
+          status: changeStatus(clientObjectInfo?.status.toString()) ?? '',
           notes: clientObjectInfo.notes
         },
     mode: 'all'
@@ -380,7 +380,7 @@ export const AddClients: React.FC = () => {
                 <Button
                   variant={'destructive'}
                   type="button"
-                  className='bg-[#e32940]'
+                  className="bg-[#e32940]"
                   onClick={() => {
                     setClientObjectInfo(null)
                     navigateTo('/customer')
