@@ -8,12 +8,17 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { useUserIdSelected } from '@renderer/context/userContext/UserContext'
-import { useGetAllUsers } from '@renderer/hooks/res/usersRes/UseUsersAPI'
 import { UserCog, UserPlus } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { DelateUserModal } from './DeleteUser'
+// import { DelateUserModal } from './DeleteUser'
+import {
+  changeExamIndexTable,
+  changeStatusTable
+} from '@renderer/context/clientContext/EnumClients'
+import { useClientIdSelected } from '@renderer/context/clientContext/clientContext'
+import { useGetAllClient } from '@renderer/hooks/res/clientRes/UseClientAPI'
 import { Toaster } from 'react-hot-toast'
+import { DelateClientsModal } from './DelteClients'
 
 const ErrorPage: React.FC = () => {
   return (
@@ -26,15 +31,15 @@ const ErrorPage: React.FC = () => {
   )
 }
 
-export const UsersListHome = (): JSX.Element => {
-  const { data, isLoading } = useGetAllUsers()
-  const { setUserObjectInfo, setIsCreate } = useUserIdSelected()
+export const ClientsListHome = (): JSX.Element => {
+  const { data, isLoading } = useGetAllClient()
+  const { setClientObjectInfo, setIsClientCreate } = useClientIdSelected()
 
   const navigateTo = useNavigate()
   const onCreateNewUser = (): void => {
-    setIsCreate(true)
-    setUserObjectInfo(null)
-    navigateTo('/users/form')
+    setIsClientCreate(true)
+    setClientObjectInfo(null)
+    navigateTo('/customer/form')
   }
 
   if (isLoading) {
@@ -49,12 +54,12 @@ export const UsersListHome = (): JSX.Element => {
     <div>
       <div className="mt-9 mx-9 mb-3 flex flex-row justify-around">
         <div>
-          <h2 className="text-2xl font-inter font-bold">USUARIOS REGISTRADOS EN EL SISTEMA</h2>
+          <h2 className="text-2xl font-inter font-bold">CLIENTES REGISTRADOS EN EL SISTEMA</h2>
         </div>
         <div>
           <Button onClick={onCreateNewUser} className="bg-[#00CAEF] text-white" variant={'ghost'}>
             <UserPlus className="mr-2" />
-            Usuario
+            Cliente
           </Button>
         </div>
       </div>
@@ -73,31 +78,38 @@ export const UsersListHome = (): JSX.Element => {
                 <TableHead className="text-center w-[220px]">Nombre</TableHead>
                 <TableHead className="text-center max-w-[50px]">Edad</TableHead>
                 <TableHead className="text-center min-w-[60px]">Teléfono</TableHead>
-                <TableHead className="text-center min-w-[200px]">Direccion</TableHead>
-                <TableHead className="text-center max-w-[40px]">Rol</TableHead>
-                <TableHead className="text-center">Acciones</TableHead>
+                <TableHead className="text-center min-w-[150px]">Direccion</TableHead>
+                <TableHead className="text-center min-w-[100px]">Doctor</TableHead>
+                <TableHead className="text-center min-w-[100px]">Tipo de Examen</TableHead>
+                <TableHead className="text-center max-w-[40px]">Estatus</TableHead>
+                <TableHead className="text-center max-w-[40px]">Acciones</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data?.map((userInfo, index) => {
+              {data?.map((clientInfo, index) => {
                 return (
                   <TableRow className="m-0 p-0" key={index}>
                     <TableCell className="text-center font-medium m-0 p-2">
-                      {userInfo.name}
+                      {clientInfo.name}
                     </TableCell>
-                    <TableCell className="text-center m-0 p-2">{userInfo.age}</TableCell>
-                    <TableCell className="text-center m-0 p-2">{userInfo.phoneNumber}</TableCell>
-                    <TableCell className="text-center m-0 p-2">{userInfo.address}</TableCell>
+                    <TableCell className="text-left m-0 p-2">{clientInfo.age}</TableCell>
+                    <TableCell className="text-center m-0 p-2">{clientInfo.phoneNumber}</TableCell>
+                    <TableCell className="text-center Fm-0 p-2">{clientInfo.address}</TableCell>
+                    <TableCell className="text-center m-0 p-2">{clientInfo.doctorName}</TableCell>
                     <TableCell className="text-center m-0 p-2">
-                      {userInfo.role.toString() === 'Admin' ? 'Administrador' : 'Empleado'}
+                      {changeExamIndexTable(clientInfo.idTests)}
                     </TableCell>
+                    <TableCell className="text-center m-0 p-2">
+                      {changeStatusTable(clientInfo.status.toString())}
+                    </TableCell>
+
                     <TableCell className="flex justify-center items-center m-0 p-2">
                       <Button
                         className="bg-[#00c9b7] mr-1"
                         onClick={() => {
-                          setIsCreate(false)
-                          setUserObjectInfo(userInfo)
-                          navigateTo('/users/form')
+                          setIsClientCreate(false)
+                          setClientObjectInfo(clientInfo)
+                          navigateTo('/customer/form')
                         }}
                       >
                         <UserCog />
@@ -105,12 +117,12 @@ export const UsersListHome = (): JSX.Element => {
 
                       <Button
                         onClick={() => {
-                          setUserObjectInfo(userInfo)
+                          setClientObjectInfo(clientInfo)
                         }}
                         className="bg-[#e32940] p-0 m-0"
                         variant={'destructive'}
                       >
-                        <DelateUserModal />
+                        <DelateClientsModal />
                       </Button>
                     </TableCell>
                   </TableRow>
