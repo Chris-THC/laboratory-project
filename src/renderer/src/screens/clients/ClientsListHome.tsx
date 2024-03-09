@@ -51,7 +51,7 @@ export const ClientsListHome = (): JSX.Element => {
   }
 
   return (
-    <div className='bg-[#f9f9f9] min-h-lvh'>
+    <div>
       <div className="mt-9 mx-9 mb-3 flex flex-row justify-around">
         <div>
           <h2 className="text-2xl font-inter font-bold">CLIENTES REGISTRADOS EN EL SISTEMA</h2>
