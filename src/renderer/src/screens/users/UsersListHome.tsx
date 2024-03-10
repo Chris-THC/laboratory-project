@@ -10,25 +10,95 @@ import {
 } from '@/components/ui/table'
 import { useUserIdSelected } from '@renderer/context/userContext/UserContext'
 import { useGetAllUsers } from '@renderer/hooks/res/usersRes/UseUsersAPI'
-import { UserCog, UserPlus } from 'lucide-react'
+import {
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+  getPaginationRowModel,
+  getFilteredRowModel
+} from '@tanstack/react-table'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink
+} from '@/components/ui/pagination'
+
+import { ChevronLeft, ChevronRight, UserCog, UserPlus } from 'lucide-react'
+import { Toaster } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { DelateUserModal } from './DeleteUser'
-import { Toaster } from 'react-hot-toast'
-
-const ErrorPage: React.FC = () => {
-  return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="max-w-md p-8 bg-white rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold mb-4">No se pudo conectar con el servidor</h2>
-        <p className="text-gray-700">Por favor, inténtelo de nuevo más tarde.</p>
-      </div>
-    </div>
-  )
-}
+import { ErrorPage } from '@renderer/components/PageNotFound/ErrorPage'
+import { LoadingSpinner } from '@renderer/components/LoadingSpinner/LoadingSpinner'
+import { useEffect, useState } from 'react'
+import { Input } from '@/components/ui/input'
 
 export const UsersListHome = (): JSX.Element => {
   const { data, isLoading } = useGetAllUsers()
   const { setUserObjectInfo, setIsCreate } = useUserIdSelected()
+
+  const [filterUsers, setFilterUsers] = useState('')
+
+
+  const columns = [
+    {
+      header: 'Nombre',
+      accessorKey: 'name'
+    },
+    {
+      header: 'Edad',
+      accessorKey: 'age'
+    },
+    {
+      header: 'Teléfono',
+      accessorKey: 'phoneNumber'
+    },
+    {
+      header: 'Dirección',
+      accessorKey: 'address'
+    },
+    {
+      header: 'Rol del usuario',
+      accessorKey: 'role',
+      cell: ({ getValue }): string => {
+        return getValue() === 'Admin' ? 'Administrador' : 'Empleado'
+      }
+    },
+    {
+      header: 'Acciones',
+      cell: ({ row }): JSX.Element => {
+        return (
+          <div>
+            <Button
+              className="bg-[#00c9b7] mr-1"
+              onClick={() => {
+                setIsCreate(false)
+                setUserObjectInfo(row.original)
+                navigateTo('/users/form')
+              }}
+            >
+              <UserCog />
+            </Button>
+
+            <DelateUserModal idUser={row.original.idUser} name={row.original.name} />
+          </div>
+        )
+      }
+    }
+  ]
+
+  const tableUser = useReactTable({
+    data: data ?? [],
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    state: {
+      globalFilter: filterUsers
+    },
+    onGlobalFilterChange: setFilterUsers
+  })
 
   const navigateTo = useNavigate()
   const onCreateNewUser = (): void => {
@@ -37,88 +107,175 @@ export const UsersListHome = (): JSX.Element => {
     navigateTo('/users/form')
   }
 
+  useEffect(() => {
+    tableUser.setPageSize(7)
+  }, [])
+
   if (isLoading) {
-    return (
-      <div>
-        <h1>Is loading...</h1>
-      </div>
-    )
+    return <LoadingSpinner />
   }
 
   return (
     <div>
-      <div className="mt-9 mx-9 mb-3 flex flex-row justify-around">
-        <div>
-          <h2 className="text-2xl font-inter font-bold">USUARIOS REGISTRADOS EN EL SISTEMA</h2>
-        </div>
-        <div>
-          <Button onClick={onCreateNewUser} className="bg-[#00CAEF] text-white" variant={'ghost'}>
-            <UserPlus className="mr-2" />
-            Usuario
-          </Button>
-        </div>
-      </div>
-
-      <Separator />
-
       {!data ? (
-        <div>
-          <ErrorPage />
-        </div>
+        <ErrorPage />
       ) : (
-        <div className="flex justify-center align-middle mx-8 my-5">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="text-center w-[220px]">Nombre</TableHead>
-                <TableHead className="text-center max-w-[50px]">Edad</TableHead>
-                <TableHead className="text-center min-w-[60px]">Teléfono</TableHead>
-                <TableHead className="text-center min-w-[200px]">Direccion</TableHead>
-                <TableHead className="text-center max-w-[40px]">Rol</TableHead>
-                <TableHead className="text-center">Acciones</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {data?.map((userInfo, index) => {
-                return (
-                  <TableRow className="m-0 p-0" key={index}>
-                    <TableCell className="text-center font-medium m-0 p-2">
-                      {userInfo.name}
-                    </TableCell>
-                    <TableCell className="text-center m-0 p-2">{userInfo.age}</TableCell>
-                    <TableCell className="text-center m-0 p-2">{userInfo.phoneNumber}</TableCell>
-                    <TableCell className="text-center m-0 p-2">{userInfo.address}</TableCell>
-                    <TableCell className="text-center m-0 p-2">
-                      {userInfo.role.toString() === 'Admin' ? 'Administrador' : 'Empleado'}
-                    </TableCell>
-                    <TableCell className="flex justify-center items-center m-0 p-2">
-                      <Button
-                        className="bg-[#00c9b7] mr-1"
-                        onClick={() => {
-                          setIsCreate(false)
-                          setUserObjectInfo(userInfo)
-                          navigateTo('/users/form')
-                        }}
-                      >
-                        <UserCog />
-                      </Button>
+        <div>
+          <div className="mt-9 mx-9 mb-1 flex flex-row justify-around">
+            <div>
+              <h2 className="text-2xl font-inter font-bold">USUARIOS REGISTRADOS EN EL SISTEMA</h2>
+            </div>
+            <div>
+              <Button
+                onClick={onCreateNewUser}
+                className="bg-[#00CAEF] text-white"
+                variant={'ghost'}
+              >
+                <UserPlus className="mr-2" />
+                Usuario
+              </Button>
+            </div>
+          </div>
 
-                      <Button
-                        onClick={() => {
-                          setUserObjectInfo(userInfo)
-                        }}
-                        className="bg-[#e32940] p-0 m-0"
-                        variant={'destructive'}
+          <Separator />
+
+          <div className="flex flex-col justify-center align-middle mx-8">
+            <div className="max-w-96 my-3">
+              <h2 className="font-inter text-xl mb-2">Busqueda</h2>
+              <Input
+                type="text"
+                placeholder="Buscar por normbre"
+                value={filterUsers}
+                onChange={(e) => setFilterUsers(e.target.value)}
+              />
+            </div>
+            <Table className="border">
+              <TableHeader>
+                {tableUser.getHeaderGroups().map((headerGrup) =>
+                  headerGrup.headers.map((header, index) => (
+                    <TableHead
+                      key={index}
+                      className="text-center text-gray-800 max-w-[120px]   font-medium m-0 p-2 bg-[#EFFBFF]"
+                    >
+                      {flexRender(header.column.columnDef.header, header.getContext())}
+                    </TableHead>
+                  ))
+                )}
+              </TableHeader>
+              <TableBody>
+                {tableUser.getRowModel().rows.map((row, index) => (
+                  <TableRow
+                    className="m-0 p-0 text-gray-600 text-center max-w-[120px] font-medium"
+                    key={index}
+                  >
+                    {row.getVisibleCells().map((cell, index) => (
+                      <TableCell
+                        key={index}
+                        className="text-center max-w-[120px] font-medium m-0 p-2"
                       >
-                        <DelateUserModal />
-                      </Button>
-                    </TableCell>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    ))}
                   </TableRow>
-                )
-              })}
-            </TableBody>
-          </Table>
-          <Toaster />
+                ))}
+              </TableBody>
+            </Table>
+
+            <div className="mt-3">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <Button
+                      disabled={!tableUser.getCanPreviousPage}
+                      variant={'ghost'}
+                      onClick={() => tableUser.previousPage()}
+                    >
+                      <ChevronLeft className="mr-1" />
+                      Anterior
+                    </Button>
+                  </PaginationItem>
+
+                  {/* Mostrar el número anterior si no estamos en la primera página */}
+                  {tableUser.getState().pagination.pageIndex > 0 && (
+                    <PaginationItem>
+                      <PaginationLink
+                        onClick={() =>
+                          tableUser.setPageIndex(tableUser.getState().pagination.pageIndex - 1)
+                        }
+                      >
+                        {tableUser.getState().pagination.pageIndex}
+                      </PaginationLink>
+                    </PaginationItem>
+                  )}
+
+                  {/* Mostrar el número actual */}
+                  <PaginationItem>
+                    <PaginationLink
+                      isActive={true} // Establece isActive a true para la página actual
+                      onClick={() =>
+                        tableUser.setPageIndex(tableUser.getState().pagination.pageIndex)
+                      }
+                    >
+                      {tableUser.getState().pagination.pageIndex + 1}
+                    </PaginationLink>
+                  </PaginationItem>
+
+                  {/* Mostrar el número siguiente si no estamos en la última página */}
+                  {tableUser.getState().pagination.pageIndex < tableUser.getPageCount() - 1 && (
+                    <PaginationItem>
+                      <PaginationLink
+                        onClick={() =>
+                          tableUser.setPageIndex(tableUser.getState().pagination.pageIndex + 1)
+                        }
+                      >
+                        {tableUser.getState().pagination.pageIndex + 2}
+                      </PaginationLink>
+                    </PaginationItem>
+                  )}
+
+                  {/* Mostrar el símbolo "..." si hay más de dos páginas antes del número actual */}
+                  {tableUser.getPageCount() > 3 &&
+                    tableUser.getState().pagination.pageIndex > 1 && (
+                      <PaginationItem>
+                        <PaginationEllipsis />
+                      </PaginationItem>
+                    )}
+
+                  {/* Mostrar el número de la última página si no estamos en la última página */}
+                  {tableUser.getState().pagination.pageIndex < tableUser.getPageCount() - 1 && (
+                    <PaginationItem>
+                      <PaginationLink
+                        onClick={() => tableUser.setPageIndex(tableUser.getPageCount() - 1)}
+                      >
+                        {tableUser.getPageCount()}
+                      </PaginationLink>
+                    </PaginationItem>
+                  )}
+
+                  <PaginationItem>
+                    <Button
+                      variant={'ghost'}
+                      disabled={!tableUser.getCanNextPage}
+                      onClick={() => {
+                        if (
+                          tableUser.getState().pagination.pageIndex ===
+                          tableUser.getPageCount() - 1
+                        ) {
+                          tableUser.getPageCount() - 1
+                        } else {
+                          tableUser.nextPage()
+                        }
+                      }}
+                    >
+                      Siguiente
+                      <ChevronRight className="ml-1" />
+                    </Button>
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+            <Toaster />
+          </div>
         </div>
       )}
     </div>

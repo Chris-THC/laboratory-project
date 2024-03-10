@@ -21,7 +21,7 @@ export const NavBar: React.FC = () => {
   const { setClientObjectInfo, setIsClientCreate } = useClientIdSelected()
 
   return (
-    <div className="bg-[#513b9c] h-16 flex justify-between px-5">
+    <div className="bg-[#005da5] h-16 flex justify-between px-5">
       <div className="flex flex-row justify-between align-middle">
         <div className="flex flex-col justify-center align-middle">
           <img src={LogoImage} alt="logo" className="w-12 h-12 m-1" />
