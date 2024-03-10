@@ -23,7 +23,7 @@ const notifyDeleteSucces = (): string => {
 }
 
 //Here we get all users list data
-const getAllUsersFromApi = async (): Promise<UsersInterface[]> => {
+const getAllUsersFromApi = async (): Promise<UsersInterface[] | null | undefined> => {
   const { data } = await apiConection.get<UsersInterface[]>('/user')
   return data
 }
