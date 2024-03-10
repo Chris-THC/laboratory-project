@@ -14,7 +14,8 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
-  getPaginationRowModel
+  getPaginationRowModel,
+  getFilteredRowModel
 } from '@tanstack/react-table'
 import {
   Pagination,
@@ -30,11 +31,15 @@ import { useNavigate } from 'react-router-dom'
 import { DelateUserModal } from './DeleteUser'
 import { ErrorPage } from '@renderer/components/PageNotFound/ErrorPage'
 import { LoadingSpinner } from '@renderer/components/LoadingSpinner/LoadingSpinner'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { Input } from '@/components/ui/input'
 
 export const UsersListHome = (): JSX.Element => {
   const { data, isLoading } = useGetAllUsers()
   const { setUserObjectInfo, setIsCreate } = useUserIdSelected()
+
+  const [filterUsers, setFilterUsers] = useState('')
+
 
   const columns = [
     {
@@ -87,7 +92,12 @@ export const UsersListHome = (): JSX.Element => {
     data: data ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel()
+    getPaginationRowModel: getPaginationRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    state: {
+      globalFilter: filterUsers
+    },
+    onGlobalFilterChange: setFilterUsers
   })
 
   const navigateTo = useNavigate()
@@ -98,26 +108,20 @@ export const UsersListHome = (): JSX.Element => {
   }
 
   useEffect(() => {
-    tableUser.setPageSize(8)
+    tableUser.setPageSize(7)
   }, [])
 
   if (isLoading) {
-    return (
-      <div>
-        <LoadingSpinner />
-      </div>
-    )
+    return <LoadingSpinner />
   }
 
   return (
     <div>
       {!data ? (
-        <div>
-          <ErrorPage />
-        </div>
+        <ErrorPage />
       ) : (
         <div>
-          <div className="mt-9 mx-9 mb-3 flex flex-row justify-around">
+          <div className="mt-9 mx-9 mb-1 flex flex-row justify-around">
             <div>
               <h2 className="text-2xl font-inter font-bold">USUARIOS REGISTRADOS EN EL SISTEMA</h2>
             </div>
@@ -135,8 +139,17 @@ export const UsersListHome = (): JSX.Element => {
 
           <Separator />
 
-          <div className="flex flex-col justify-center align-middle mx-8 my-5">
-            <Table className='border'>
+          <div className="flex flex-col justify-center align-middle mx-8">
+            <div className="max-w-96 my-3">
+              <h2 className="font-inter text-xl mb-2">Busqueda</h2>
+              <Input
+                type="text"
+                placeholder="Buscar por normbre"
+                value={filterUsers}
+                onChange={(e) => setFilterUsers(e.target.value)}
+              />
+            </div>
+            <Table className="border">
               <TableHeader>
                 {tableUser.getHeaderGroups().map((headerGrup) =>
                   headerGrup.headers.map((header, index) => (
@@ -168,7 +181,7 @@ export const UsersListHome = (): JSX.Element => {
               </TableBody>
             </Table>
 
-            <div className="mt-5">
+            <div className="mt-3">
               <Pagination>
                 <PaginationContent>
                   <PaginationItem>
