@@ -8,6 +8,5 @@ export interface ClientsInterface {
   status: number
   pdfTimestamp: string
   doctorName: string
-  idTests: string
   notes: string
 }

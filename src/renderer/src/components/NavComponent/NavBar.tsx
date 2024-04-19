@@ -86,7 +86,15 @@ export const NavBar: React.FC = () => {
         </div>
 
         <div className="flex flex-col justify-center align-middle">
-          <Button variant={'ghost'} className="mx-2 text-white font-inter">
+          <Button
+            onClick={() => {
+              setIsClientCreate(true)
+              setClientObjectInfo(null)
+              navigateTo('/customer/form')
+            }}
+            variant={'ghost'}
+            className="mx-2 text-white font-inter"
+          >
             <UserPlus className="mr-2 text-sm" />
             Cliente
           </Button>

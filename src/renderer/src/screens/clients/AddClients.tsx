@@ -31,7 +31,7 @@ import { useClientIdSelected } from '@renderer/context/clientContext/clientConte
 import { ClientsInterface } from '@renderer/interfaces/clients/clients'
 import { DateTime } from 'luxon'
 import { useCreateNewClient, useUpdateClientById } from '@renderer/hooks/res/clientRes/UseClientAPI'
-import { changeStatus, changeExamIndex } from '@renderer/context/clientContext/EnumClients'
+import { changeStatus } from '@renderer/context/clientContext/EnumClients'
 
 const FormSchema = z.object({
   name: z
@@ -76,9 +76,6 @@ const FormSchema = z.object({
     .regex(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s.,]+$/, {
       message: 'El nombre solo puede contener letras y espacios'
     }),
-  idTests: z.string({
-    required_error: 'El valor es requerido'
-  }),
   status: z.string({
     required_error: 'El valor es requerido'
   }),
@@ -105,7 +102,6 @@ export const AddClients: React.FC = () => {
           dateOfBirth: '',
           address: '',
           doctorName: '',
-          idTests: '',
           status: '',
           notes: ''
         }
@@ -116,7 +112,6 @@ export const AddClients: React.FC = () => {
           dateOfBirth: clientObjectInfo.dateOfBirth,
           address: clientObjectInfo.address,
           doctorName: clientObjectInfo.doctorName,
-          idTests: clientObjectInfo.idTests,
           status: changeStatus(clientObjectInfo?.status.toString()) ?? '',
           notes: clientObjectInfo.notes
         },
@@ -136,7 +131,7 @@ export const AddClients: React.FC = () => {
         status: parseInt(data.status),
         pdfTimestamp: dateNow.toISODate(),
         doctorName: data.doctorName,
-        idTests: data.idTests,
+
         notes: data.notes
       }
       creteNewUser.mutate(createNewClient)
@@ -153,7 +148,6 @@ export const AddClients: React.FC = () => {
         status: parseInt(data.status),
         pdfTimestamp: dateNow.toISODate(),
         doctorName: data.doctorName,
-        idTests: data.idTests,
         notes: data.notes
       }
       updateUser.mutate({ ClientInfo: infoClientUpdate, idClient: clientId })
@@ -306,40 +300,6 @@ export const AddClients: React.FC = () => {
                         <SelectItem value="0">Reportado</SelectItem>
                         <SelectItem value="1">Impreso</SelectItem>
                         <SelectItem value="2">Entregado</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                  {fieldState.error && (
-                    <FormDescription className="text-red-500">
-                      {fieldState.error.message}
-                    </FormDescription>
-                  )}
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="idTests"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>Examen</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={
-                      clientObjectInfo === null
-                        ? ''
-                        : changeExamIndex(clientObjectInfo?.idTests.toString()) ?? ''
-                    }
-                  >
-                    <SelectTrigger className="w-[290px]">
-                      <SelectValue placeholder="Selecciona un examen" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Examenes Disponibles</SelectLabel>
-                        <SelectItem value="0">Formato único adultos</SelectItem>
-                        <SelectItem value="1">Química sanguínea 35 elementos</SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>

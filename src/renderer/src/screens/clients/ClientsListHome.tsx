@@ -18,10 +18,7 @@ import {
 } from '@/components/ui/table'
 import { LoadingSpinner } from '@renderer/components/LoadingSpinner/LoadingSpinner'
 import { ErrorPage } from '@renderer/components/PageNotFound/ErrorPage'
-import {
-  changeExamIndexTable,
-  changeStatusTable
-} from '@renderer/context/clientContext/EnumClients'
+import { changeStatusTable } from '@renderer/context/clientContext/EnumClients'
 import { useClientIdSelected } from '@renderer/context/clientContext/clientContext'
 import { useGetAllClient } from '@renderer/hooks/res/clientRes/UseClientAPI'
 import {
@@ -62,13 +59,13 @@ export const ClientsListHome = (): JSX.Element => {
       header: 'Doctor',
       accessorKey: 'doctorName'
     },
-    {
-      header: 'Tipo de Examen',
-      accessorKey: 'idTests',
-      cell: ({ row }): string | undefined | null => {
-        return changeExamIndexTable(row.original.idTests)
-      }
-    },
+    // {
+    //   header: 'Tipo de Examen',
+    //   accessorKey: 'idTests',
+    //   cell: ({ row }): string | undefined | null => {
+    //     return changeExamIndexTable(row.original.idTests)
+    //   }
+    // },
     {
       header: 'Estatus',
       accessorKey: 'status',
@@ -87,7 +84,6 @@ export const ClientsListHome = (): JSX.Element => {
                 setIsClientCreate(false)
                 setClientObjectInfo(row.original)
                 navigateTo('/customer/form')
-                console.log(row)
               }}
             >
               <UserCog />
