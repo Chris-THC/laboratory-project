@@ -6,24 +6,28 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger
+  AlertDialogTitle
 } from '@/components/ui/alert-dialog'
-import { Button } from '@/components/ui/button'
+import { useModalDelete } from '@renderer/context/ModalDeleteContext/IsOpenModalDelete'
 import { useClientIdSelected } from '@renderer/context/clientContext/clientContext'
 import { useDelateClient } from '@renderer/hooks/res/clientRes/UseClientAPI'
-import { UserX } from 'lucide-react'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
 interface DelateUserModalProps {
   idCostumer: number
   name: string
+  isOpen: boolean
 }
 
-export const DelateClientsModal: React.FC<DelateUserModalProps> = ({ idCostumer, name }) => {
+export const DelateClientsModal: React.FC<DelateUserModalProps> = ({
+  idCostumer,
+  name,
+  isOpen
+}) => {
   const navigateTo = useNavigate()
   const { setClientObjectInfo, setIsClientCreate } = useClientIdSelected()
+  const { isOpenModalDelete, setIsOpenModalDelete } = useModalDelete()
 
   const deleteClient = useDelateClient()
   const onDeleteUser = (idCostumer: number): void => {
@@ -31,16 +35,10 @@ export const DelateClientsModal: React.FC<DelateUserModalProps> = ({ idCostumer,
     setClientObjectInfo(null)
     setIsClientCreate(true)
     navigateTo('/customer')
-    console.log('Eliminar')
   }
 
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Button className="bg-inherit font-inter bg-red-600" variant="destructive">
-          <UserX />
-        </Button>
-      </AlertDialogTrigger>
+    <AlertDialog open={isOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle className="flex flex-row justify-center align-middle">
@@ -53,6 +51,7 @@ export const DelateClientsModal: React.FC<DelateUserModalProps> = ({ idCostumer,
             <AlertDialogAction
               onClick={() => {
                 onDeleteUser(idCostumer)
+                setIsOpenModalDelete(!isOpenModalDelete)
               }}
               className="bg-red-600 mx-3"
             >
@@ -60,7 +59,7 @@ export const DelateClientsModal: React.FC<DelateUserModalProps> = ({ idCostumer,
             </AlertDialogAction>
             <AlertDialogCancel
               onClick={() => {
-                console.log('NO se elimino')
+                setIsOpenModalDelete(!isOpenModalDelete)
               }}
               className="mx-3"
             >

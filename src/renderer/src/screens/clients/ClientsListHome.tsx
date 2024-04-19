@@ -28,15 +28,29 @@ import {
   getPaginationRowModel,
   useReactTable
 } from '@tanstack/react-table'
-import { ChevronLeft, ChevronRight, UserCog, UserPlus } from 'lucide-react'
+import { ChevronLeft, ChevronRight, FlaskConical, UserCog, UserPlus, UserX } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { DelateClientsModal } from './DelteClients'
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
+import { useModalDelete } from '@renderer/context/ModalDeleteContext/IsOpenModalDelete'
+
 export const ClientsListHome = (): JSX.Element => {
   const { data, isLoading } = useGetAllClient()
   const { setClientObjectInfo, setIsClientCreate } = useClientIdSelected()
+  const { isOpenModalDelete, setIsOpenModalDelete } = useModalDelete()
+  const [idUserToDelete, setIdUserToDelete] = useState(0)
+  const [nameUserToDelete, setNameUserToDelete] = useState('')
 
   const columns = [
     {
@@ -59,13 +73,7 @@ export const ClientsListHome = (): JSX.Element => {
       header: 'Doctor',
       accessorKey: 'doctorName'
     },
-    // {
-    //   header: 'Tipo de Examen',
-    //   accessorKey: 'idTests',
-    //   cell: ({ row }): string | undefined | null => {
-    //     return changeExamIndexTable(row.original.idTests)
-    //   }
-    // },
+
     {
       header: 'Estatus',
       accessorKey: 'status',
@@ -78,18 +86,54 @@ export const ClientsListHome = (): JSX.Element => {
       cell: ({ row }): JSX.Element => {
         return (
           <div>
-            <Button
-              className="bg-[#00c9b7] mr-1"
-              onClick={() => {
-                setIsClientCreate(false)
-                setClientObjectInfo(row.original)
-                navigateTo('/customer/form')
-              }}
-            >
-              <UserCog />
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline">Opciones</Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuLabel>Selecciona una opción</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuRadioGroup>
+                  <DropdownMenuRadioItem
+                    onClick={() => {
+                      setIsClientCreate(false)
+                      setClientObjectInfo(row.original)
+                      navigateTo('/customer/form')
+                    }}
+                    value="Editar"
+                    className="text-[#15658d] font-bold"
+                  >
+                    <UserCog color="#15658d" className="mr-2 h-4 w-4" />
+                    Editar
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem
+                    onClick={() => {
+                      setIdUserToDelete(row.original.idCustomer)
+                      setNameUserToDelete(row.original.name)
+                      setIsOpenModalDelete(!isOpenModalDelete)
+                    }}
+                    value="Eliminar"
+                    className="text-[#c80800] font-bold"
+                  >
+                    <UserX color="#c80800" className="mr-2 h-4 w-4" />
+                    Eliminar
+                  </DropdownMenuRadioItem>
 
-            <DelateClientsModal idCostumer={row.original.idCustomer} name={row.original.name} />
+                  <DropdownMenuSeparator />
+
+                  <DropdownMenuRadioItem
+                    onClick={() => {
+                      navigateTo('/tests')
+                    }}
+                    value="Gestionar Examenes"
+                    className="text-[#179f7e] font-bold"
+                  >
+                    <FlaskConical color="#179f7e" className="mr-2 h-4 w-4" />
+                    Gestionar exámenes
+                  </DropdownMenuRadioItem>
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         )
       }
@@ -159,37 +203,40 @@ export const ClientsListHome = (): JSX.Element => {
               />
             </div>
 
-            <Table className="border">
-              <TableHeader>
-                {tableCostumer.getHeaderGroups().map((headerGrup) =>
-                  headerGrup.headers.map((header, index) => (
-                    <TableHead
-                      key={index}
-                      className="text-center text-gray-800 max-w-[120px]   font-medium m-0 p-2 bg-[#EFFBFF]"
-                    >
-                      {flexRender(header.column.columnDef.header, header.getContext())}
-                    </TableHead>
-                  ))
-                )}
-              </TableHeader>
-              <TableBody>
-                {tableCostumer.getRowModel().rows.map((row, index) => (
-                  <TableRow
-                    className="m-0 p-0 text-gray-600 text-center max-w-[120px] font-medium"
-                    key={index}
-                  >
-                    {row.getVisibleCells().map((cell, index) => (
-                      <TableCell
+            <div className="h-80">
+              <Table className="border">
+                <TableHeader>
+                  {tableCostumer.getHeaderGroups().map((headerGrup) =>
+                    headerGrup.headers.map((header, index) => (
+                      <TableHead
                         key={index}
-                        className="text-center max-w-[120px] font-medium m-0 p-2"
+                        className="text-center text-gray-800 max-w-[120px]   font-medium m-0 p-2 bg-[#EFFBFF]"
                       >
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                      </TableHead>
+                    ))
+                  )}
+                </TableHeader>
+                <TableBody>
+                  {tableCostumer.getRowModel().rows.map((row, index) => (
+                    <TableRow
+                      className="m-0 p-0 text-gray-600 text-center max-w-[120px] font-medium"
+                      key={index}
+                    >
+                      {row.getVisibleCells().map((cell, index) => (
+                        <TableCell
+                          key={index}
+                          className="text-center max-w-[120px] font-medium m-0 p-2"
+                        >
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+
             <div className="mt-3">
               <Pagination>
                 <PaginationContent>
@@ -291,6 +338,11 @@ export const ClientsListHome = (): JSX.Element => {
             </div>
 
             <Toaster />
+            <DelateClientsModal
+              isOpen={isOpenModalDelete}
+              idCostumer={idUserToDelete}
+              name={nameUserToDelete}
+            />
           </div>
         </div>
       )}

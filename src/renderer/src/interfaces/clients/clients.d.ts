@@ -4,9 +4,7 @@ export interface ClientsInterface {
   age: number
   phoneNumber: string
   address: string
-  dateOfBirth?: string
+  dateOfBirth: string
   status: number
-  pdfTimestamp: string
   doctorName: string
-  notes: string
 }

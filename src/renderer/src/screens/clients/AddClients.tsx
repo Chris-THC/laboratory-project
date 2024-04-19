@@ -29,7 +29,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { useClientIdSelected } from '@renderer/context/clientContext/clientContext'
 import { ClientsInterface } from '@renderer/interfaces/clients/clients'
-import { DateTime } from 'luxon'
 import { useCreateNewClient, useUpdateClientById } from '@renderer/hooks/res/clientRes/UseClientAPI'
 import { changeStatus } from '@renderer/context/clientContext/EnumClients'
 
@@ -78,9 +77,6 @@ const FormSchema = z.object({
     }),
   status: z.string({
     required_error: 'El valor es requerido'
-  }),
-  notes: z.string({
-    required_error: 'El valor es requerido'
   })
 })
 
@@ -102,8 +98,7 @@ export const AddClients: React.FC = () => {
           dateOfBirth: '',
           address: '',
           doctorName: '',
-          status: '',
-          notes: ''
+          status: ''
         }
       : {
           name: clientObjectInfo.name,
@@ -112,15 +107,12 @@ export const AddClients: React.FC = () => {
           dateOfBirth: clientObjectInfo.dateOfBirth,
           address: clientObjectInfo.address,
           doctorName: clientObjectInfo.doctorName,
-          status: changeStatus(clientObjectInfo?.status.toString()) ?? '',
-          notes: clientObjectInfo.notes
+          status: changeStatus(clientObjectInfo?.status.toString()) ?? ''
         },
     mode: 'all'
   })
 
   const onSubmit = (data: z.infer<typeof FormSchema>): void => {
-    const dateNow: DateTime = DateTime.now()
-
     if (isClientCreate === true) {
       const createNewClient: ClientsInterface = {
         name: data.name,
@@ -129,10 +121,7 @@ export const AddClients: React.FC = () => {
         address: data.address,
         dateOfBirth: data.dateOfBirth,
         status: parseInt(data.status),
-        pdfTimestamp: dateNow.toISODate(),
-        doctorName: data.doctorName,
-
-        notes: data.notes
+        doctorName: data.doctorName
       }
       creteNewUser.mutate(createNewClient)
       setIsClientCreate(!isClientCreate)
@@ -146,9 +135,7 @@ export const AddClients: React.FC = () => {
         address: data.address,
         dateOfBirth: data.dateOfBirth,
         status: parseInt(data.status),
-        pdfTimestamp: dateNow.toISODate(),
-        doctorName: data.doctorName,
-        notes: data.notes
+        doctorName: data.doctorName
       }
       updateUser.mutate({ ClientInfo: infoClientUpdate, idClient: clientId })
       setIsClientCreate(!isClientCreate)
@@ -303,24 +290,6 @@ export const AddClients: React.FC = () => {
                       </SelectGroup>
                     </SelectContent>
                   </Select>
-                  {fieldState.error && (
-                    <FormDescription className="text-red-500">
-                      {fieldState.error.message}
-                    </FormDescription>
-                  )}
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="notes"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>Notas</FormLabel>
-                  <FormControl>
-                    <Textarea placeholder="Agregue una nota" {...field} />
-                  </FormControl>
                   {fieldState.error && (
                     <FormDescription className="text-red-500">
                       {fieldState.error.message}

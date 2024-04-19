@@ -6,6 +6,7 @@ import { AddUser } from '../users/AddUser'
 import { UsersListHome } from '../users/UsersListHome'
 import { AddClients } from '../clients/AddClients'
 import { ClientsListHome } from '../clients/ClientsListHome'
+import { TestManagerHome } from '../TestManager/TestManager'
 
 export const HomeScreen: React.FC = () => {
   return (
@@ -24,6 +25,7 @@ export const HomeScreen: React.FC = () => {
         <Route path="/users/form" element={<AddUser />} />
         <Route path="/customer" element={<ClientsListHome />} />
         <Route path="/customer/form" element={<AddClients />} />
+        <Route path="/tests" element={<TestManagerHome />} />
 
         {/* Here you can add new screens */}
         {/* <Route path="/add/task" element={<AddTask />} /> */}
