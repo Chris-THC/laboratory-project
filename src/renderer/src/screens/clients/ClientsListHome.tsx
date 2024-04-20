@@ -18,7 +18,6 @@ import {
 } from '@/components/ui/table'
 import { LoadingSpinner } from '@renderer/components/LoadingSpinner/LoadingSpinner'
 import { ErrorPage } from '@renderer/components/PageNotFound/ErrorPage'
-import { changeStatusTable } from '@renderer/context/clientContext/EnumClients'
 import { useClientIdSelected } from '@renderer/context/clientContext/clientContext'
 import { useGetAllClient } from '@renderer/hooks/res/clientRes/UseClientAPI'
 import {
@@ -74,67 +73,66 @@ export const ClientsListHome = (): JSX.Element => {
       accessorKey: 'doctorName'
     },
 
-    {
-      header: 'Estatus',
-      accessorKey: 'status',
-      cell: ({ row }): string | undefined | null => {
-        return changeStatusTable(row.original.status)
-      }
-    },
+    // {
+    //   header: 'Estatus',
+    //   accessorKey: 'status',
+    //   cell: ({ row }): string | undefined | null => {
+    //     return changeStatusTable(row.original.status)
+    //   }
+    // },
     {
       header: 'Acciones',
       cell: ({ row }): JSX.Element => {
         return (
-          <div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline">Opciones</Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel>Selecciona una opción</DropdownMenuLabel>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">Opciones</Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              <DropdownMenuLabel>Selecciona una opción</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuRadioGroup>
+                <DropdownMenuRadioItem
+                  onClick={() => {
+                    setIsClientCreate(false)
+                    setClientObjectInfo(row.original)
+                    navigateTo('/customer/form')
+                  }}
+                  value="Editar"
+                  className="text-[#15658d] font-bold px-1"
+                >
+                  <UserCog color="#15658d" className="mr-2 h-4 w-4" />
+                  Editar
+                </DropdownMenuRadioItem>
+
+                <DropdownMenuRadioItem
+                  onClick={() => {
+                    setIdUserToDelete(row.original.idCustomer)
+                    setNameUserToDelete(row.original.name)
+                    setIsOpenModalDelete(!isOpenModalDelete)
+                  }}
+                  value="Eliminar"
+                  className="text-[#c80800] font-bold px-1"
+                >
+                  <UserX color="#c80800" className="mr-2 h-4 w-4" />
+                  Eliminar
+                </DropdownMenuRadioItem>
+
                 <DropdownMenuSeparator />
-                <DropdownMenuRadioGroup>
-                  <DropdownMenuRadioItem
-                    onClick={() => {
-                      setIsClientCreate(false)
-                      setClientObjectInfo(row.original)
-                      navigateTo('/customer/form')
-                    }}
-                    value="Editar"
-                    className="text-[#15658d] font-bold"
-                  >
-                    <UserCog color="#15658d" className="mr-2 h-4 w-4" />
-                    Editar
-                  </DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem
-                    onClick={() => {
-                      setIdUserToDelete(row.original.idCustomer)
-                      setNameUserToDelete(row.original.name)
-                      setIsOpenModalDelete(!isOpenModalDelete)
-                    }}
-                    value="Eliminar"
-                    className="text-[#c80800] font-bold"
-                  >
-                    <UserX color="#c80800" className="mr-2 h-4 w-4" />
-                    Eliminar
-                  </DropdownMenuRadioItem>
 
-                  <DropdownMenuSeparator />
-
-                  <DropdownMenuRadioItem
-                    onClick={() => {
-                      navigateTo('/tests')
-                    }}
-                    value="Gestionar Examenes"
-                    className="text-[#179f7e] font-bold"
-                  >
-                    <FlaskConical color="#179f7e" className="mr-2 h-4 w-4" />
-                    Gestionar exámenes
-                  </DropdownMenuRadioItem>
-                </DropdownMenuRadioGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+                <DropdownMenuRadioItem
+                  onClick={() => {
+                    navigateTo('/tests')
+                  }}
+                  value="Gestionar Examenes"
+                  className="text-[#0a8f94] font-bold px-1"
+                >
+                  <FlaskConical color="#0a8f94" className="mr-2 h-4 w-4" />
+                  Gestionar exámenes
+                </DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
         )
       }
     }
