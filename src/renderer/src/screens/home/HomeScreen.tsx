@@ -9,6 +9,7 @@ import { ClientsListHome } from '../clients/ClientsListHome'
 import { TestManagerHome } from '../TestManager/TestManager'
 import { TestEditorHome } from '../TestEditor/TestEditorHome'
 import { HepatitisAPDF } from '@renderer/PDF/Hepatitis-A-PDF/HepatitisAPDF'
+import { AddTest } from '../TestManager/AddTest'
 
 export const HomeScreen: React.FC = () => {
   return (
@@ -28,6 +29,7 @@ export const HomeScreen: React.FC = () => {
         <Route path="/customer" element={<ClientsListHome />} />
         <Route path="/customer/form" element={<AddClients />} />
         <Route path="/tests" element={<TestManagerHome />} />
+        <Route path="/tests/add" element={<AddTest />} />
         <Route path="/tests/editor" element={<TestEditorHome />} />
         <Route path="/pdf/render" element={<HepatitisAPDF />} />
 

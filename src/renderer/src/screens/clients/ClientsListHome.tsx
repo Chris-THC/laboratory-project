@@ -211,7 +211,7 @@ export const ClientsListHome = (): JSX.Element => {
               />
             </div>
 
-            <div className="h-80">
+            <div className="h-full">
               <Table className="border">
                 <TableHeader>
                   {tableCostumer.getHeaderGroups().map((headerGrup) =>

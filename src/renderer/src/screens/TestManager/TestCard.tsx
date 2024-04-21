@@ -70,12 +70,20 @@ export const TestCard: React.FC<CardTestProps> = ({ nameCostumer, nameTest, stat
 }
 
 export const TestNewCard: React.FC = () => {
+  const navigateTo = useNavigate()
+
   return (
     <div className="text-gray-900 my-3 max-h-70">
       <div className="flex justify-center">
         <div className="w-80 h-44">
           <Card className="border-dashed border-2 border-gray-400 flex flex-col justify-center h-40">
-            <Button variant={'ghost'} className="text-[#15658d]">
+            <Button
+              onClick={() => {
+                navigateTo('/tests/add')
+              }}
+              variant={'ghost'}
+              className="text-[#15658d]"
+            >
               <Plus color="#15658d" className="mx-1" />
               Agregar
             </Button>

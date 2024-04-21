@@ -44,7 +44,7 @@ export const NavBar: React.FC = () => {
               <Menubar className="bg-inherit border-none">
                 <MenubarMenu>
                   <MenubarTrigger className="text-white font-semibold text-sm bg-transparent border-none font-inter cursor-pointer">
-                    Clentes
+                    Clientes
                   </MenubarTrigger>
                   <MenubarContent>
                     <MenubarItem
