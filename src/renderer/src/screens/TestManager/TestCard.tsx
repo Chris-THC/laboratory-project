@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Atom, ClockIcon, Plus } from 'lucide-react'
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 interface CardTestProps {
   nameCostumer: string
@@ -9,6 +10,8 @@ interface CardTestProps {
   status: string
 }
 export const TestCard: React.FC<CardTestProps> = ({ nameCostumer, nameTest, status }) => {
+  const navigateTo = useNavigate()
+
   const getStatusColor = (status: string): string => {
     switch (status) {
       case 'Reportado':
@@ -25,12 +28,12 @@ export const TestCard: React.FC<CardTestProps> = ({ nameCostumer, nameTest, stat
   return (
     <div className="text-gray-900 my-2 max-h-70">
       <div className="flex justify-center">
-        <div className="w-72 h-44">
-          <Card className="border-dashed border-2 border-gray-400 p-4 flex flex-col justify-between">
+        <div className="w-80 h-44">
+          <Card className="border-dashed border-2 border-gray-400 p-1 flex flex-col">
             <div className="flex items-center space-x-4">
               <Atom className="text-[#15658d] h-10 w-10" />
               <div>
-                <div className="font-semibold ">
+                <div className="font-semibold">
                   {nameTest.length > 20 ? nameTest.substring(0, 20) + '...' : nameTest}
                 </div>
               </div>
@@ -46,7 +49,13 @@ export const TestCard: React.FC<CardTestProps> = ({ nameCostumer, nameTest, stat
             </div>
 
             <div className="flex items-center justify-center py-1">
-              <Button className="mr-3 max-w-28 text-[#15658d]" variant="outline">
+              <Button
+                onClick={() => {
+                  navigateTo('/tests/editor')
+                }}
+                className="mr-3 max-w-28 text-[#15658d]"
+                variant="outline"
+              >
                 Editar
               </Button>
               <Button className="mr-3 max-w-28 text-[#c80800]" variant="outline">
@@ -62,10 +71,10 @@ export const TestCard: React.FC<CardTestProps> = ({ nameCostumer, nameTest, stat
 
 export const TestNewCard: React.FC = () => {
   return (
-    <div className="text-gray-900 my-3 max-h-72">
+    <div className="text-gray-900 my-3 max-h-70">
       <div className="flex justify-center">
-        <div className="w-72 h-44">
-          <Card className="border-dashed border-2 border-gray-400 p-4 flex flex-col justify-center h-full">
+        <div className="w-80 h-44">
+          <Card className="border-dashed border-2 border-gray-400 flex flex-col justify-center h-40">
             <Button variant={'ghost'} className="text-[#15658d]">
               <Plus color="#15658d" className="mx-1" />
               Agregar

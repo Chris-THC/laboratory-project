@@ -12,7 +12,7 @@ export const PatientCard: React.FC = () => {
       <CardContent>
         <div className="grid grid-cols-3 gap-1">
           <div className="flex flex-col space-y-1.5">
-            <Label>Name</Label>
+            <Label>Nombre</Label>
             <p>Jose Hernandez Herrera</p>
           </div>
 
@@ -32,7 +32,7 @@ export const PatientCard: React.FC = () => {
           </div>
 
           <div className="flex flex-col space-y-1.5">
-            <Label>Nombre del doctor</Label>
+            <Label>Doctor</Label>
             <p>Axel Perez Perez</p>
           </div>
         </div>

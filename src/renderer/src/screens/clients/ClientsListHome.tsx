@@ -27,7 +27,15 @@ import {
   getPaginationRowModel,
   useReactTable
 } from '@tanstack/react-table'
-import { ChevronLeft, ChevronRight, FlaskConical, UserCog, UserPlus, UserX } from 'lucide-react'
+import {
+  AlignLeft,
+  ChevronLeft,
+  ChevronRight,
+  FlaskConical,
+  UserCog,
+  UserPlus,
+  UserX
+} from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
@@ -86,7 +94,9 @@ export const ClientsListHome = (): JSX.Element => {
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline">Opciones</Button>
+              <Button className="text-gray-800" variant="ghost">
+                <AlignLeft />
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
               <DropdownMenuLabel>Selecciona una opción</DropdownMenuLabel>
@@ -180,7 +190,7 @@ export const ClientsListHome = (): JSX.Element => {
             <div>
               <Button
                 onClick={onCreateNewUser}
-                className="bg-[#00CAEF] text-white"
+                className="bg-[#0a95ed] text-white"
                 variant={'ghost'}
               >
                 <UserPlus className="mr-2" />
