@@ -11,10 +11,10 @@ interface IPatients {
 
 const Header: React.FC = () => {
   const patientInfo: IPatients = {
-    name: 'Israel Montiel Tzitzihua',
+    name: 'Israel Montiel Dominguez',
     age: 23,
     doctor: 'Jose Luis Peréz Hernandez',
-    date: '01 de marzo del 2024'
+    date: '21 de abril del 2024'
   }
 
   return (
