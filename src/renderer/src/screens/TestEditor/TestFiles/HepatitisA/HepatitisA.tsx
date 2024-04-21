@@ -78,7 +78,7 @@ export function HepatitisA(): JSX.Element {
                   className="mx-3"
                   variant={'outline'}
                   onClick={() => {
-                    console.log('Hece otra cosa')
+                    navigate('/pdf/render')
                   }}
                   type="button"
                 >
