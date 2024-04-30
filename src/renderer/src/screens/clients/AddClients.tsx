@@ -14,23 +14,13 @@ import {
   FormLabel
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { useClientIdSelected } from '@renderer/context/clientContext/clientContext'
-import { ClientsInterface } from '@renderer/interfaces/clients/clients'
 import { useCreateNewClient, useUpdateClientById } from '@renderer/hooks/res/clientRes/UseClientAPI'
-import { changeStatus } from '@renderer/context/clientContext/EnumClients'
+import { ClientsInterface } from '@renderer/interfaces/clients/clients'
 
 const FormSchema = z.object({
   name: z
@@ -74,10 +64,7 @@ const FormSchema = z.object({
     })
     .regex(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s.,]+$/, {
       message: 'El nombre solo puede contener letras y espacios'
-    }),
-  status: z.string({
-    required_error: 'El valor es requerido'
-  })
+    })
 })
 
 export const AddClients: React.FC = () => {
@@ -97,8 +84,7 @@ export const AddClients: React.FC = () => {
           phoneNumber: '',
           dateOfBirth: '',
           address: '',
-          doctorName: '',
-          status: ''
+          doctorName: ''
         }
       : {
           name: clientObjectInfo.name,
@@ -106,8 +92,7 @@ export const AddClients: React.FC = () => {
           phoneNumber: clientObjectInfo.phoneNumber,
           dateOfBirth: clientObjectInfo.dateOfBirth,
           address: clientObjectInfo.address,
-          doctorName: clientObjectInfo.doctorName,
-          status: changeStatus(clientObjectInfo?.status.toString()) ?? ''
+          doctorName: clientObjectInfo.doctorName
         },
     mode: 'all'
   })
@@ -120,7 +105,6 @@ export const AddClients: React.FC = () => {
         phoneNumber: data.phoneNumber,
         address: data.address,
         dateOfBirth: data.dateOfBirth,
-        status: parseInt(data.status),
         doctorName: data.doctorName
       }
       creteNewUser.mutate(createNewClient)
@@ -134,7 +118,6 @@ export const AddClients: React.FC = () => {
         phoneNumber: data.phoneNumber,
         address: data.address,
         dateOfBirth: data.dateOfBirth,
-        status: parseInt(data.status),
         doctorName: data.doctorName
       }
       updateUser.mutate({ ClientInfo: infoClientUpdate, idClient: clientId })
@@ -255,41 +238,6 @@ export const AddClients: React.FC = () => {
                   <FormControl>
                     <Input type="text" placeholder="Agregar el nombre del doctor" {...field} />
                   </FormControl>
-                  {fieldState.error && (
-                    <FormDescription className="text-red-500">
-                      {fieldState.error.message}
-                    </FormDescription>
-                  )}
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="status"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>Estatus</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={
-                      clientObjectInfo === null
-                        ? ''
-                        : changeStatus(clientObjectInfo?.status.toString()) ?? ''
-                    }
-                  >
-                    <SelectTrigger className="w-[290px]">
-                      <SelectValue placeholder="Selecciona el status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Estatus</SelectLabel>
-                        <SelectItem value="0">Reportado</SelectItem>
-                        <SelectItem value="1">Impreso</SelectItem>
-                        <SelectItem value="2">Entregado</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
                   {fieldState.error && (
                     <FormDescription className="text-red-500">
                       {fieldState.error.message}

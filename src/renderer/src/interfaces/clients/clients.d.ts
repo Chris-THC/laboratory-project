@@ -5,6 +5,5 @@ export interface ClientsInterface {
   phoneNumber: string
   address: string
   dateOfBirth: string
-  status: number
   doctorName: string
 }
