@@ -1,16 +1,37 @@
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
+import { useDeleteCustomerTest } from '@renderer/hooks/res/clientRes/UseClientTest'
 import { Atom, ClockIcon, Plus } from 'lucide-react'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
+} from '@/components/ui/alert-dialog'
+
 interface CardTestProps {
+  idCusrtomerTest: number
   nameCostumer: string | undefined
   nameTest: string
   status: string
 }
-export const TestCard: React.FC<CardTestProps> = ({ nameCostumer, nameTest, status }) => {
+
+export const TestCard: React.FC<CardTestProps> = ({
+  nameCostumer,
+  nameTest,
+  status,
+  idCusrtomerTest
+}) => {
   const navigateTo = useNavigate()
+  const deteleCustomerTest = useDeleteCustomerTest()
 
   const getStatusColor = (status: string): string => {
     switch (status) {
@@ -23,6 +44,33 @@ export const TestCard: React.FC<CardTestProps> = ({ nameCostumer, nameTest, stat
       default:
         return 'bg-[#ff0000]'
     }
+  }
+
+  const DeleteModalCustomerTest: React.FC = () => {
+    return (
+      <AlertDialog>
+        <AlertDialogTrigger>Eliminar</AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Deseas continuar?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción eliminará la tarea de forma permanente.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                deteleCustomerTest.mutate(idCusrtomerTest)
+              }}
+              className="bg-red-600"
+            >
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    )
   }
 
   return (
@@ -59,7 +107,7 @@ export const TestCard: React.FC<CardTestProps> = ({ nameCostumer, nameTest, stat
                 Editar
               </Button>
               <Button className="mr-3 max-w-28 text-[#c80800]" variant="outline">
-                Eliminar
+                <DeleteModalCustomerTest />
               </Button>
             </div>
           </Card>

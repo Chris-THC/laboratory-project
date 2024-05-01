@@ -8,6 +8,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PatientCard } from './PatientCrad'
 import { TestCard, TestNewCard } from './TestCard'
+import { Toaster } from 'react-hot-toast'
 
 export const TestManagerHome: React.FC = () => {
   const navigate = useNavigate()
@@ -41,6 +42,7 @@ export const TestManagerHome: React.FC = () => {
             {data?.map((testInfo, index) => (
               <TestCard
                 key={index}
+                idCusrtomerTest={testInfo.idCustomersTests}
                 nameCostumer={clientObjectInfo?.name}
                 nameTest={testInfo.testDTO.testName}
                 status={testInfo.status}
@@ -50,6 +52,8 @@ export const TestManagerHome: React.FC = () => {
           </section>
         </CardContent>
       </Card>
+
+      <Toaster />
     </div>
   )
 }
