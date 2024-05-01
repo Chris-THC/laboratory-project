@@ -5,7 +5,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
 interface CardTestProps {
-  nameCostumer: string
+  nameCostumer: string | undefined
   nameTest: string
   status: string
 }

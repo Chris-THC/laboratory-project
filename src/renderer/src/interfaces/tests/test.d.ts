@@ -2,5 +2,5 @@ export interface TestInterface {
   idTest: number
   testName: string
   testPrice: number
-  testPriceWithDiscount?: number
+  testPriceWithDiscount?: number | null
 }

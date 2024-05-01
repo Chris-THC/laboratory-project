@@ -133,6 +133,7 @@ export const ClientsListHome = (): JSX.Element => {
                 <DropdownMenuRadioItem
                   onClick={() => {
                     navigateTo('/tests')
+                    setClientObjectInfo(row.original)
                   }}
                   value="Gestionar Examenes"
                   className="text-[#0a8f94] font-bold px-1"

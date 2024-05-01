@@ -1,6 +1,8 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import { useClientIdSelected } from '@renderer/context/clientContext/clientContext'
+import { useAllTestByIdCustomer } from '@renderer/hooks/res/clientRes/UseClientTest'
 import { ArrowLeft } from 'lucide-react'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -9,6 +11,8 @@ import { TestCard, TestNewCard } from './TestCard'
 
 export const TestManagerHome: React.FC = () => {
   const navigate = useNavigate()
+  const { clientObjectInfo } = useClientIdSelected()
+  const { data } = useAllTestByIdCustomer(clientObjectInfo!.idCustomer)
 
   return (
     <div className="bg-white text-gray-900 mx-8 mt-4">
@@ -34,19 +38,14 @@ export const TestManagerHome: React.FC = () => {
         </CardHeader>
         <CardContent>
           <section className="grid grid-cols-4 gap-5">
-            <TestCard
-              nameCostumer="Jose Hernandez Hernandez"
-              nameTest="HEPATITIS A"
-              status="Reportado"
-            />
-            <TestCard nameCostumer="Jose Hernandez Hernandez" nameTest="FOSFORO" status="Impreso" />
-
-            <TestCard
-              nameCostumer="Jose Hernandez Hernandez"
-              nameTest="INMUNOGLOBULINA G (IgG)"
-              status="Entregado"
-            />
-
+            {data?.map((testInfo, index) => (
+              <TestCard
+                key={index}
+                nameCostumer={clientObjectInfo?.name}
+                nameTest={testInfo.testDTO.testName}
+                status={testInfo.status}
+              />
+            ))}
             <TestNewCard />
           </section>
         </CardContent>

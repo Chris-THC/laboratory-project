@@ -2,7 +2,12 @@ import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
+import { useClientIdSelected } from '@renderer/context/clientContext/clientContext'
+
 export const PatientCard: React.FC = () => {
+  // Just call the customer selected into the table
+  const { clientObjectInfo } = useClientIdSelected()
+  
   return (
     <Card>
       <CardHeader>
@@ -13,27 +18,27 @@ export const PatientCard: React.FC = () => {
         <div className="grid grid-cols-3 gap-1">
           <div className="flex flex-col space-y-1.5">
             <Label>Nombre</Label>
-            <p>Jose Hernandez Herrera</p>
+            <p>{clientObjectInfo?.name}</p>
           </div>
 
           <div className="flex flex-col space-y-1.5">
             <Label>Edad</Label>
-            <p>50</p>
+            <p>{`${clientObjectInfo?.age} años`}</p>
           </div>
 
           <div className="flex flex-col space-y-1.5">
             <Label>Número de télefono</Label>
-            <p>2721907289</p>
+            <p>{clientObjectInfo?.phoneNumber}</p>
           </div>
 
           <div className="flex flex-col space-y-1.5">
             <Label>Direccion</Label>
-            <p>Esta es una direccion que se puede editar</p>
+            <p>{clientObjectInfo?.address}</p>
           </div>
 
           <div className="flex flex-col space-y-1.5">
             <Label>Doctor</Label>
-            <p>Axel Perez Perez</p>
+            <p>{clientObjectInfo?.doctorName}</p>
           </div>
         </div>
       </CardContent>
