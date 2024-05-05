@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import { TestSelector } from './TestSelector'
 
 export const AddTest: React.FC = () => {
   const navigate = useNavigate()
@@ -18,6 +19,16 @@ export const AddTest: React.FC = () => {
           <ArrowLeft className="mr-1" />
           Regresar
         </Button>
+      </div>
+
+      <div>
+        <div>
+          <h2 className="ml-16">
+            Selecciona los examenes que se encuentra dentro de la siguiente tabla y posteriomente da
+            clic en el boton de agregar
+          </h2>
+        </div>
+        <TestSelector />
       </div>
     </div>
   )
