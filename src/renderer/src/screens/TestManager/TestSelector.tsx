@@ -23,11 +23,18 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
+import { useClientIdSelected } from '@renderer/context/clientContext/clientContext'
+import { useAddCustomerTest } from '@renderer/hooks/res/clientRes/UseClientTest'
 import { useGetTestList } from '@renderer/hooks/res/testNameRes/UseTestNameAPI'
+import { CostumerTestAddInterface } from '@renderer/interfaces/clients/costumersTest'
 import { TestInterface } from '@renderer/interfaces/tests/test'
+import { useNavigate } from 'react-router-dom'
 
 export const TestSelector: React.FC = () => {
   const { data } = useGetTestList()
+  const newCustomerTests = useAddCustomerTest()
+  const { clientObjectInfo } = useClientIdSelected()
+  const goToBack = useNavigate()
 
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -123,12 +130,20 @@ export const TestSelector: React.FC = () => {
           <div>
             <Button
               onClick={() => {
-                console.log(selectedRows)
+                selectedRows.map((testInfo) => {
+                  const customerTestInfo: CostumerTestAddInterface = {
+                    idCustomer: clientObjectInfo!.idCustomer,
+                    idTest: testInfo.idTest,
+                    status: '0'
+                  }
+                  newCustomerTests.mutate(customerTestInfo)
+                })
+                goToBack(-1)
               }}
               className="bg-[#0a95ed] text-[#fff]"
               variant={'ghost'}
             >
-              Agregar
+              Agregar Examenes
             </Button>
           </div>
         </div>

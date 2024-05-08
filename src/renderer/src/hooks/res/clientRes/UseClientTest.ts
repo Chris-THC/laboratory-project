@@ -1,21 +1,21 @@
-import { CostumerTestInterface } from '@renderer/interfaces/clients/costumersTest'
+import { CostumerTestAddInterface, CostumerTestInterface } from '@renderer/interfaces/clients/costumersTest'
 import { UseMutationResult, UseQueryResult, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import apiConection from '../../../api/ConnectionAPI'
 import { HttpStatusCode } from 'axios'
 import toast from 'react-hot-toast'
 
 
-// const notifyCreatedSucces = (): string => {
-//   return toast.success('Cliente se ha agregado exitosamente!')
-// }
+const notifyCreatedSucces = (): string => {
+  return toast.success('Agregado Exitosamente..!')
+}
+
+const notifyDeleteSucces = (): string => {
+  return toast.error('Examen eliminado..!')
+}
 
 // const notifyUpdatedSucces = (): string => {
 //   return toast.success('Cliente editado exitosamente!')
 // }
-
-const notifyDeleteSucces = (): string => {
-  return toast.error('Examen eliminado')
-}
 
 const allTestByIdCustomer = async (idCustomer: number | null | undefined): Promise<CostumerTestInterface[]> => {
   const { data } = await apiConection.get<CostumerTestInterface[]>(
@@ -30,6 +30,28 @@ export const useAllTestByIdCustomer = (idCustomer: number | null | undefined): U
 
     queryFn: () => {
       return allTestByIdCustomer(idCustomer)
+    }
+  })
+}
+
+
+// TODO: Create a new customerTest
+export const addNewCostumerTest = async (customerTestInfoBody: CostumerTestAddInterface): Promise<CostumerTestAddInterface> => {
+  const { data } = await apiConection.post<CostumerTestAddInterface>('/customertest', customerTestInfoBody)
+  return data
+}
+
+export const useAddCustomerTest = (): UseMutationResult<CostumerTestAddInterface, Error, CostumerTestAddInterface, unknown> => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: addNewCostumerTest,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['testByIdCustomer'] })
+      notifyCreatedSucces()
+    },
+    onError: () => {
+      toast.error('No se pudo crear al usuario')
     }
   })
 }
