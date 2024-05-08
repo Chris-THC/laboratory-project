@@ -4,10 +4,6 @@ export interface ClientsInterface {
   age: number
   phoneNumber: string
   address: string
-  dateOfBirth?: string
-  status: number
-  pdfTimestamp: string
+  dateOfBirth: string
   doctorName: string
-  idTests: string
-  notes: string
 }
