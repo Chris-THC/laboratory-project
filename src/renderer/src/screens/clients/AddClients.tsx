@@ -138,12 +138,12 @@ export const AddClients: React.FC = () => {
 
       <CardContent className="flex justify-center align-middle">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="w-3/4 space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="w-3/4 flex flex-wrap justify-center">
             <FormField
               control={form.control}
               name="name"
               render={({ field, fieldState }) => (
-                <FormItem>
+                <FormItem style={{width: '45%', marginRight: '30px', marginBottom: '20px'}}>
                   <FormLabel>Nombre</FormLabel>
                   <FormControl>
                     <Input type="text" placeholder="Agregar un nombre" {...field} />
@@ -161,7 +161,7 @@ export const AddClients: React.FC = () => {
               control={form.control}
               name="age"
               render={({ field, fieldState }) => (
-                <FormItem>
+                <FormItem style={{width: '10%',marginRight: '280px',marginBottom: '20px'}}>
                   <FormLabel>Edad</FormLabel>
                   <FormControl>
                     <Input type="number" placeholder="Agregar un número de teléfono" {...field} />
@@ -179,7 +179,7 @@ export const AddClients: React.FC = () => {
               control={form.control}
               name="phoneNumber"
               render={({ field, fieldState }) => (
-                <FormItem>
+                <FormItem style={{width: '45%',marginRight: '30px',marginBottom: '20px'}}>
                   <FormLabel>Número de teléfono</FormLabel>
                   <FormControl>
                     <Input type="text" placeholder="Agregar un número de teléfono" {...field} />
@@ -197,7 +197,7 @@ export const AddClients: React.FC = () => {
               control={form.control}
               name="dateOfBirth"
               render={({ field, fieldState }) => (
-                <FormItem>
+                <FormItem style={{width: '45%',marginRight: '30px',marginBottom: '20px'}}>
                   <FormLabel>Fecha de nacimiento</FormLabel>
                   <FormControl>
                     <Input type="date" placeholder="Agregar fecha de nacimiento" {...field} />
@@ -215,7 +215,7 @@ export const AddClients: React.FC = () => {
               control={form.control}
               name="address"
               render={({ field, fieldState }) => (
-                <FormItem>
+                <FormItem style={{width: '45%',marginRight: '30px', marginBottom: '20px'}}>
                   <FormLabel>Dirección</FormLabel>
                   <FormControl>
                     <Textarea placeholder="Agregue su dirección" {...field} />
@@ -233,7 +233,7 @@ export const AddClients: React.FC = () => {
               name="doctorName"
               control={form.control}
               render={({ field, fieldState }) => (
-                <FormItem>
+                <FormItem style={{width: '45%',marginRight: '30px', marginBottom: '20px'}}>
                   <FormLabel>Nombre del doctor</FormLabel>
                   <FormControl>
                     <Input type="text" placeholder="Agregar el nombre del doctor" {...field} />
