@@ -34,7 +34,7 @@ export const TestManagerHome: React.FC = () => {
       {/* <Separator className="my-5" /> */}
       <Card className="mt-5">
         <CardHeader>
-          <CardTitle className="font-inter">Lista de exámenes registrados </CardTitle>
+          <CardTitle className="font-inter">Lista de exámenes registrados</CardTitle>
           <Separator className="my-5" />
         </CardHeader>
         <CardContent>
@@ -42,7 +42,9 @@ export const TestManagerHome: React.FC = () => {
             {data?.map((testInfo, index) => (
               <TestCard
                 key={index}
+                idCustomer={testInfo.idCustomer}
                 idCusrtomerTest={testInfo.idCustomersTests}
+                idTest={testInfo.idTest}
                 nameCostumer={clientObjectInfo?.name}
                 nameTest={testInfo.testDTO.testName}
                 status={testInfo.status}

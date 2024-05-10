@@ -13,9 +13,9 @@ const notifyDeleteSucces = (): string => {
   return toast.error('Examen eliminado..!')
 }
 
-// const notifyUpdatedSucces = (): string => {
-//   return toast.success('Cliente editado exitosamente!')
-// }
+const notifyUpdatedSucces = (): string => {
+  return toast.success('Estatus editado..!')
+}
 
 const allTestByIdCustomer = async (idCustomer: number | null | undefined): Promise<CostumerTestInterface[]> => {
   const { data } = await apiConection.get<CostumerTestInterface[]>(
@@ -73,6 +73,28 @@ export const useDeleteCustomerTest = (): UseMutationResult<HttpStatusCode, Error
     },
     onError: () => {
       toast.error('No se pudo eliminar al cliente')
+    }
+  })
+}
+
+//TODO: Update user
+export const useUpdateTestCustomers = (): UseMutationResult<CostumerTestAddInterface,Error,{ CostumerTestInfo: CostumerTestAddInterface; idCustomerTest: number },unknown> => {
+  const queryClient = useQueryClient()
+  const updateClient = async ({CostumerTestInfo , idCustomerTest}: {CostumerTestInfo: CostumerTestAddInterface, idCustomerTest: number
+  }): Promise<CostumerTestAddInterface> => {
+    const { data } = await apiConection.patch<CostumerTestAddInterface>(`/customertest/${idCustomerTest}`, CostumerTestInfo)
+    return data
+  }
+
+  return useMutation({
+    mutationFn: (variables: { CostumerTestInfo: CostumerTestAddInterface; idCustomerTest: number }) =>
+      updateClient(variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['testByIdCustomer'] })
+      notifyUpdatedSucces()
+    },
+    onError: () => {
+      toast.error('No se pudo actualizar el estatus')
     }
   })
 }

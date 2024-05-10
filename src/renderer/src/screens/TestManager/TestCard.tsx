@@ -1,7 +1,10 @@
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { useDeleteCustomerTest } from '@renderer/hooks/res/clientRes/UseClientTest'
-import { Atom, ClockIcon, Plus } from 'lucide-react'
+import {
+  useDeleteCustomerTest,
+  useUpdateTestCustomers
+} from '@renderer/hooks/res/clientRes/UseClientTest'
+import { Atom, Plus } from 'lucide-react'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -17,22 +20,34 @@ import {
   AlertDialogTrigger
 } from '@/components/ui/alert-dialog'
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select'
+
 interface CardTestProps {
   idCusrtomerTest: number
   nameCostumer: string | undefined
   nameTest: string
   status: string
+  idCustomer: number
+  idTest: number
 }
 
 export const TestCard: React.FC<CardTestProps> = ({
   nameCostumer,
   nameTest,
   status,
-  idCusrtomerTest
+  idCusrtomerTest,
+  idCustomer,
+  idTest
 }) => {
   const navigateTo = useNavigate()
+  const updateCustomerTest = useUpdateTestCustomers()
   const deteleCustomerTest = useDeleteCustomerTest()
-
   const getStatusColor = (status: string): string => {
     switch (status) {
       case 'Reportado':
@@ -73,6 +88,43 @@ export const TestCard: React.FC<CardTestProps> = ({
     )
   }
 
+  const ChangeStatusTest: React.FC = () => {
+    return (
+      <Select
+        defaultValue={status}
+        onValueChange={(value: string) => {
+          if (value === 'Reportado') {
+            updateCustomerTest.mutate({
+              CostumerTestInfo: { idCustomer: idCustomer, idTest: idTest, status: '0' },
+              idCustomerTest: idCusrtomerTest
+            })
+          } else if (value === 'Impreso') {
+            updateCustomerTest.mutate({
+              CostumerTestInfo: { idCustomer: idCustomer, idTest: idTest, status: '1' },
+              idCustomerTest: idCusrtomerTest
+            })
+          } else if (value === 'Entregado') {
+            updateCustomerTest.mutate({
+              CostumerTestInfo: { idCustomer: idCustomer, idTest: idTest, status: '2' },
+              idCustomerTest: idCusrtomerTest
+            })
+          }
+        }}
+      >
+        <SelectTrigger
+          className={`max-w-[55%] rounded flex items-center text-sm font-bold text-white ${getStatusColor(status)} `}
+        >
+          <SelectValue placeholder="Status" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="Reportado">Reportado</SelectItem>
+          <SelectItem value="Impreso">Impreso</SelectItem>
+          <SelectItem value="Entregado">Entregado</SelectItem>
+        </SelectContent>
+      </Select>
+    )
+  }
+
   return (
     <div className="text-gray-900 my-2 max-h-70">
       <div className="flex justify-center">
@@ -82,18 +134,15 @@ export const TestCard: React.FC<CardTestProps> = ({
               <Atom className="text-[#15658d] h-10 w-10" />
               <div>
                 <div className="font-semibold">
-                  {nameTest.length > 20 ? nameTest.substring(0, 20) + '...' : nameTest}
+                  {nameTest.length > 21 ? nameTest.substring(0, 21) + '...' : nameTest}
                 </div>
               </div>
             </div>
             <div className="text-sm overflow-ellipsis text-center my-1">
               <p>{nameCostumer}</p>
             </div>
-            <div className="flex items-center justify-center my-1">
-              <div className={`px-2 py-1 rounded flex items-center ${getStatusColor(status)}`}>
-                <ClockIcon color="#fff" className="h-4 w-4 mr-1" />
-                <span className="text-sm font-bold text-white">{status}</span>
-              </div>
+            <div className="flex justify-center align-middle">
+              <ChangeStatusTest />
             </div>
 
             <div className="flex items-center justify-center py-1">
@@ -130,7 +179,7 @@ export const TestNewCard: React.FC = () => {
                 navigateTo('/tests/add')
               }}
               variant={'ghost'}
-              className="text-[#15658d]"
+              className="text-[#15658d] h-full"
             >
               <Plus color="#15658d" className="mx-1" />
               Agregar
