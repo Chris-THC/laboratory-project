@@ -161,7 +161,7 @@ export const AddClients: React.FC = () => {
               control={form.control}
               name="age"
               render={({ field, fieldState }) => (
-                <FormItem style={{width: '10%',marginRight: '280px',marginBottom: '20px'}}>
+                <FormItem style={{width: '45%',marginRight: '30px',marginBottom: '20px'}}>
                   <FormLabel>Edad</FormLabel>
                   <FormControl>
                     <Input type="number" placeholder="Agregar un número de teléfono" {...field} />
