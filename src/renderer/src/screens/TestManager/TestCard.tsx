@@ -27,6 +27,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
+import { useTestIdByTestContens } from '@renderer/context/testContentsContext/testContentContext'
 
 interface CardTestProps {
   idCusrtomerTest: number
@@ -48,6 +49,8 @@ export const TestCard: React.FC<CardTestProps> = ({
   const navigateTo = useNavigate()
   const updateCustomerTest = useUpdateTestCustomers()
   const deteleCustomerTest = useDeleteCustomerTest()
+  const { setIdTestByTestContent } = useTestIdByTestContens()
+
   const getStatusColor = (status: string): string => {
     switch (status) {
       case 'Reportado':
@@ -148,6 +151,7 @@ export const TestCard: React.FC<CardTestProps> = ({
             <div className="flex items-center justify-center py-1">
               <Button
                 onClick={() => {
+                  setIdTestByTestContent(idTest)
                   navigateTo('/tests/editor')
                 }}
                 className="mr-3 max-w-28 text-[#15658d]"

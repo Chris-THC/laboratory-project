@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { HepatitisA } from './TestFiles/HepatitisA/HepatitisA'
+import { TestFormsEditor } from './TestForms/TestFormSelector'
 
 export const TestEditorHome: React.FC = () => {
   const navigate = useNavigate()
@@ -21,7 +21,8 @@ export const TestEditorHome: React.FC = () => {
       </div>
 
       <div>
-        <HepatitisA />
+        <TestFormsEditor />
+        {/* <HepatitisA /> */}
       </div>
     </div>
   )

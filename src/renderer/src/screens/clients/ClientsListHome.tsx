@@ -80,14 +80,6 @@ export const ClientsListHome = (): JSX.Element => {
       header: 'Doctor',
       accessorKey: 'doctorName'
     },
-
-    // {
-    //   header: 'Estatus',
-    //   accessorKey: 'status',
-    //   cell: ({ row }): string | undefined | null => {
-    //     return changeStatusTable(row.original.status)
-    //   }
-    // },
     {
       header: 'Acciones',
       cell: ({ row }): JSX.Element => {
