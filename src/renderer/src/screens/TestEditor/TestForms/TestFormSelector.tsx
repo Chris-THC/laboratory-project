@@ -10,9 +10,10 @@ import {
   AccordionTrigger
 } from '@/components/ui/accordion'
 import { AvailableParametersByTest } from './AvailableParametersByTest'
+import { TestForm } from './form/TestForm'
 
 export const TestFormsEditor: React.FC = () => {
-  const { idTestByTestContent } = useTestIdByTestContens()
+  const { idTestByTestContent, testNameSelected } = useTestIdByTestContens()
   const { isLoading, data } = useTestContestByIdTest(idTestByTestContent)
 
   if (isLoading) {
@@ -27,18 +28,18 @@ export const TestFormsEditor: React.FC = () => {
         <div>
           <Accordion type="single" collapsible>
             <AccordionItem value="item-1">
-              <AccordionTrigger className="font-inter font-semibold text-[1.05rem]">
-                SELECCIONA LOS PARÁMETROS QUE NECESITES PARA ESTE EXAMEN
+              <AccordionTrigger className="font-inter font-medium text-[1.05rem]">
+                {`SELECCIONA LOS PARÁMETROS QUE NECESITES PARA ESTE EXAMEN [${testNameSelected}]`}
               </AccordionTrigger>
               <AccordionContent>
-                {/* {data.map((testContent, index) => (
-                  <div key={index}>{testContent.contentsDTO?.name}</div>
-                ))} */}
-
                 <AvailableParametersByTest testContents={data} />
               </AccordionContent>
             </AccordionItem>
           </Accordion>
+
+          <div>
+            <TestForm />
+          </div>
         </div>
       )}
     </div>

@@ -1,20 +1,21 @@
-import React from 'react'
-import { TestContentsInterface } from '@renderer/interfaces/testContest/testContents'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { TestContentsInterface } from '@renderer/interfaces/testContest/testContents'
+import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
-  FormMessage
+  FormLabel
 } from '@/components/ui/form'
+import { Separator } from '@/components/ui/separator'
+import { useTestIdByTestContens } from '@renderer/context/testContentsContext/testContentContext'
 
 interface PropsTestContents {
   testContents: TestContentsInterface[]
@@ -26,6 +27,8 @@ interface Item {
 }
 
 export const AvailableParametersByTest: React.FC<PropsTestContents> = ({ testContents }) => {
+  const { testNameSelected } = useTestIdByTestContens()
+
   const items: Item[] = testContents.map((testInfo) => ({
     id: testInfo.contentsDTO!.contentId.toString(),
     label: testInfo.contentsDTO!.name
@@ -50,50 +53,76 @@ export const AvailableParametersByTest: React.FC<PropsTestContents> = ({ testCon
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
           name="items"
           render={() => (
             <FormItem>
-              <div className="mb-4">
-                <FormLabel className="text-base">Sidebar</FormLabel>
-                <FormDescription>
-                  Select the items you want to display in the sidebar.
-                </FormDescription>
-              </div>
-              {items.map((item) => (
-                <FormField
-                  key={item.id}
-                  control={form.control}
-                  name="items"
-                  render={({ field }) => {
-                    return (
-                      <FormItem
+              <Card>
+                <CardHeader>
+                  <CardTitle className="font-inter text-[1.05rem]">{testNameSelected}</CardTitle>
+                  <h2 className='text-[1rem]'>Seleccione los elementos que desea agregar</h2>
+                  <Separator className="my-2" />
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-4 gap-1">
+                    {items.map((item) => (
+                      <FormField
                         key={item.id}
-                        className="flex flex-row items-start space-x-3 space-y-0"
-                      >
-                        <FormControl>
-                          <Checkbox
-                            defaultChecked={field.value?.includes(item.id)}
-                            onCheckedChange={(checked) => {
-                              return checked
-                                ? field.onChange([...field.value, item.id])
-                                : field.onChange(field.value?.filter((value) => value !== item.id))
-                            }}
-                          />
-                        </FormControl>
-                        <FormLabel className="font-normal">{item.label}</FormLabel>
-                      </FormItem>
-                    )
-                  }}
-                />
-              ))}
-              <FormMessage />
+                        control={form.control}
+                        name="items"
+                        render={({ field }) => {
+                          return (
+                            <FormItem
+                              key={item.id}
+                              className="flex flex-row items-start space-x-3 space-y-0"
+                            >
+                              <FormControl>
+                                <Checkbox
+                                  defaultChecked={field.value?.includes(item.id)}
+                                  onCheckedChange={(checked) => {
+                                    return checked
+                                      ? field.onChange([...field.value, item.id])
+                                      : field.onChange(
+                                          field.value?.filter((value) => value !== item.id)
+                                        )
+                                  }}
+                                />
+                              </FormControl>
+                              <FormLabel className="font-normal">{item.label}</FormLabel>
+                            </FormItem>
+                          )
+                        }}
+                      />
+                    ))}
+                  </div>
+                </CardContent>
+
+                <Separator className="my-3" />
+
+                <CardFooter className="flex justify-start">
+                  <Button
+                    variant={'outline'}
+                    type="submit"
+                    className="bg-[#0a95ed] text-white mx-2"
+                  >
+                    Aceptar
+                  </Button>
+                  <Button
+                    variant={'destructive'}
+                    className="mx-2"
+                    onClick={() => {
+                      console.log('Cancelar')
+                    }}
+                  >
+                    Cancelar
+                  </Button>
+                </CardFooter>
+              </Card>
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
       </form>
     </Form>
   )

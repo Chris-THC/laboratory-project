@@ -49,7 +49,7 @@ export const TestCard: React.FC<CardTestProps> = ({
   const navigateTo = useNavigate()
   const updateCustomerTest = useUpdateTestCustomers()
   const deteleCustomerTest = useDeleteCustomerTest()
-  const { setIdTestByTestContent } = useTestIdByTestContens()
+  const { setIdTestByTestContent, setTestNameSelected } = useTestIdByTestContens()
 
   const getStatusColor = (status: string): string => {
     switch (status) {
@@ -152,6 +152,7 @@ export const TestCard: React.FC<CardTestProps> = ({
               <Button
                 onClick={() => {
                   setIdTestByTestContent(idTest)
+                  setTestNameSelected(nameTest)
                   navigateTo('/tests/editor')
                 }}
                 className="mr-3 max-w-28 text-[#15658d]"
