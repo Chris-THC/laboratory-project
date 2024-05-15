@@ -93,7 +93,7 @@ export const AddUser: React.FC = () => {
           age: userObjectInfo.age.toString(),
           phoneNumber: userObjectInfo.phoneNumber,
           address: userObjectInfo.address,
-          password: userObjectInfo.address,
+          password: userObjectInfo.phoneNumber,
           role: userObjectInfo.role.toString() === 'Admin' ? '0' : '1'
         },
     mode: 'all'
@@ -121,6 +121,7 @@ export const AddUser: React.FC = () => {
         age: parseInt(data.age),
         phoneNumber: data.phoneNumber,
         address: data.address,
+        password: data.password,
         role: parseInt(data.role)
       }
 
@@ -142,12 +143,12 @@ export const AddUser: React.FC = () => {
 
       <CardContent className="flex justify-center align-middle">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="w-3/4 space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="w-3/4 flex flex-wrap justify-center">
             <FormField
               control={form.control}
               name="name"
               render={({ field, fieldState }) => (
-                <FormItem>
+                <FormItem style={{width: '45%', marginRight: '30px', marginBottom: '20px'}}>
                   <FormLabel>Nombre</FormLabel>
                   <FormControl>
                     <Input type="text" placeholder="Agregar un nombre" {...field} />
@@ -165,7 +166,7 @@ export const AddUser: React.FC = () => {
               control={form.control}
               name="age"
               render={({ field, fieldState }) => (
-                <FormItem>
+                <FormItem style={{width: '45%', marginRight: '30px', marginBottom: '20px'}}>
                   <FormLabel>Edad</FormLabel>
                   <FormControl>
                     <Input type="text" placeholder="Agregar un número de teléfono" {...field} />
@@ -183,7 +184,7 @@ export const AddUser: React.FC = () => {
               control={form.control}
               name="phoneNumber"
               render={({ field, fieldState }) => (
-                <FormItem>
+                <FormItem style={{width: '45%', marginRight: '30px', marginBottom: '20px'}}>
                   <FormLabel>Número de teléfono</FormLabel>
                   <FormControl>
                     <Input type="text" placeholder="Agregar un número de teléfono" {...field} />
@@ -201,7 +202,7 @@ export const AddUser: React.FC = () => {
               control={form.control}
               name="address"
               render={({ field, fieldState }) => (
-                <FormItem>
+                <FormItem style={{width: '45%', marginRight: '30px', marginBottom: '20px'}}>
                   <FormLabel>Dirección</FormLabel>
                   <FormControl>
                     <Textarea placeholder="Agregue su dirección" {...field} />
@@ -215,15 +216,11 @@ export const AddUser: React.FC = () => {
               )}
             />
 
-            <div>
-              {!isCreate ? (
-                <div></div>
-              ) : (
                 <FormField
                   control={form.control}
                   name="password"
                   render={({ field, fieldState }) => (
-                    <FormItem>
+                    <FormItem style={{width: '45%', marginRight: '30px', marginBottom: '20px'}}>
                       <FormLabel>Contrseña</FormLabel>
                       <FormControl>
                         <Input type="password" placeholder="Agrega una contraseña" {...field} />
@@ -236,14 +233,12 @@ export const AddUser: React.FC = () => {
                     </FormItem>
                   )}
                 />
-              )}
-            </div>
 
             <FormField
               control={form.control}
               name="role"
               render={({ field, fieldState }) => (
-                <FormItem>
+                <FormItem style={{width: '45%', marginRight: '30px', marginBottom: '20px'}}>
                   <FormLabel>Rol del usuario</FormLabel>
                   <Select
                     onValueChange={field.onChange}
