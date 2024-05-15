@@ -28,6 +28,7 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import { useTestIdByTestContens } from '@renderer/context/testContentsContext/testContentContext'
+import { useDeleteResult } from '@renderer/hooks/res/resultsRes/useResults'
 
 interface CardTestProps {
   idCusrtomerTest: number
@@ -49,6 +50,7 @@ export const TestCard: React.FC<CardTestProps> = ({
   const navigateTo = useNavigate()
   const updateCustomerTest = useUpdateTestCustomers()
   const deteleCustomerTest = useDeleteCustomerTest()
+  const deleteResults = useDeleteResult()
   const { setIdTestByTestContent, setTestNameSelected } = useTestIdByTestContens()
 
   const getStatusColor = (status: string): string => {
@@ -72,7 +74,7 @@ export const TestCard: React.FC<CardTestProps> = ({
           <AlertDialogHeader>
             <AlertDialogTitle>¿Deseas continuar?</AlertDialogTitle>
             <AlertDialogDescription>
-              Esta acción eliminará la tarea de forma permanente.
+              Esta acción eliminará el examen de forma permanente.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -80,6 +82,7 @@ export const TestCard: React.FC<CardTestProps> = ({
             <AlertDialogAction
               onClick={() => {
                 deteleCustomerTest.mutate(idCusrtomerTest)
+                deleteResults.mutate({ idTest, idCustomer })
               }}
               className="bg-red-600"
             >

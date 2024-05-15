@@ -29,10 +29,12 @@ import { useGetTestList } from '@renderer/hooks/res/testNameRes/UseTestNameAPI'
 import { CostumerTestAddInterface } from '@renderer/interfaces/clients/costumersTest'
 import { TestInterface } from '@renderer/interfaces/tests/test'
 import { useNavigate } from 'react-router-dom'
+import { useAddResults } from '@renderer/hooks/res/resultsRes/useResults'
 
 export const TestSelector: React.FC = () => {
   const { data } = useGetTestList()
   const newCustomerTests = useAddCustomerTest()
+  const addNewResult = useAddResults()
   const { clientObjectInfo } = useClientIdSelected()
   const goToBack = useNavigate()
 
@@ -131,12 +133,36 @@ export const TestSelector: React.FC = () => {
             <Button
               onClick={() => {
                 selectedRows.map((testInfo) => {
+                  function obtenerFechaActual(): string {
+                    const fecha = new Date()
+                    const año = fecha.getFullYear()
+                    const mes = agregarCero(fecha.getMonth() + 1)
+                    const dia = agregarCero(fecha.getDate())
+                    return `${año}-${mes}-${dia}`
+                  }
+
+                  function agregarCero(numero: number): string {
+                    return numero < 10 ? `0${numero}` : `${numero}`
+                  }
+
+                  const fechaActual = obtenerFechaActual()
+
                   const customerTestInfo: CostumerTestAddInterface = {
                     idCustomer: clientObjectInfo!.idCustomer,
                     idTest: testInfo.idTest,
                     status: '0'
                   }
+
+                  const resultsInfo = {
+                    idCustomers: clientObjectInfo!.idCustomer,
+                    idTests: testInfo!.idTest,
+                    resultTimeStamp: fechaActual,
+                    resultNote: 'No hay notas'
+                  }
+                  console.log(resultsInfo)
+
                   newCustomerTests.mutate(customerTestInfo)
+                  addNewResult.mutate(resultsInfo)
                 })
                 goToBack(-1)
               }}
