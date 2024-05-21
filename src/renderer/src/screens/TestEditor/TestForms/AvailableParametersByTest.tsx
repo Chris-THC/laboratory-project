@@ -11,6 +11,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/
 import { Separator } from '@/components/ui/separator'
 import { useTestIdByTestContens } from '@renderer/context/testContentsContext/testContentContext'
 import { ResultsInterface } from '@renderer/interfaces/results/results'
+import { useNewContentResult } from '@renderer/hooks/res/contentsResultsRes/useContentsResultsRes'
 
 interface PropsTestContents {
   testContents: TestContentsInterface[]
@@ -27,6 +28,7 @@ export const AvailableParametersByTest: React.FC<PropsTestContents> = ({
   resultsByIdTestAndIdCustomer
 }) => {
   const { testNameSelected } = useTestIdByTestContens()
+  const newContentsInfo = useNewContentResult()
 
   console.log(`Resuls info by props: ${JSON.stringify(resultsByIdTestAndIdCustomer)}`)
 
@@ -50,6 +52,17 @@ export const AvailableParametersByTest: React.FC<PropsTestContents> = ({
 
   function onSubmit(data: z.infer<typeof FormSchema>): void {
     console.log(JSON.stringify(data, null, 2))
+    const infoCustomer = resultsByIdTestAndIdCustomer![0]
+    data.items.map((info) => {
+      const contentBody = {
+        resultId: infoCustomer.idResults,
+        contentId: parseInt(info),
+        resultValue: " "
+      }
+      newContentsInfo.mutate(contentBody)
+      // console.log(contentBody);
+      
+    })
   }
 
   return (
@@ -114,7 +127,7 @@ export const AvailableParametersByTest: React.FC<PropsTestContents> = ({
                     variant={'outline'}
                     className="bg-red-600 text-white mx-2"
                     onClick={(event) => {
-                      event.preventDefault() 
+                      event.preventDefault()
                       console.log('Cancelar')
                     }}
                   >
