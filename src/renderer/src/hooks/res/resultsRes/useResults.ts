@@ -1,6 +1,6 @@
 import { ResultsInterface } from '@renderer/interfaces/results/results'
 import apiConection from '../../../api/ConnectionAPI'
-import { UseMutationResult, useMutation, useQueryClient } from '@tanstack/react-query'
+import { UseMutationResult, UseQueryResult, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { HttpStatusCode } from 'axios'
 
 const addResultByCustomer = async (resultsBody: ResultsInterface): Promise<ResultsInterface> => {
@@ -46,3 +46,18 @@ export const useDeleteResult = (): UseMutationResult<HttpStatusCode, Error, { id
     }
   })
 }
+
+// TODO: In this sectio is to get Results info by idTest and IdCustomer
+
+export const getResultsByIdTestAndIdCustomer = async (idTest: number | undefined| null, idCustomer: number | undefined| null):Promise<ResultsInterface[]> => { 
+  const { data } = await apiConection.get<ResultsInterface[]>(`/result/customer/${idTest}/${idCustomer}`)
+  return data
+
+ }
+
+ export const useGetResultsByIdTestAndIdCustomer = (idTest: number | undefined| null, idCustomer:  number | undefined| null): UseQueryResult<ResultsInterface[]> => {
+  return useQuery({
+    queryKey: ['getResultsByIdTestnIdCustomer'],
+    queryFn: ()=> getResultsByIdTestAndIdCustomer(idTest, idCustomer)
+  });
+};

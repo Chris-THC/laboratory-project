@@ -69,7 +69,10 @@ export const TestCard: React.FC<CardTestProps> = ({
   const DeleteModalCustomerTest: React.FC = () => {
     return (
       <AlertDialog>
-        <AlertDialogTrigger>Eliminar</AlertDialogTrigger>
+        <AlertDialogTrigger className="mr-3 max-w-28 max-h-10 text-[#fff] bg-[#c80800] border border-[#c80800] hover:bg-transparent hover:text-[#c80800] font-medium py-2 px-4 rounded">
+          Eliminar
+        </AlertDialogTrigger>
+
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>¿Deseas continuar?</AlertDialogTitle>
@@ -163,9 +166,12 @@ export const TestCard: React.FC<CardTestProps> = ({
               >
                 Editar
               </Button>
-              <Button className="mr-3 max-w-28 text-[#c80800]" variant="outline">
-                <DeleteModalCustomerTest />
-              </Button>
+
+              {/* <Button className="mr-3 max-w-28 text-[#c80800]" variant="outline">
+                
+              </Button> */}
+
+              <DeleteModalCustomerTest />
             </div>
           </Card>
         </div>

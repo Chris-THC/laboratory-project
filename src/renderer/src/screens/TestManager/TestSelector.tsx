@@ -159,7 +159,6 @@ export const TestSelector: React.FC = () => {
                     resultTimeStamp: fechaActual,
                     resultNote: 'No hay notas'
                   }
-                  console.log(resultsInfo)
 
                   newCustomerTests.mutate(customerTestInfo)
                   addNewResult.mutate(resultsInfo)

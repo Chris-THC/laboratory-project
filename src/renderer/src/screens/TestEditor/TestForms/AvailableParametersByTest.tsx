@@ -7,18 +7,14 @@ import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel
-} from '@/components/ui/form'
+import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { Separator } from '@/components/ui/separator'
 import { useTestIdByTestContens } from '@renderer/context/testContentsContext/testContentContext'
+import { ResultsInterface } from '@renderer/interfaces/results/results'
 
 interface PropsTestContents {
   testContents: TestContentsInterface[]
+  resultsByIdTestAndIdCustomer: ResultsInterface[] | undefined | null
 }
 
 interface Item {
@@ -26,8 +22,13 @@ interface Item {
   label: string
 }
 
-export const AvailableParametersByTest: React.FC<PropsTestContents> = ({ testContents }) => {
+export const AvailableParametersByTest: React.FC<PropsTestContents> = ({
+  testContents,
+  resultsByIdTestAndIdCustomer
+}) => {
   const { testNameSelected } = useTestIdByTestContens()
+
+  console.log(`Resuls info by props: ${JSON.stringify(resultsByIdTestAndIdCustomer)}`)
 
   const items: Item[] = testContents.map((testInfo) => ({
     id: testInfo.contentsDTO!.contentId.toString(),
@@ -62,7 +63,7 @@ export const AvailableParametersByTest: React.FC<PropsTestContents> = ({ testCon
               <Card>
                 <CardHeader>
                   <CardTitle className="font-inter text-[1.05rem]">{testNameSelected}</CardTitle>
-                  <h2 className='text-[1rem]'>Seleccione los elementos que desea agregar</h2>
+                  <h2 className="text-[1rem]">Seleccione los elementos que desea agregar</h2>
                   <Separator className="my-2" />
                 </CardHeader>
                 <CardContent>
@@ -110,9 +111,10 @@ export const AvailableParametersByTest: React.FC<PropsTestContents> = ({ testCon
                     Aceptar
                   </Button>
                   <Button
-                    variant={'destructive'}
-                    className="mx-2"
-                    onClick={() => {
+                    variant={'outline'}
+                    className="bg-red-600 text-white mx-2"
+                    onClick={(event) => {
+                      event.preventDefault() 
                       console.log('Cancelar')
                     }}
                   >
