@@ -26,17 +26,6 @@ export const TestEditorHome: React.FC = () => {
           <ArrowLeft className="mr-1" />
           Regresar
         </Button>
-
-        <Button
-          onClick={() => {
-            console.log(`Data Results: ${JSON.stringify(contentsresults, null, 2)}`)
-          }}
-          className="font-inter"
-          variant={'outline'}
-        >
-          <ArrowLeft className="mr-1" />
-          Mostrar Results table Info
-        </Button>
       </div>
 
       <div>

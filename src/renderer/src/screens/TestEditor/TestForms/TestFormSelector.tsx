@@ -36,9 +36,6 @@ export const TestFormsEditor: React.FC = () => {
         <ErrorPage />
       ) : (
         <div>
-          <div>
-            <h3>Este es el edito XD</h3>
-          </div>
           <Accordion type="single" collapsible>
             <AccordionItem value="item-1">
               <AccordionTrigger className="font-inter font-medium text-[1.05rem]">
