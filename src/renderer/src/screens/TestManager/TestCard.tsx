@@ -28,7 +28,11 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import { useTestIdByTestContens } from '@renderer/context/testContentsContext/testContentContext'
-import { useDeleteResult } from '@renderer/hooks/res/resultsRes/useResults'
+import {
+  useDeleteResult,
+  getResultsByIdTestAndIdCustomer
+} from '@renderer/hooks/res/resultsRes/useResults'
+import { useContentResultWasSelect } from '@renderer/context/contentResults/contentsResultContext'
 
 interface CardTestProps {
   idCusrtomerTest: number
@@ -51,7 +55,9 @@ export const TestCard: React.FC<CardTestProps> = ({
   const updateCustomerTest = useUpdateTestCustomers()
   const deteleCustomerTest = useDeleteCustomerTest()
   const deleteResults = useDeleteResult()
-  const { setIdTestByTestContent, setTestNameSelected } = useTestIdByTestContens()
+  const { setIdTestByTestContent, setTestNameSelected, setIdCustomerByTestContent } =
+    useTestIdByTestContens()
+  const { setResultsId } = useContentResultWasSelect()
 
   const getStatusColor = (status: string): string => {
     switch (status) {
@@ -156,9 +162,12 @@ export const TestCard: React.FC<CardTestProps> = ({
 
             <div className="flex items-center justify-center py-1">
               <Button
-                onClick={() => {
+                onClick={async () => {
                   setIdTestByTestContent(idTest)
                   setTestNameSelected(nameTest)
+                  setIdCustomerByTestContent(idCustomer)
+                  const dataResults = await getResultsByIdTestAndIdCustomer(idTest, idCustomer)
+                  setResultsId(dataResults![0].idResults!)
                   navigateTo('/tests/editor')
                 }}
                 className="mr-3 max-w-28 text-[#15658d]"
@@ -166,10 +175,6 @@ export const TestCard: React.FC<CardTestProps> = ({
               >
                 Editar
               </Button>
-
-              {/* <Button className="mr-3 max-w-28 text-[#c80800]" variant="outline">
-                
-              </Button> */}
 
               <DeleteModalCustomerTest />
             </div>

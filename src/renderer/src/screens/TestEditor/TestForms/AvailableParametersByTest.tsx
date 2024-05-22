@@ -30,7 +30,6 @@ export const AvailableParametersByTest: React.FC<PropsTestContents> = ({
   const { testNameSelected } = useTestIdByTestContens()
   const newContentsInfo = useNewContentResult()
 
-  console.log(`Resuls info by props: ${JSON.stringify(resultsByIdTestAndIdCustomer)}`)
 
   const items: Item[] = testContents.map((testInfo) => ({
     id: testInfo.contentsDTO!.contentId.toString(),

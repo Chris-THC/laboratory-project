@@ -1,23 +1,34 @@
-import React from 'react'
-import { useTestContestByIdTest } from '@renderer/hooks/res/testContents/useTestContents'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger
+} from '@/components/ui/accordion'
 import { LoadingSpinner } from '@renderer/components/LoadingSpinner/LoadingSpinner'
 import { ErrorPage } from '@renderer/components/PageNotFound/ErrorPage'
 import { useTestIdByTestContens } from '@renderer/context/testContentsContext/testContentContext'
-import {Accordion, AccordionContent, AccordionItem,AccordionTrigger} from '@/components/ui/accordion'
-import { AvailableParametersByTest } from './AvailableParametersByTest'
-import { TestForm } from './form/TestForm'
-import { useClientIdSelected } from '@renderer/context/clientContext/clientContext'
 import { useGetResultsByIdTestAndIdCustomer } from '@renderer/hooks/res/resultsRes/useResults'
+import { useTestContestByIdTest } from '@renderer/hooks/res/testContents/useTestContents'
+import React from 'react'
+import { AvailableParametersByTest } from './AvailableParametersByTest'
 
 export const TestFormsEditor: React.FC = () => {
-  const { idTestByTestContent, testNameSelected } = useTestIdByTestContens()
-  const { clientObjectInfo } = useClientIdSelected()
+  const { idTestByTestContent, testNameSelected, idCustomerByTestContent } =
+    useTestIdByTestContens()
   const { isLoading, data } = useTestContestByIdTest(idTestByTestContent)
-  const { data: dataResults } = useGetResultsByIdTestAndIdCustomer(idTestByTestContent, clientObjectInfo?.idCustomer)
+  const { data: dataResults } = useGetResultsByIdTestAndIdCustomer(
+    idTestByTestContent,
+    idCustomerByTestContent
+  )
+
+  // //Pendiente de implementar
+  // const { data: contentsresults } = useListContentsResultsByIdResults(dataResults![0].idResults)
 
   if (isLoading) {
     return <LoadingSpinner />
   }
+
+  // console.log(`Data Results: ${JSON.stringify(contentsresults, null, 2)}`);
 
   return (
     <div>
@@ -25,21 +36,22 @@ export const TestFormsEditor: React.FC = () => {
         <ErrorPage />
       ) : (
         <div>
+          <div>
+            <h3>Este es el edito XD</h3>
+          </div>
           <Accordion type="single" collapsible>
             <AccordionItem value="item-1">
               <AccordionTrigger className="font-inter font-medium text-[1.05rem]">
                 {`SELECCIONA LOS PARÁMETROS QUE NECESITES PARA ESTE EXAMEN [${testNameSelected}]`}
               </AccordionTrigger>
               <AccordionContent>
-                <AvailableParametersByTest testContents={data} resultsByIdTestAndIdCustomer={dataResults} />
+                <AvailableParametersByTest
+                  testContents={data}
+                  resultsByIdTestAndIdCustomer={dataResults}
+                />
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-
-          <div>
-            <TestForm />
-          </div>
-          
         </div>
       )}
     </div>

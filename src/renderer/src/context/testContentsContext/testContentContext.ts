@@ -5,10 +5,12 @@ interface TestIdSelectedByTestContentsInterface {
   setIdTestByTestContent: (idTestByTestContent: number) => void
   testNameSelected: string
   setTestNameSelected: (testNameSelected: string) => void
+  idCustomerByTestContent: number
+  setIdCustomerByTestContent: (idCustomerByTestContent: number) => void
 }
 
 export const useTestIdByTestContens = create<TestIdSelectedByTestContentsInterface>((set) => ({
-  idTestByTestContent: 0,
+  idTestByTestContent: -1,
   setIdTestByTestContent: (idTestByTestContent: number): void =>
     set(() => ({
       idTestByTestContent: idTestByTestContent
@@ -17,5 +19,10 @@ export const useTestIdByTestContens = create<TestIdSelectedByTestContentsInterfa
   setTestNameSelected: (TestName: string): void =>
     set(() => ({
       testNameSelected: TestName
+    })),
+  idCustomerByTestContent: -1,
+  setIdCustomerByTestContent: (idCustomerByTestContent: number): void =>
+    set(() => ({
+      idCustomerByTestContent: idCustomerByTestContent
     }))
 }))
