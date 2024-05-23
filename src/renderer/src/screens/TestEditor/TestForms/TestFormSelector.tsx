@@ -1,9 +1,4 @@
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger
-} from '@/components/ui/accordion'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger} from '@/components/ui/accordion'
 import { LoadingSpinner } from '@renderer/components/LoadingSpinner/LoadingSpinner'
 import { ErrorPage } from '@renderer/components/PageNotFound/ErrorPage'
 import { useTestIdByTestContens } from '@renderer/context/testContentsContext/testContentContext'
@@ -20,15 +15,10 @@ export const TestFormsEditor: React.FC = () => {
     idTestByTestContent,
     idCustomerByTestContent
   )
-
-  // //Pendiente de implementar
-  // const { data: contentsresults } = useListContentsResultsByIdResults(dataResults![0].idResults)
-
+  
   if (isLoading) {
     return <LoadingSpinner />
   }
-
-  // console.log(`Data Results: ${JSON.stringify(contentsresults, null, 2)}`);
 
   return (
     <div>
