@@ -46,11 +46,11 @@ export const TestForm: React.FC<PropsTestForm> = ({ contentsresults }) => {
         },
         {} as Record<string, string>
       )
-      
+
       // Check if defaultValues are actually different before resetting the form
       const currentValues = form.getValues()
       const shouldReset = Object.keys(defaultValues).some(
-        key => defaultValues[key] !== currentValues[key]
+        (key) => defaultValues[key] !== currentValues[key]
       )
 
       if (shouldReset) {
@@ -69,8 +69,6 @@ export const TestForm: React.FC<PropsTestForm> = ({ contentsresults }) => {
 
   return (
     <div>
-      <h1>Test Form</h1>
-
       <div>
         {contentsresults!.length === 0 ? (
           <div>
@@ -80,7 +78,7 @@ export const TestForm: React.FC<PropsTestForm> = ({ contentsresults }) => {
           <div>
             <Card className="mt-5">
               <CardHeader>
-                <CardTitle className="font-inter text-center text-[1rem]">{`PARÁMETROS PARA EL EXAMEN DE ${testNameSelected}`}</CardTitle>
+                <CardTitle className="font-inter text-center text-[1rem]">{`PARÁMETROS PARA EL EXAMEN DE ${testNameSelected.toUpperCase()}`}</CardTitle>
                 <Separator />
               </CardHeader>
               <CardContent>
@@ -98,7 +96,7 @@ export const TestForm: React.FC<PropsTestForm> = ({ contentsresults }) => {
                                 <FormControl>
                                   <Input placeholder="shadcn" {...field} />
                                 </FormControl>
-                                <FormDescription>{`Resultados para ${contentResults.contentsDTO?.name}`}</FormDescription>
+                                <FormDescription>{`Resultados para ${contentResults.contentsDTO?.name.toLowerCase()}`}</FormDescription>
                                 <FormMessage />
                               </FormItem>
                             )}
