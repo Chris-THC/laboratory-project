@@ -94,7 +94,7 @@ export const TestForm: React.FC<PropsTestForm> = ({ contentsresults }) => {
                               <FormItem>
                                 <FormLabel>{contentResults.contentsDTO?.name}</FormLabel>
                                 <FormControl>
-                                  <Input placeholder="shadcn" {...field} />
+                                  <Input {...field} />
                                 </FormControl>
                                 <FormDescription>{`Resultados para ${contentResults.contentsDTO?.name.toLowerCase()}`}</FormDescription>
                                 <FormMessage />
