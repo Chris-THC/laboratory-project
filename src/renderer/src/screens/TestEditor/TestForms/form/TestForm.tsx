@@ -26,36 +26,36 @@ interface PropsTestForm {
 export const TestForm: React.FC<PropsTestForm> = ({ contentsresults }) => {
   const { testNameSelected } = useTestIdByTestContens()
 
-  // Define FormSchema y form fuera de la condición
   const FormSchema = contentsresults
     ? z.object(
-        Object.fromEntries(
-          contentsresults.map((info) => [
-            info.contentsDTO?.name,
-            z.string().min(2, {
-              message: `${info.contentsDTO?.name} must be at least 2 characters.`
-            })
-          ])
-        )
+        Object.fromEntries(contentsresults.map((info) => [info.contentsDTO?.name, z.string()]))
       )
     : z.object({})
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    shouldUnregister: true // Esto habilitará la validación automática al cambiar los valores de los campos
+    shouldUnregister: true
   })
 
   useEffect(() => {
-    // Actualizar los valores del formulario cuando contentsresults cambie
     if (contentsresults) {
       const defaultValues = contentsresults.reduce(
         (values, field) => {
-          values[field.contentsDTO!.name] = field.resultValue.toString() ?? '' // Usamos el nombre del campo como clave
+          values[field.contentsDTO!.name] = field.resultValue.toString() ?? ''
           return values
         },
         {} as Record<string, string>
       )
-      form.reset(defaultValues)
+      
+      // Check if defaultValues are actually different before resetting the form
+      const currentValues = form.getValues()
+      const shouldReset = Object.keys(defaultValues).some(
+        key => defaultValues[key] !== currentValues[key]
+      )
+
+      if (shouldReset) {
+        form.reset(defaultValues)
+      }
     }
   }, [contentsresults, form])
 
@@ -64,7 +64,7 @@ export const TestForm: React.FC<PropsTestForm> = ({ contentsresults }) => {
   }
 
   if (contentsresults === undefined) {
-    return null // O cualquier otro JSX que desees renderizar en este caso
+    return null
   }
 
   return (
@@ -108,11 +108,11 @@ export const TestForm: React.FC<PropsTestForm> = ({ contentsresults }) => {
                     </div>
                     <div className="mt-6">
                       <Button className="bg-[#4472c4] mx-2" variant={'default'} type="submit">
-                        Guaradar
+                        Guardar
                       </Button>
                       <Button
                         onClick={() => {
-                          console.log('Hace otra wea')
+                          console.log('Hace otra cosa')
                         }}
                         className="mx-2"
                         variant={'destructive'}
