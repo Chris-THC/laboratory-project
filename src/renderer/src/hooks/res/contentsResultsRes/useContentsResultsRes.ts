@@ -39,3 +39,25 @@ export const useNewContentResult = (): UseMutationResult<ContentsResultsInterfac
     }
   })
 }
+
+// * This section is to update contentsresults
+
+const updateContentsResultsById = async (contentResultId:number, contentBody: ContentsResultsInterface): Promise<ContentsResultsInterface> => {
+  const { data } = await apiConection.patch<ContentsResultsInterface>(`/contentsresults/${contentResultId}`, contentBody);
+  return data;
+};
+
+export const useUpdate = (): UseMutationResult<ContentsResultsInterface, Error, { contentResultId: number, contentBody: ContentsResultsInterface }> => {
+  
+  const queryClient = useQueryClient();
+
+  return useMutation<ContentsResultsInterface, Error, { contentResultId: number, contentBody: ContentsResultsInterface }>({
+    mutationFn: ({ contentResultId, contentBody }) => updateContentsResultsById(contentResultId, contentBody),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['contentResults'] });
+    },
+    onError: () => {
+      console.log("Hay un error al actualizar");
+    }
+  });
+};

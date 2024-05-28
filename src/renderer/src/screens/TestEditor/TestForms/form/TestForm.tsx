@@ -27,9 +27,7 @@ export const TestForm: React.FC<PropsTestForm> = ({ contentsresults }) => {
   const { testNameSelected } = useTestIdByTestContens()
 
   const FormSchema = contentsresults
-    ? z.object(
-        Object.fromEntries(contentsresults.map((info) => [info.contentsDTO?.name, z.string()]))
-      )
+    ? z.object(Object.fromEntries(contentsresults.map((info) => [info.contResultId, z.string()])))
     : z.object({})
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -41,7 +39,7 @@ export const TestForm: React.FC<PropsTestForm> = ({ contentsresults }) => {
     if (contentsresults) {
       const defaultValues = contentsresults.reduce(
         (values, field) => {
-          values[field.contentsDTO!.name] = field.resultValue.toString() ?? ''
+          values[field.contResultId!] = field.resultValue.toString() ?? ''
           return values
         },
         {} as Record<string, string>
@@ -60,8 +58,12 @@ export const TestForm: React.FC<PropsTestForm> = ({ contentsresults }) => {
   }, [contentsresults, form])
 
   const onSubmit = (data: z.infer<typeof FormSchema>): void => {
-    console.log(JSON.stringify(data, null, 2))
-  }
+    Object.keys(data).map((idResults) => {
+      const contenido = data[idResults];
+      console.log(`ID# ${idResults}: ${contenido}`);
+    });
+  };
+  
 
   if (contentsresults === undefined) {
     return null
@@ -89,7 +91,7 @@ export const TestForm: React.FC<PropsTestForm> = ({ contentsresults }) => {
                         <div key={index}>
                           <FormField
                             control={form.control}
-                            name={contentResults.contentsDTO!.name}
+                            name={contentResults.contResultId!.toString()}
                             render={({ field }) => (
                               <FormItem>
                                 <FormLabel>{contentResults.contentsDTO?.name}</FormLabel>
@@ -111,6 +113,7 @@ export const TestForm: React.FC<PropsTestForm> = ({ contentsresults }) => {
                       <Button
                         onClick={() => {
                           console.log('Hace otra cosa')
+                          console.log(contentsresults)
                         }}
                         className="mx-2"
                         variant={'destructive'}
