@@ -5,8 +5,8 @@ interface ContentsResultsContextInterface {
   resultsId: number
   setResultsId: (resultsId: number) => void
 
-  contentResults: ContentsResultsInterface | null | undefined
-  setContentResults: (contentResults: ContentsResultsInterface) => void
+  contentResultsArray: ContentsResultsInterface[] | null | undefined
+  setContentResultsArray: (contentResults: ContentsResultsInterface[] | null | undefined) => void
 }
 
 export const useContentResultWasSelect = create<ContentsResultsContextInterface>((set) => ({
@@ -16,10 +16,10 @@ export const useContentResultWasSelect = create<ContentsResultsContextInterface>
       resultsId: resultsId
     })),
 
-  contentResults: null,
-  setContentResults: (contentResults: ContentsResultsInterface | null | undefined): void => {
+  contentResultsArray: null,
+  setContentResultsArray: (contentResults: ContentsResultsInterface[] | null | undefined): void => {
     return set(() => ({
-      contentResults: contentResults
+      contentResultsArray: contentResults
     }))
   }
 }))

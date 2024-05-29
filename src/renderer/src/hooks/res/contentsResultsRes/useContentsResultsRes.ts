@@ -17,9 +17,14 @@ const notifyError = (message: string): string => {
 }
 
 //TODO: Here we get content_results by idResult
-const getContentsResultByIdResut = async (resultId:number|null|undefined): Promise<ContentsResultsInterface[]> => {
-  const { data } = await apiConection.get<ContentsResultsInterface[]>(`/contentsresults/resultId/${resultId}`)
-  return data
+export const getContentsResultByIdResut = async (resultId: number | null | undefined): Promise<ContentsResultsInterface[] | null> => {
+  try {
+    const { data } = await apiConection.get<ContentsResultsInterface[]>(`/contentsresults/resultId/${resultId}`);
+    return data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
 }
 
 export const useListContentsResultsByIdResults = (idResult:number|null|undefined): UseQueryResult<ContentsResultsInterface[]> => {

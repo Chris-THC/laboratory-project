@@ -1,30 +1,22 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { ContentsResultsInterface } from '@renderer/interfaces/contentsResults/contentsResults'
 import React, { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '@/components/ui/form'
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
+import { useContentResultWasSelect } from '@renderer/context/contentResults/contentsResultContext'
 import { useTestIdByTestContens } from '@renderer/context/testContentsContext/testContentContext'
 import { useUpdateContentResults } from '@renderer/hooks/res/contentsResultsRes/useContentsResultsRes'
 
-interface PropsTestForm {
-  contentsresults: ContentsResultsInterface[] | null | undefined
-}
 
-export const TestForm: React.FC<PropsTestForm> = ({ contentsresults }) => {
+
+export const TestForm: React.FC = () => {
+  
+  const { contentResultsArray: contentsresults } = useContentResultWasSelect()
+
   const { testNameSelected } = useTestIdByTestContens()
 
   const updateContentResults = useUpdateContentResults()
@@ -62,12 +54,13 @@ export const TestForm: React.FC<PropsTestForm> = ({ contentsresults }) => {
 
   const onSubmit = (data: z.infer<typeof FormSchema>): void => {
     Object.keys(data).map((idResults) => {
-      const contenido = data[idResults];
-      console.log(`ID# ${idResults}: ${contenido}`);
-      updateContentResults.mutate({ contentResultId: parseInt(idResults), contentBody: { resultValue: contenido } })
-    });
-  };
-  
+      const contenido = data[idResults]
+      updateContentResults.mutate({
+        contentResultId: parseInt(idResults),
+        contentBody: { resultValue: contenido }
+      })
+    })
+  }
 
   if (contentsresults === undefined) {
     return null

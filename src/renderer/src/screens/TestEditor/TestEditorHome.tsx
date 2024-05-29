@@ -1,20 +1,15 @@
 import { Button } from '@/components/ui/button'
-import { useContentResultWasSelect } from '@renderer/context/contentResults/contentsResultContext'
-import { useListContentsResultsByIdResults } from '@renderer/hooks/res/contentsResultsRes/useContentsResultsRes'
 import { ArrowLeft } from 'lucide-react'
 import React from 'react'
+import { Toaster } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { TestFormsEditor } from './TestForms/TestFormSelector'
 import { TestForm } from './TestForms/form/TestForm'
-import { Toaster } from 'react-hot-toast'
 
 export const TestEditorHome: React.FC = () => {
-  // const { idTestByTestContent, idCustomerByTestContent } = useTestIdByTestContens()
-  const { resultsId } = useContentResultWasSelect()
-
-  const { data: contentsresults } = useListContentsResultsByIdResults(resultsId)
-
+  
   const navigate = useNavigate()
+  
   return (
     <div className="bg-white text-gray-900 mx-8 mt-4">
       <div className="mb-2">
@@ -35,7 +30,7 @@ export const TestEditorHome: React.FC = () => {
       </div>
 
       <div>
-        <TestForm contentsresults={contentsresults} />
+        <TestForm />
       </div>
 
       <Toaster />

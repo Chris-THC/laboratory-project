@@ -6,7 +6,7 @@ import icon from '../../resources/icon.png?asset'
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    minWidth: 1200,
+    minWidth: 1100,
     minHeight: 660,
     show: false,
     autoHideMenuBar: true,
@@ -25,6 +25,9 @@ function createWindow(): void {
     shell.openExternal(details.url)
     return { action: 'deny' }
   })
+
+    // Center the window on any screen.
+  mainWindow.center()
 
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.

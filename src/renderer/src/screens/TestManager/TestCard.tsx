@@ -1,38 +1,15 @@
+import React from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import {
-  useDeleteCustomerTest,
-  useUpdateTestCustomers
-} from '@renderer/hooks/res/clientRes/UseClientTest'
+import { useDeleteCustomerTest, useUpdateTestCustomers } from '@renderer/hooks/res/clientRes/UseClientTest'
 import { Atom, Plus } from 'lucide-react'
-import React from 'react'
 import { useNavigate } from 'react-router-dom'
-
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger
-} from '@/components/ui/alert-dialog'
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select'
+import {AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger} from '@/components/ui/alert-dialog'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
 import { useTestIdByTestContens } from '@renderer/context/testContentsContext/testContentContext'
-import {
-  useDeleteResult,
-  getResultsByIdTestAndIdCustomer
-} from '@renderer/hooks/res/resultsRes/useResults'
+import { useDeleteResult, getResultsByIdTestAndIdCustomer} from '@renderer/hooks/res/resultsRes/useResults'
 import { useContentResultWasSelect } from '@renderer/context/contentResults/contentsResultContext'
+import { getContentsResultByIdResut } from '@renderer/hooks/res/contentsResultsRes/useContentsResultsRes'
 
 interface CardTestProps {
   idCusrtomerTest: number
@@ -43,21 +20,15 @@ interface CardTestProps {
   idTest: number
 }
 
-export const TestCard: React.FC<CardTestProps> = ({
-  nameCostumer,
-  nameTest,
-  status,
-  idCusrtomerTest,
-  idCustomer,
-  idTest
-}) => {
+export const TestCard: React.FC<CardTestProps> = ({ nameCostumer, nameTest, status, idCusrtomerTest, idCustomer, idTest}) => {
   const navigateTo = useNavigate()
   const updateCustomerTest = useUpdateTestCustomers()
   const deteleCustomerTest = useDeleteCustomerTest()
   const deleteResults = useDeleteResult()
   const { setIdTestByTestContent, setTestNameSelected, setIdCustomerByTestContent } =
     useTestIdByTestContens()
-  const { setResultsId } = useContentResultWasSelect()
+
+  const { setContentResultsArray } = useContentResultWasSelect()
 
   const getStatusColor = (status: string): string => {
     switch (status) {
@@ -167,7 +138,9 @@ export const TestCard: React.FC<CardTestProps> = ({
                   setTestNameSelected(nameTest)
                   setIdCustomerByTestContent(idCustomer)
                   const dataResults = await getResultsByIdTestAndIdCustomer(idTest, idCustomer)
-                  setResultsId(dataResults![0].idResults!)
+                  const dataGet = await getContentsResultByIdResut(dataResults![0].idResults!)
+                  setContentResultsArray(dataGet)
+
                   navigateTo('/tests/editor')
                 }}
                 className="mr-3 max-w-28 text-[#15658d]"
