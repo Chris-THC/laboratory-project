@@ -11,7 +11,12 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/
 import { Separator } from '@/components/ui/separator'
 import { useTestIdByTestContens } from '@renderer/context/testContentsContext/testContentContext'
 import { ResultsInterface } from '@renderer/interfaces/results/results'
-import { useNewContentResult } from '@renderer/hooks/res/contentsResultsRes/useContentsResultsRes'
+import {
+  getContentsResultByIdResut,
+  useNewContentResult
+} from '@renderer/hooks/res/contentsResultsRes/useContentsResultsRes'
+import { getResultsByIdTestAndIdCustomer } from '@renderer/hooks/res/resultsRes/useResults'
+import { useContentResultWasSelect } from '@renderer/context/contentResults/contentsResultContext'
 
 interface PropsTestContents {
   testContents: TestContentsInterface[]
@@ -30,6 +35,9 @@ export const AvailableParametersByTest: React.FC<PropsTestContents> = ({
   const { testNameSelected } = useTestIdByTestContens()
   const newContentsInfo = useNewContentResult()
 
+  const { idTestByTestContent, idCustomerByTestContent } = useTestIdByTestContens()
+
+  const { setContentResultsArray } = useContentResultWasSelect()
 
   const items: Item[] = testContents.map((testInfo) => ({
     id: testInfo.contentsDTO!.contentId.toString(),
@@ -49,19 +57,28 @@ export const AvailableParametersByTest: React.FC<PropsTestContents> = ({
     }
   })
 
-  function onSubmit(data: z.infer<typeof FormSchema>): void {
-    console.log(JSON.stringify(data, null, 2))
+  const getListContenteResults = async (): Promise<void> => {
+    const dataResults = await getResultsByIdTestAndIdCustomer(
+      idTestByTestContent,
+      idCustomerByTestContent
+    )
+    const listContentsResults = await getContentsResultByIdResut(dataResults![0].idResults!)
+
+    setContentResultsArray(listContentsResults)
+  }
+
+  const onSubmit = (data: z.infer<typeof FormSchema>): void => {
     const infoCustomer = resultsByIdTestAndIdCustomer![0]
     data.items.map((info) => {
       const contentBody = {
         resultId: infoCustomer.idResults,
         contentId: parseInt(info),
-        resultValue: " "
+        resultValue: ' '
       }
       newContentsInfo.mutate(contentBody)
-      // console.log(contentBody);
-      
     })
+
+    getListContenteResults()
   }
 
   return (
@@ -127,7 +144,6 @@ export const AvailableParametersByTest: React.FC<PropsTestContents> = ({
                     className="bg-red-600 text-white mx-2"
                     onClick={(event) => {
                       event.preventDefault()
-                      console.log('Cancelar')
                     }}
                   >
                     Cancelar

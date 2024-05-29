@@ -138,8 +138,8 @@ export const TestCard: React.FC<CardTestProps> = ({ nameCostumer, nameTest, stat
                   setTestNameSelected(nameTest)
                   setIdCustomerByTestContent(idCustomer)
                   const dataResults = await getResultsByIdTestAndIdCustomer(idTest, idCustomer)
-                  const dataGet = await getContentsResultByIdResut(dataResults![0].idResults!)
-                  setContentResultsArray(dataGet)
+                  const listContentsResults = await getContentsResultByIdResut(dataResults![0].idResults!)
+                  setContentResultsArray(listContentsResults)
 
                   navigateTo('/tests/editor')
                 }}

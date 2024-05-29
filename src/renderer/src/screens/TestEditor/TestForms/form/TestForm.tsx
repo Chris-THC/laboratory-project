@@ -10,8 +10,7 @@ import { Separator } from '@/components/ui/separator'
 import { useContentResultWasSelect } from '@renderer/context/contentResults/contentsResultContext'
 import { useTestIdByTestContens } from '@renderer/context/testContentsContext/testContentContext'
 import { useUpdateContentResults } from '@renderer/hooks/res/contentsResultsRes/useContentsResultsRes'
-
-
+import { useNavigate } from 'react-router-dom'
 
 export const TestForm: React.FC = () => {
   
@@ -20,6 +19,8 @@ export const TestForm: React.FC = () => {
   const { testNameSelected } = useTestIdByTestContens()
 
   const updateContentResults = useUpdateContentResults()
+
+  const navigateToBack = useNavigate()
 
   const FormSchema = contentsresults
     ? z.object(Object.fromEntries(contentsresults.map((info) => [info.contResultId, z.string()])))
@@ -60,7 +61,13 @@ export const TestForm: React.FC = () => {
         contentBody: { resultValue: contenido }
       })
     })
+    navigateToBack(-1)
   }
+
+  const handleCancel = (event: React.MouseEvent<HTMLButtonElement>):void => {
+    event.preventDefault();
+    navigateToBack(-1)
+  };
 
   if (contentsresults === undefined) {
     return null
@@ -107,14 +114,7 @@ export const TestForm: React.FC = () => {
                       <Button className="bg-[#4472c4] mx-2" variant={'default'} type="submit">
                         Guardar
                       </Button>
-                      <Button
-                        onClick={() => {
-                          console.log('Hace otra cosa')
-                          console.log(contentsresults)
-                        }}
-                        className="mx-2"
-                        variant={'destructive'}
-                      >
+                      <Button onClick={handleCancel} className="mx-2" variant={'destructive'}>
                         Cancelar
                       </Button>
                     </div>
