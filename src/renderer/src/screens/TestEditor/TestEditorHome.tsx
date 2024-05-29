@@ -6,6 +6,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { TestFormsEditor } from './TestForms/TestFormSelector'
 import { TestForm } from './TestForms/form/TestForm'
+import { Toaster } from 'react-hot-toast'
 
 export const TestEditorHome: React.FC = () => {
   // const { idTestByTestContent, idCustomerByTestContent } = useTestIdByTestContens()
@@ -36,6 +37,8 @@ export const TestEditorHome: React.FC = () => {
       <div>
         <TestForm contentsresults={contentsresults} />
       </div>
+
+      <Toaster />
     </div>
   )
 }

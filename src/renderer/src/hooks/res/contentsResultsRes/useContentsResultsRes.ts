@@ -1,6 +1,20 @@
 import { ContentsResultsInterface } from '@renderer/interfaces/contentsResults/contentsResults'
 import { UseMutationResult, UseQueryResult, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import apiConection from '../../../api/ConnectionAPI'
+import toast from 'react-hot-toast'
+
+// TODO: toast Messages
+const notifyCreatedSucces = (message: string): string => {
+  return toast.success(message)
+}
+
+const notifyUpdatedSucces = (message: string): string => {
+  return toast.success(message)
+}
+
+const notifyError = (message: string): string => {
+  return toast.error(message)
+}
 
 //TODO: Here we get content_results by idResult
 const getContentsResultByIdResut = async (resultId:number|null|undefined): Promise<ContentsResultsInterface[]> => {
@@ -23,19 +37,14 @@ const postNewContentResult = async (contentBody: ContentsResultsInterface): Prom
 
 export const useNewContentResult = (): UseMutationResult<ContentsResultsInterface, Error, ContentsResultsInterface,unknown> => {
   const queryClient = useQueryClient()
-
   return useMutation({
     mutationFn: postNewContentResult,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['contentResults'] })
-      // notifyCreatedSucces()
-      console.log("Se ha agregado un dato a contents results");
-      
+      queryClient.invalidateQueries({ queryKey: ['contentResults'] })  
+      notifyCreatedSucces("Se ha agregado un dato a contents results");
     },
     onError: () => {
-      // toast.error('No se pudo crear al usuario')
-      console.error("Hay un error al agregar un dato a contents results");
-
+      notifyError("Hay un error al agregar un dato a contents results");
     }
   })
 }
@@ -47,17 +56,16 @@ const updateContentsResultsById = async (contentResultId:number, contentBody: Co
   return data;
 };
 
-export const useUpdate = (): UseMutationResult<ContentsResultsInterface, Error, { contentResultId: number, contentBody: ContentsResultsInterface }> => {
-  
+export const useUpdateContentResults = (): UseMutationResult<ContentsResultsInterface, Error, { contentResultId: number, contentBody: ContentsResultsInterface }> => {
   const queryClient = useQueryClient();
-
   return useMutation<ContentsResultsInterface, Error, { contentResultId: number, contentBody: ContentsResultsInterface }>({
     mutationFn: ({ contentResultId, contentBody }) => updateContentsResultsById(contentResultId, contentBody),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['contentResults'] });
+      notifyUpdatedSucces("Se ha actualizado..!");
     },
     onError: () => {
-      console.log("Hay un error al actualizar");
+      notifyError("No se pudo actualizar el campo..!");
     }
   });
 };

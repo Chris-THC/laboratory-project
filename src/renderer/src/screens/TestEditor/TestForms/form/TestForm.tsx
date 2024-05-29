@@ -18,6 +18,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { useTestIdByTestContens } from '@renderer/context/testContentsContext/testContentContext'
+import { useUpdateContentResults } from '@renderer/hooks/res/contentsResultsRes/useContentsResultsRes'
 
 interface PropsTestForm {
   contentsresults: ContentsResultsInterface[] | null | undefined
@@ -25,6 +26,8 @@ interface PropsTestForm {
 
 export const TestForm: React.FC<PropsTestForm> = ({ contentsresults }) => {
   const { testNameSelected } = useTestIdByTestContens()
+
+  const updateContentResults = useUpdateContentResults()
 
   const FormSchema = contentsresults
     ? z.object(Object.fromEntries(contentsresults.map((info) => [info.contResultId, z.string()])))
@@ -61,6 +64,7 @@ export const TestForm: React.FC<PropsTestForm> = ({ contentsresults }) => {
     Object.keys(data).map((idResults) => {
       const contenido = data[idResults];
       console.log(`ID# ${idResults}: ${contenido}`);
+      updateContentResults.mutate({ contentResultId: parseInt(idResults), contentBody: { resultValue: contenido } })
     });
   };
   
