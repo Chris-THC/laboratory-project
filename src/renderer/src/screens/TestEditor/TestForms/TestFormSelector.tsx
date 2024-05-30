@@ -1,4 +1,9 @@
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger} from '@/components/ui/accordion'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger
+} from '@/components/ui/accordion'
 import { LoadingSpinner } from '@renderer/components/LoadingSpinner/LoadingSpinner'
 import { ErrorPage } from '@renderer/components/PageNotFound/ErrorPage'
 import { useTestIdByTestContens } from '@renderer/context/testContentsContext/testContentContext'
@@ -11,11 +16,12 @@ export const TestFormsEditor: React.FC = () => {
   const { idTestByTestContent, testNameSelected, idCustomerByTestContent } =
     useTestIdByTestContens()
   const { isLoading, data } = useTestContestByIdTest(idTestByTestContent)
+
   const { data: dataResults } = useGetResultsByIdTestAndIdCustomer(
     idTestByTestContent,
     idCustomerByTestContent
   )
-  
+
   if (isLoading) {
     return <LoadingSpinner />
   }

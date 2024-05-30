@@ -29,7 +29,7 @@ interface Item {
   label: string;
 }
 
-export const AvailableParametersByTest: React.FC<PropsTestContents> = ({
+export const AvailableTester: React.FC<PropsTestContents> = ({
   testContents,
   resultsByIdTestAndIdCustomer
 }) => {
@@ -92,8 +92,8 @@ export const AvailableParametersByTest: React.FC<PropsTestContents> = ({
       idTestByTestContent,
       idCustomerByTestContent
     );
-    const listContentsResults = await getContentsResultByIdResut(dataResults![0].idResults!)
-    setContentResultsArray(listContentsResults)
+    const listContentsResults = await getContentsResultByIdResut(dataResults[0].idResults);
+    setContentResultsArray(listContentsResults);
   };
 
   const onSubmit = (data: z.infer<typeof FormSchema>): void => {
