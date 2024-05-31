@@ -33,7 +33,7 @@ export const HomeScreen: React.FC = () => {
         <Route path="/tests/add" element={<AddTest />} />
         <Route path="/tests/editor" element={<TestEditorHome />} />
         <Route path="/pdf" element={<PDFHome />} />
-        {/* This route eliminates the need to use the pd */}
+        {/* This route eliminate before */}
         <Route path="/pdf/render" element={<HepatitisAPDF />} />
 
         {/* Here you can add new screens */}
