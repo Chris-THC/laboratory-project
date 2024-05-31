@@ -1,114 +1,136 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { TestContentsInterface } from '@renderer/interfaces/testContest/testContents';
-import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
-import { Separator } from '@/components/ui/separator';
-import { useTestIdByTestContens } from '@renderer/context/testContentsContext/testContentContext';
-import { ResultsInterface } from '@renderer/interfaces/results/results';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { TestContentsInterface } from '@renderer/interfaces/testContest/testContents'
+import React, { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import toast from 'react-hot-toast'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
+import { Separator } from '@/components/ui/separator'
+import { useTestIdByTestContens } from '@renderer/context/testContentsContext/testContentContext'
+import { ResultsInterface } from '@renderer/interfaces/results/results'
 import {
   getContentsResultByIdResut,
   useNewContentResult
-} from '@renderer/hooks/res/contentsResultsRes/useContentsResultsRes';
-import { getResultsByIdTestAndIdCustomer } from '@renderer/hooks/res/resultsRes/useResults';
-import { useContentResultWasSelect } from '@renderer/context/contentResults/contentsResultContext';
-import { ContentsResultsInterface } from '@renderer/interfaces/contentsResults/contentsResults';
+} from '@renderer/hooks/res/contentsResultsRes/useContentsResultsRes'
+import { getResultsByIdTestAndIdCustomer } from '@renderer/hooks/res/resultsRes/useResults'
+import { useContentResultWasSelect } from '@renderer/context/contentResults/contentsResultContext'
+import { ContentsResultsInterface } from '@renderer/interfaces/contentsResults/contentsResults'
 
 interface PropsTestContents {
-  testContents: TestContentsInterface[];
-  resultsByIdTestAndIdCustomer: ResultsInterface[] | undefined | null;
+  testContents: TestContentsInterface[]
+  resultsByIdTestAndIdCustomer: ResultsInterface[] | undefined | null
 }
 
 interface Item {
-  id: string;
-  label: string;
+  id: string
+  label: string
 }
 
 export const AvailableParametersByTest: React.FC<PropsTestContents> = ({
   testContents,
   resultsByIdTestAndIdCustomer
 }) => {
-  const [inputsWasSelected, setInputsWasSelected] = useState<ContentsResultsInterface[] | null>(null);
-  const [itemSelected, setItemSelected] = useState<string[]>([]);
+  const [inputsWasSelected, setInputsWasSelected] = useState<ContentsResultsInterface[] | null>(
+    null
+  )
+  const [itemSelected, setItemSelected] = useState<string[]>([])
 
-  const { testNameSelected } = useTestIdByTestContens();
+  const { testNameSelected } = useTestIdByTestContens()
 
-  const newContentsInfo = useNewContentResult();
+  const newContentsInfo = useNewContentResult()
 
-  const { idTestByTestContent, idCustomerByTestContent } = useTestIdByTestContens();
+  const { idTestByTestContent, idCustomerByTestContent } = useTestIdByTestContens()
 
-  const { setContentResultsArray } = useContentResultWasSelect();
+  const { setContentResultsArray } = useContentResultWasSelect()
 
   useEffect(() => {
     const contentResultsList = async (): Promise<void> => {
       const dataResults = await getResultsByIdTestAndIdCustomer(
         idTestByTestContent,
         idCustomerByTestContent
-      );
-      const listContentsResults = await getContentsResultByIdResut(dataResults[0].idResults);
+      )
+      const listContentsResults = await getContentsResultByIdResut(dataResults[0].idResults)
 
-      setInputsWasSelected(listContentsResults);
-    };
+      setInputsWasSelected(listContentsResults)
+    }
 
-    contentResultsList();
-  }, [idTestByTestContent, idCustomerByTestContent]);
+    contentResultsList()
+  }, [idTestByTestContent, idCustomerByTestContent])
 
   useEffect(() => {
     if (inputsWasSelected) {
-      const selectedIds = inputsWasSelected.map((input) => input.contentId!.toString());
-      setItemSelected(selectedIds);
+      const selectedIds = inputsWasSelected.map((input) => input.contentId!.toString())
+      setItemSelected(selectedIds)
     }
-  }, [inputsWasSelected]);
+  }, [inputsWasSelected])
 
   const items: Item[] = testContents.map((testInfo) => ({
     id: testInfo.contentsDTO!.contentId.toString(),
     label: testInfo.contentsDTO!.name
-  }));
+  }))
 
   const FormSchema = z.object({
     items: z.array(z.string()).refine((value) => value.some((item) => item), {
       message: 'Debe seleccionar al menos un elemento'
     })
-  });
+  })
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       items: itemSelected // Aquí usamos itemSelected en lugar de itemSelected?.toString()
     }
-  });
+  })
 
   useEffect(() => {
-    form.reset({ items: itemSelected });
-  }, [itemSelected, form]);
+    form.reset({ items: itemSelected })
+  }, [itemSelected, form])
 
   const getListContenteResults = async (): Promise<void> => {
     const dataResults = await getResultsByIdTestAndIdCustomer(
       idTestByTestContent,
       idCustomerByTestContent
-    );
+    )
     const listContentsResults = await getContentsResultByIdResut(dataResults![0].idResults!)
     setContentResultsArray(listContentsResults)
-  };
+  }
 
-  const onSubmit = (data: z.infer<typeof FormSchema>): void => {
-    const infoCustomer = resultsByIdTestAndIdCustomer![0];
-    data.items.forEach((info) => {
-      const contentBody = {
-        resultId: infoCustomer.idResults,
-        contentId: parseInt(info),
-        resultValue: ' '
-      };
-      newContentsInfo.mutate(contentBody);
-    });
+  const isExistItemsBefore = async (): Promise<ContentsResultsInterface[] | null> => {
+    const dataResults = await getResultsByIdTestAndIdCustomer(
+      idTestByTestContent,
+      idCustomerByTestContent
+    )
+    const listContentsResults = await getContentsResultByIdResut(dataResults[0].idResults)
+    return listContentsResults
+  }
 
-    getListContenteResults();
-  };
+  const onSubmit = async (data: z.infer<typeof FormSchema>): Promise<void> => {
+    const infoIsExist = await isExistItemsBefore()
+
+    const arryIdContent = infoIsExist?.map((info) => info.contentId) || []
+
+    const infoCustomer = resultsByIdTestAndIdCustomer![0]
+
+    data.items.forEach((idContent) => {
+      if (arryIdContent.includes(parseInt(idContent))) {
+        toast('Campo ya existente', {
+          icon: '⚠️'
+        })
+      } else {
+        const contentBody = {
+          resultId: infoCustomer.idResults,
+          contentId: parseInt(idContent),
+          resultValue: ' '
+        }
+        newContentsInfo.mutate(contentBody)
+      }
+    })
+
+    getListContenteResults()
+  }
 
   return (
     <Form {...form}>
@@ -145,13 +167,13 @@ export const AvailableParametersByTest: React.FC<PropsTestContents> = ({
                                       ? field.onChange([...field.value, item.id])
                                       : field.onChange(
                                           field.value.filter((value) => value !== item.id)
-                                        );
+                                        )
                                   }}
                                 />
                               </FormControl>
                               <FormLabel className="font-normal">{item.label}</FormLabel>
                             </FormItem>
-                          );
+                          )
                         }}
                       />
                     ))}
@@ -172,7 +194,7 @@ export const AvailableParametersByTest: React.FC<PropsTestContents> = ({
                     variant={'outline'}
                     className="bg-red-600 text-white mx-2"
                     onClick={(event) => {
-                      event.preventDefault();
+                      event.preventDefault()
                     }}
                   >
                     Cancelar
@@ -184,5 +206,5 @@ export const AvailableParametersByTest: React.FC<PropsTestContents> = ({
         />
       </form>
     </Form>
-  );
-};
+  )
+}
