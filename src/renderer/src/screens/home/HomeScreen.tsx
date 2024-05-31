@@ -10,6 +10,7 @@ import { TestManagerHome } from '../TestManager/TestManager'
 import { TestEditorHome } from '../TestEditor/TestEditorHome'
 import { HepatitisAPDF } from '@renderer/PDF/Hepatitis-A-PDF/HepatitisAPDF'
 import { AddTest } from '../TestManager/AddTest'
+import { PDFHome } from '../PDF/PDFHome'
 
 export const HomeScreen: React.FC = () => {
   return (
@@ -31,6 +32,8 @@ export const HomeScreen: React.FC = () => {
         <Route path="/tests" element={<TestManagerHome />} />
         <Route path="/tests/add" element={<AddTest />} />
         <Route path="/tests/editor" element={<TestEditorHome />} />
+        <Route path="/pdf" element={<PDFHome />} />
+        {/* This route eliminates the need to use the pd */}
         <Route path="/pdf/render" element={<HepatitisAPDF />} />
 
         {/* Here you can add new screens */}
