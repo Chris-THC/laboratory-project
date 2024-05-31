@@ -35,7 +35,7 @@ export const TestFormsEditor: React.FC = () => {
           <Accordion type="single" collapsible>
             <AccordionItem value="item-1">
               <AccordionTrigger className="font-inter font-medium text-[1.05rem]">
-                {`SELECCIONA LOS PARÁMETROS QUE NECESITES PARA ESTE EXAMEN [${testNameSelected}]`}
+                {`ELIGE LOS PARÁMETROS NECESARIOS PARA EL EXAMEN [${testNameSelected}]`}
               </AccordionTrigger>
               <AccordionContent>
                 <AvailableParametersByTest
