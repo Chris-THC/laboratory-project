@@ -1,37 +1,34 @@
+import React from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { useDeleteCustomerTest } from '@renderer/hooks/res/clientRes/UseClientTest'
-import { Atom, ClockIcon, Plus } from 'lucide-react'
-import React from 'react'
+import { useDeleteCustomerTest, useUpdateTestCustomers } from '@renderer/hooks/res/clientRes/UseClientTest'
+import { Atom, Plus } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger
-} from '@/components/ui/alert-dialog'
+import {AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger} from '@/components/ui/alert-dialog'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select'
+import { useTestIdByTestContens } from '@renderer/context/testContentsContext/testContentContext'
+import { useDeleteResult, getResultsByIdTestAndIdCustomer} from '@renderer/hooks/res/resultsRes/useResults'
+import { useContentResultWasSelect } from '@renderer/context/contentResults/contentsResultContext'
+import { getContentsResultByIdResut } from '@renderer/hooks/res/contentsResultsRes/useContentsResultsRes'
 
 interface CardTestProps {
   idCusrtomerTest: number
   nameCostumer: string | undefined
   nameTest: string
   status: string
+  idCustomer: number
+  idTest: number
 }
 
-export const TestCard: React.FC<CardTestProps> = ({
-  nameCostumer,
-  nameTest,
-  status,
-  idCusrtomerTest
-}) => {
+export const TestCard: React.FC<CardTestProps> = ({ nameCostumer, nameTest, status, idCusrtomerTest, idCustomer, idTest}) => {
   const navigateTo = useNavigate()
+  const updateCustomerTest = useUpdateTestCustomers()
   const deteleCustomerTest = useDeleteCustomerTest()
+  const deleteResults = useDeleteResult()
+  const { setIdTestByTestContent, setTestNameSelected, setIdCustomerByTestContent } =
+    useTestIdByTestContens()
+
+  const { setContentResultsArray } = useContentResultWasSelect()
 
   const getStatusColor = (status: string): string => {
     switch (status) {
@@ -49,12 +46,15 @@ export const TestCard: React.FC<CardTestProps> = ({
   const DeleteModalCustomerTest: React.FC = () => {
     return (
       <AlertDialog>
-        <AlertDialogTrigger>Eliminar</AlertDialogTrigger>
+        <AlertDialogTrigger className="mr-3 max-w-28 max-h-10 text-[#fff] bg-[#c80800] border border-[#c80800] hover:bg-transparent hover:text-[#c80800] font-medium py-2 px-4 rounded">
+          Eliminar
+        </AlertDialogTrigger>
+
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>¿Deseas continuar?</AlertDialogTitle>
             <AlertDialogDescription>
-              Esta acción eliminará la tarea de forma permanente.
+              Esta acción eliminará el examen de forma permanente.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -62,6 +62,7 @@ export const TestCard: React.FC<CardTestProps> = ({
             <AlertDialogAction
               onClick={() => {
                 deteleCustomerTest.mutate(idCusrtomerTest)
+                deleteResults.mutate({ idTest, idCustomer })
               }}
               className="bg-red-600"
             >
@@ -70,6 +71,43 @@ export const TestCard: React.FC<CardTestProps> = ({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+    )
+  }
+
+  const ChangeStatusTest: React.FC = () => {
+    return (
+      <Select
+        defaultValue={status}
+        onValueChange={(value: string) => {
+          if (value === 'Reportado') {
+            updateCustomerTest.mutate({
+              CostumerTestInfo: { idCustomer: idCustomer, idTest: idTest, status: '0' },
+              idCustomerTest: idCusrtomerTest
+            })
+          } else if (value === 'Impreso') {
+            updateCustomerTest.mutate({
+              CostumerTestInfo: { idCustomer: idCustomer, idTest: idTest, status: '1' },
+              idCustomerTest: idCusrtomerTest
+            })
+          } else if (value === 'Entregado') {
+            updateCustomerTest.mutate({
+              CostumerTestInfo: { idCustomer: idCustomer, idTest: idTest, status: '2' },
+              idCustomerTest: idCusrtomerTest
+            })
+          }
+        }}
+      >
+        <SelectTrigger
+          className={`max-w-[55%] rounded flex items-center text-sm font-bold text-white ${getStatusColor(status)} `}
+        >
+          <SelectValue placeholder="Status" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="Reportado">Reportado</SelectItem>
+          <SelectItem value="Impreso">Impreso</SelectItem>
+          <SelectItem value="Entregado">Entregado</SelectItem>
+        </SelectContent>
+      </Select>
     )
   }
 
@@ -82,23 +120,27 @@ export const TestCard: React.FC<CardTestProps> = ({
               <Atom className="text-[#15658d] h-10 w-10" />
               <div>
                 <div className="font-semibold">
-                  {nameTest.length > 20 ? nameTest.substring(0, 20) + '...' : nameTest}
+                  {nameTest.length > 21 ? nameTest.substring(0, 21) + '...' : nameTest}
                 </div>
               </div>
             </div>
             <div className="text-sm overflow-ellipsis text-center my-1">
               <p>{nameCostumer}</p>
             </div>
-            <div className="flex items-center justify-center my-1">
-              <div className={`px-2 py-1 rounded flex items-center ${getStatusColor(status)}`}>
-                <ClockIcon color="#fff" className="h-4 w-4 mr-1" />
-                <span className="text-sm font-bold text-white">{status}</span>
-              </div>
+            <div className="flex justify-center align-middle">
+              <ChangeStatusTest />
             </div>
 
             <div className="flex items-center justify-center py-1">
               <Button
-                onClick={() => {
+                onClick={async () => {
+                  setIdTestByTestContent(idTest)
+                  setTestNameSelected(nameTest)
+                  setIdCustomerByTestContent(idCustomer)
+                  const dataResults = await getResultsByIdTestAndIdCustomer(idTest, idCustomer)
+                  const listContentsResults = await getContentsResultByIdResut(dataResults![0].idResults!)
+                  setContentResultsArray(listContentsResults)
+
                   navigateTo('/tests/editor')
                 }}
                 className="mr-3 max-w-28 text-[#15658d]"
@@ -106,9 +148,8 @@ export const TestCard: React.FC<CardTestProps> = ({
               >
                 Editar
               </Button>
-              <Button className="mr-3 max-w-28 text-[#c80800]" variant="outline">
-                <DeleteModalCustomerTest />
-              </Button>
+
+              <DeleteModalCustomerTest />
             </div>
           </Card>
         </div>
@@ -130,7 +171,7 @@ export const TestNewCard: React.FC = () => {
                 navigateTo('/tests/add')
               }}
               variant={'ghost'}
-              className="text-[#15658d]"
+              className="text-[#15658d] h-full"
             >
               <Plus color="#15658d" className="mx-1" />
               Agregar

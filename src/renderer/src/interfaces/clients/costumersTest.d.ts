@@ -7,3 +7,9 @@ export interface CostumerTestInterface {
   testDTO: TestInterface
   status: string
 }
+
+export interface CostumerTestAddInterface {
+  idCustomer: number | null | undefined
+  idTest: number
+  status: string
+}
