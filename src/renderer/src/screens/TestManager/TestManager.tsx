@@ -36,7 +36,7 @@ export const TestManagerHome: React.FC = () => {
           <div className="flex flex-row justify-between  align-middle">
             <CardTitle className="py-2">Exámenes Registrados</CardTitle>
             <Button
-              onClick={() => console.log('Al PDF')}
+              onClick={() => navigate('/pdf')}
               className="font-inter px-1 bg-[#0074cc]"
               variant={'default'}
             >
