@@ -1,69 +1,13 @@
 import { Document, Font, Image, Page, StyleSheet, Text, View } from '@react-pdf/renderer'
 import React from 'react'
 import ImgLogo from '@/renderer/src/assets/img/Imagen2.png'
+import { ClientsInterface } from '@renderer/interfaces/clients/clients'
 
-interface IPatients {
-  name: string
-  age: number
-  doctor: string
-  date: string
+interface PropsFilePDF {
+  customerInfo: ClientsInterface | null | undefined
 }
 
-const Header: React.FC = () => {
-  const patientInfo: IPatients = {
-    name: 'Israel Montiel Dominguez',
-    age: 23,
-    doctor: 'Jose Luis Peréz Hernandez',
-    date: '21 de abril del 2024'
-  }
-
-  return (
-    <View fixed>
-      <View
-        style={{
-          flexDirection: 'row',
-          height: 90
-        }}
-      >
-        <View style={styles.headerComponent}>
-          <View style={styles.titleContent}>
-            <View style={{ justifyContent: 'flex-end' }}>
-              <Text style={[styles.textTitle]}>LABORATORIO</Text>
-            </View>
-            <View style={{ justifyContent: 'flex-end' }}>
-              <Text style={[styles.textTitle, { fontSize: 40, marginTop: 4, marginLeft: 6 }]}>
-                &quot;ELISA&quot;
-              </Text>
-            </View>
-          </View>
-
-          <View style={{ marginVertical: 5, alignItems: 'center' }}>
-            <Text style={styles.secondText}>ANÁLISIS CLÍNICOS A TU SERVICIO</Text>
-          </View>
-
-          <View style={{ marginLeft: 25, marginTop: 10, flexDirection: 'row' }}>
-            <View style={{ marginRight: 20 }}>
-              <Text style={styles.textUserInfo}>{`PACIENTE:  ${patientInfo.name}`}</Text>
-              <Text style={styles.textUserInfo}>{`DOCTOR (A):  ${patientInfo.doctor}`}</Text>
-            </View>
-            <View>
-              <Text style={styles.textUserInfo}>{`EDAD:  ${patientInfo.age} años`}</Text>
-              <Text style={styles.textUserInfo}>{`FECHA:  ${patientInfo.date}`}</Text>
-            </View>
-          </View>
-        </View>
-        <View>
-          <Image style={{ height: 90, width: 90 }} source={ImgLogo} />
-        </View>
-      </View>
-      <View
-        style={{ height: 3, backgroundColor: '#4472c4', marginVertical: 20, marginHorizontal: 8 }}
-      ></View>
-    </View>
-  )
-}
-
-export const FooterContent: React.FC = () => {
+const FooterContent: React.FC = () => {
   return (
     <View style={styles.FooterPage} fixed>
       <View>
@@ -81,28 +25,77 @@ export const FooterContent: React.FC = () => {
   )
 }
 
-export const FilePDF: React.FC = () => (
-  <Document>
-    <Page size={'A4'} style={styles.body}>
-      <Header />
+export const FilePDF: React.FC<PropsFilePDF> = ({ customerInfo }) => {
+  const Header: React.FC = () => {
+    return (
+      <View fixed>
+        <View
+          style={{
+            flexDirection: 'row',
+            height: 90
+          }}
+        >
+          <View style={styles.headerComponent}>
+            <View style={styles.titleContent}>
+              <View style={{ justifyContent: 'flex-end' }}>
+                <Text style={[styles.textTitle]}>LABORATORIO</Text>
+              </View>
+              <View style={{ justifyContent: 'flex-end' }}>
+                <Text style={[styles.textTitle, { fontSize: 40, marginTop: 4, marginLeft: 6 }]}>
+                  &quot;ELISA&quot;
+                </Text>
+              </View>
+            </View>
 
-      <View style={styles.container}>
-        <View style={styles.headerRow}>
-          <Text style={styles.headerCell}>ESTUDIO</Text>
-          <Text style={styles.headerCell}>RESULTADO</Text>
-          <Text style={styles.headerCell}>VALOR DE REFERENCIA</Text>
+            <View style={{ marginVertical: 5, alignItems: 'center' }}>
+              <Text style={styles.secondText}>ANÁLISIS CLÍNICOS A TU SERVICIO</Text>
+            </View>
+
+            <View style={{ marginLeft: 25, marginTop: 10, flexDirection: 'row' }}>
+              <View style={{ marginRight: 20 }}>
+                <Text style={styles.textUserInfo}>{`PACIENTE:  ${customerInfo!.name}`}</Text>
+                <Text style={styles.textUserInfo}>{`DOCTOR (A):  ${customerInfo!.doctorName}`}</Text>
+              </View>
+              <View>
+                <Text style={styles.textUserInfo}>{`EDAD:  ${customerInfo!.age} años`}</Text>
+                <Text style={styles.textUserInfo}>{`FECHA:  ${customerInfo!.dateOfBirth}`}</Text>
+              </View>
+            </View>
+          </View>
+          <View>
+            <Image style={{ height: 90, width: 90 }} source={ImgLogo} />
+          </View>
         </View>
-        <View style={styles.dataRow}>
-          <Text style={styles.dataCell}>{`Hepatitis 'A'`}</Text>
-          <Text style={styles.dataCell}>{'Negativo'}</Text>
-          <Text style={styles.dataCell}>{'Negativo'}</Text>
-        </View>
+        <View
+          style={{ height: 3, backgroundColor: '#4472c4', marginVertical: 20, marginHorizontal: 8 }}
+        ></View>
       </View>
+    )
+  }
 
-      <FooterContent />
-    </Page>
-  </Document>
-)
+  return (
+    <Document>
+      <Page size={'A4'} style={styles.body}>
+        <Header />
+
+        <View style={styles.container}>
+          <View style={styles.headerRow}>
+            <Text style={styles.headerCell}>ESTUDIO</Text>
+            <Text style={styles.headerCell}>RESULTADO</Text>
+            <Text style={styles.headerCell}>VALOR DE REFERENCIA</Text>
+          </View>
+          <View style={styles.dataRow}>
+            <Text style={styles.dataCell}>{`Hepatitis 'A'`}</Text>
+            <Text style={styles.dataCell}>{'Negativo'}</Text>
+            <Text style={styles.dataCell}>{'Negativo'}</Text>
+          </View>
+        </View>
+
+        <FooterContent />
+      </Page>
+    </Document>
+  )
+}
 
 Font.register({
   family: 'Oswald',

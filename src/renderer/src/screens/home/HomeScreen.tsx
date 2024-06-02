@@ -1,16 +1,14 @@
-import { NavBar } from '@renderer/components/NavComponent/NavBar'
 import React from 'react'
+import { NavBar } from '@renderer/components/NavComponent/NavBar'
 import { Route, Routes } from 'react-router-dom'
-
-import { AddUser } from '../users/AddUser'
-import { UsersListHome } from '../users/UsersListHome'
+import { HomePDF } from '../PDF/HomePDF'
+import { TestEditorHome } from '../TestEditor/TestEditorHome'
+import { AddTest } from '../TestManager/AddTest'
+import { TestManagerHome } from '../TestManager/TestManager'
 import { AddClients } from '../clients/AddClients'
 import { ClientsListHome } from '../clients/ClientsListHome'
-import { TestManagerHome } from '../TestManager/TestManager'
-import { TestEditorHome } from '../TestEditor/TestEditorHome'
-import { HepatitisAPDF } from '@renderer/PDF/Hepatitis-A-PDF/HepatitisAPDF'
-import { AddTest } from '../TestManager/AddTest'
-import { PDFHome } from '../PDF/PDFHome'
+import { AddUser } from '../users/AddUser'
+import { UsersListHome } from '../users/UsersListHome'
 
 export const HomeScreen: React.FC = () => {
   return (
@@ -32,12 +30,7 @@ export const HomeScreen: React.FC = () => {
         <Route path="/tests" element={<TestManagerHome />} />
         <Route path="/tests/add" element={<AddTest />} />
         <Route path="/tests/editor" element={<TestEditorHome />} />
-        <Route path="/pdf" element={<PDFHome />} />
-        {/* This route eliminate before */}
-        <Route path="/pdf/render" element={<HepatitisAPDF />} />
-
-        {/* Here you can add new screens */}
-        {/* <Route path="/add/task" element={<AddTask />} /> */}
+        <Route path="/pdf" element={<HomePDF />} />
       </Routes>
     </div>
   )
