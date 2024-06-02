@@ -1,6 +1,6 @@
 import { Document, Font, Image, Page, StyleSheet, Text, View } from '@react-pdf/renderer'
 import React from 'react'
-import ImgLogo from '@/renderer/src/assets/img/Imagen2.png'
+import ImgLogo from '@/renderer/src/assets/img/imageLogo1.png'
 import { ClientsInterface } from '@renderer/interfaces/clients/clients'
 
 interface PropsFilePDF {
@@ -54,7 +54,9 @@ export const FilePDF: React.FC<PropsFilePDF> = ({ customerInfo }) => {
             <View style={{ marginLeft: 25, marginTop: 10, flexDirection: 'row' }}>
               <View style={{ marginRight: 20 }}>
                 <Text style={styles.textUserInfo}>{`PACIENTE:  ${customerInfo!.name}`}</Text>
-                <Text style={styles.textUserInfo}>{`DOCTOR (A):  ${customerInfo!.doctorName}`}</Text>
+                <Text
+                  style={styles.textUserInfo}
+                >{`DOCTOR (A):  ${customerInfo!.doctorName}`}</Text>
               </View>
               <View>
                 <Text style={styles.textUserInfo}>{`EDAD:  ${customerInfo!.age} años`}</Text>

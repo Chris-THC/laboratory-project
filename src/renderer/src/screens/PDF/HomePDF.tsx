@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, FileDown, Printer } from 'lucide-react'
@@ -6,11 +6,25 @@ import { PDFViewer, PDFDownloadLink } from '@react-pdf/renderer'
 import { FilePDF } from './FilePDF/FilePDF'
 import { Separator } from '@/components/ui/separator'
 import { useClientIdSelected } from '@renderer/context/clientContext/clientContext'
+import { TestFilePDF } from './FilePDF/TestFilePDF'
 
 export const HomePDF: React.FC = () => {
   const { clientObjectInfo } = useClientIdSelected()
-
+  const [date, setDate] = useState<string>('')
   const navigate = useNavigate()
+
+  useEffect(() => {
+    const formatDate = (): void => {
+      const date = new Date()
+      const day = date.getDate().toString().padStart(2, '0')
+      const month = (date.getMonth() + 1).toString().padStart(2, '0') // getMonth() devuelve un valor de 0 a 11
+      const year = date.getFullYear().toString()
+
+      setDate(`${day}/${month}/${year}`)
+    }
+
+    formatDate()
+  }, [])
 
   // This funtion is Just to open a box and print, I think so
   const handlePrint = (): void => {
@@ -65,7 +79,9 @@ export const HomePDF: React.FC = () => {
       <div>
         <div className="flex justify-center align-middle m-5">
           <PDFViewer height={600} width={'90%'}>
-            <FilePDF customerInfo={clientObjectInfo} />
+            {/* <FilePDF customerInfo={clientObjectInfo} />
+             */}
+            <TestFilePDF customerInfo={clientObjectInfo} currentDate={date} />
           </PDFViewer>
         </div>
       </div>

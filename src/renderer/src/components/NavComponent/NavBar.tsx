@@ -1,17 +1,8 @@
-import {
-  Menubar,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarSeparator,
-  MenubarTrigger
-} from '@/components/ui/menubar'
+import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarSeparator, MenubarTrigger } from '@/components/ui/menubar'
 import React from 'react'
 import { UserDropMenu } from './UserDropMenu'
-
 import { Button } from '@/components/ui/button'
-import LogoImage from '../../assets/img/logo.png'
-
+import LogoImage from '../../assets/img/imageLogo1.png'
 import { UserPlus } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useClientIdSelected } from '@renderer/context/clientContext/clientContext'
@@ -24,7 +15,7 @@ export const NavBar: React.FC = () => {
     <div className="bg-[#005da5] h-16 flex justify-between px-5">
       <div className="flex flex-row justify-between align-middle">
         <div className="flex flex-col justify-center align-middle">
-          <img src={LogoImage} alt="logo" className="w-12 h-12 m-1" />
+          <img src={LogoImage} alt="logo" className="w-14 h-12 m-1" />
         </div>
         <div className="flex flex-col justify-center align-middle  ml-8">
           <h1
