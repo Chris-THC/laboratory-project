@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer'
 import { useClientIdSelected } from '@renderer/context/clientContext/clientContext'
-import { ArrowLeft, FileDown, Printer } from 'lucide-react'
+import { ArrowLeft, FileDown } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FilePDF } from './FilePDF/FilePDF'
@@ -24,11 +24,6 @@ export const HomePDF: React.FC = () => {
 
     formatDate()
   }, [])
-
-  // This funtion is Just to open a box and print, I think so
-  const handlePrint = (): void => {
-    window.print()
-  }
 
   const nameFile: string = `${clientObjectInfo?.name}.pdf`
 
@@ -66,12 +61,6 @@ export const HomePDF: React.FC = () => {
                 )
               }
             </PDFDownloadLink>
-            <div>
-              <Button variant={'outline'} onClick={handlePrint}>
-                <Printer className="mr-1" />
-                Imprimir
-              </Button>
-            </div>
           </div>
         </div>
       </div>

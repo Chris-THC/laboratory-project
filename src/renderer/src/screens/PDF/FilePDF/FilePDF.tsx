@@ -55,9 +55,9 @@ export const FilePDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate }) =
 
         <View fixed style={styles.customerLayaud}>
           <View style={styles.userInfoSection}>
-            <Text style={styles.textUserInfo}>{`PACIENTE:  ${customerInfo!.name}`}</Text>
-            <Text style={styles.textUserInfo}>{`EDAD:  ${customerInfo!.age} años`}</Text>
-            <Text style={styles.textUserInfo}>{`DOCTOR (A):  ${customerInfo!.doctorName}`}</Text>
+            <Text style={styles.textUserInfo}>{`PACIENTE:  ${customerInfo!.name.toUpperCase()}`}</Text>
+            <Text style={styles.textUserInfo}>{`EDAD:  ${customerInfo!.age} AÑOS`}</Text>
+            <Text style={styles.textUserInfo}>{`DOCTOR (A):  ${customerInfo!.doctorName.toUpperCase()}`}</Text>
             <Text style={styles.textUserInfo}>{`FECHA:  ${currentDate}`}</Text>
           </View>
         </View>
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   textUserInfo: {
     color: '#002060',
     fontWeight: 'extrabold',
-    fontSize: 12,
+    fontSize: 11,
     marginTop: 1,
     marginBottom: 2
   },
