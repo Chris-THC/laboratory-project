@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
+import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer'
+import { useClientIdSelected } from '@renderer/context/clientContext/clientContext'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, FileDown, Printer } from 'lucide-react'
-import { PDFViewer, PDFDownloadLink } from '@react-pdf/renderer'
-import { FilePDF } from './FilePDF/FilePDF'
 import { Separator } from '@/components/ui/separator'
-import { useClientIdSelected } from '@renderer/context/clientContext/clientContext'
+import { ArrowLeft, FileDown, Printer } from 'lucide-react'
 import { TestFilePDF } from './FilePDF/TestFilePDF'
 
 export const HomePDF: React.FC = () => {
@@ -31,6 +30,8 @@ export const HomePDF: React.FC = () => {
     window.print()
   }
 
+  const nameFile: string = `${clientObjectInfo?.name}.pdf`
+
   return (
     <div className="bg-white text-gray-900 mx-8 mt-4">
       <div className="mb-2">
@@ -41,15 +42,16 @@ export const HomePDF: React.FC = () => {
         </div>
 
         <div className="flex flex-row justify-between">
-          <Button onClick={() => navigate(-1)} className="font-inter" variant={'outline'}>
+          <Button onClick={() => navigate('/tests')} className="font-inter" variant={'outline'}>
             <ArrowLeft className="mr-1" />
             Regresar
           </Button>
 
           <div className="flex flex-row space-x-3">
             <PDFDownloadLink
-              document={<FilePDF customerInfo={clientObjectInfo} />}
-              fileName="Test.pdf"
+              // document={<FilePDF customerInfo={clientObjectInfo} />}
+              document={<TestFilePDF customerInfo={clientObjectInfo} currentDate={date} />}
+              fileName={nameFile}
             >
               {({ loading }) =>
                 loading ? (

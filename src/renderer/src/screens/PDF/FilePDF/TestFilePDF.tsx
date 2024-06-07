@@ -9,33 +9,6 @@ interface PropsFilePDF {
 }
 
 export const TestFilePDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate }) => {
-  // Generar las filas de datos
-  const dataRows = Array.from({ length: 50 }).map((_, index) => (
-    <View key={index} style={styles.dataRow}>
-      <Text style={styles.dataCell}>{`Hepatitis 'A'`}</Text>
-      <Text style={styles.dataCell}>{'Negativo'}</Text>
-      <Text style={styles.dataCell}>{'Negativo'}</Text>
-    </View>
-  ))
-
-  const FooterContent: React.FC = () => {
-    return (
-      <View style={styles.FooterPage} fixed>
-        <View>
-          <View>
-            <Text style={styles.textFooter}>Verificado y validado por:</Text>
-            <Text style={styles.textFooter}>QFB María Cristina Cano Perez</Text>
-            <Text style={styles.textFooter}>Cedula Profesional 3655756</Text>
-          </View>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 10 }}>
-            <Text style={styles.textFooterContac}>Registro sanitario 1830077536x1288 SSA</Text>
-            <Text style={styles.textFooterContac}>TEL. 2781139811, 2787324019</Text>
-          </View>
-        </View>
-      </View>
-    )
-  }
-
   return (
     <Document>
       <Page size={'A4'} style={styles.body}>
@@ -50,18 +23,20 @@ export const TestFilePDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate 
           </View>
         </View>
 
-        <View style={styles.testTable}>
-          <View style={styles.container}>
-            <View style={styles.headerRow}>
-              <Text style={styles.headerCell}>ESTUDIO</Text>
-              <Text style={styles.headerCell}>RESULTADO</Text>
-              <Text style={styles.headerCell}>VALOR DE REFERENCIA</Text>
-            </View>
-            {dataRows}
-          </View>
+        <View style={styles.mainContent}>
+          {Array.from({ length: 50 }).map((_, index) => (
+            <Text key={index}>Test</Text>
+          ))}
         </View>
 
-        <FooterContent />
+        <View fixed style={styles.footerInfo}>
+          <View style={{ flexDirection: 'column', height: 80 }}>
+            <Text style={styles.textUserInfo}>{`PACIENTE:  ${customerInfo!.name}`}</Text>
+            <Text style={styles.textUserInfo}>{`EDAD:  ${customerInfo!.age} años`}</Text>
+            <Text style={styles.textUserInfo}>{`DOCTOR (A):  ${customerInfo!.doctorName}`}</Text>
+            <Text style={styles.textUserInfo}>{`FECHA:  ${currentDate}`}</Text>
+          </View>
+        </View>
       </Page>
     </Document>
   )
@@ -75,17 +50,18 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: -1,
     top: 0,
-    width: '100%'
+    width: '100%',
+    height: '100%'
   },
   customerInfo: {
     position: 'absolute',
     top: 120,
     left: 230
   },
-  testTable: {
-    marginTop: 223,
-    marginLeft: 33,
-    marginRight: 33
+  footerInfo: {
+    position: 'absolute',
+    top: 500,
+    left: 0
   },
   textUserInfo: {
     color: '#002060',
@@ -106,38 +82,9 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     marginBottom: 5
   },
-  headerRow: {
-    flexDirection: 'row',
-    backgroundColor: 'transparent'
-  },
-  dataRow: {
-    flexDirection: 'row',
-    borderBottomWidth: 0
-  },
-  dataCell: {
-    flex: 1,
-    padding: 2,
-    textAlign: 'left',
-    color: '#002060',
-    fontSize: 10
-  },
-  FooterPage: {
-    position: 'absolute',
-    fontSize: 12,
-    bottom: 30,
-    left: 0,
-    right: 0,
-    textAlign: 'center',
-    color: 'grey'
-  },
-  textFooter: {
-    color: '#002060',
-    fontSize: 12,
-    textAlign: 'center',
-    fontWeight: 'bold'
-  },
-  textFooterContac: {
-    color: '#002060',
-    fontSize: 12
+  mainContent: {
+    flexGrow: 1,
+    margin: '200px 0 20px 0', // Ajusta los márgenes según sea necesario
+    backgroundColor: 'red'
   }
 })
