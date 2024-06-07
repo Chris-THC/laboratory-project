@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer'
-import { useClientIdSelected } from '@renderer/context/clientContext/clientContext'
-import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
+import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer'
+import { useClientIdSelected } from '@renderer/context/clientContext/clientContext'
 import { ArrowLeft, FileDown, Printer } from 'lucide-react'
-import { TestFilePDF } from './FilePDF/TestFilePDF'
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { FilePDF } from './FilePDF/FilePDF'
 
 export const HomePDF: React.FC = () => {
   const { clientObjectInfo } = useClientIdSelected()
@@ -49,8 +49,7 @@ export const HomePDF: React.FC = () => {
 
           <div className="flex flex-row space-x-3">
             <PDFDownloadLink
-              // document={<FilePDF customerInfo={clientObjectInfo} />}
-              document={<TestFilePDF customerInfo={clientObjectInfo} currentDate={date} />}
+              document={<FilePDF customerInfo={clientObjectInfo} currentDate={date} />}
               fileName={nameFile}
             >
               {({ loading }) =>
@@ -81,9 +80,7 @@ export const HomePDF: React.FC = () => {
       <div>
         <div className="flex justify-center align-middle m-5">
           <PDFViewer height={600} width={'90%'}>
-            {/* <FilePDF customerInfo={clientObjectInfo} />
-             */}
-            <TestFilePDF customerInfo={clientObjectInfo} currentDate={date} />
+            <FilePDF customerInfo={clientObjectInfo} currentDate={date} />
           </PDFViewer>
         </div>
       </div>
