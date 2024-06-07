@@ -81,7 +81,7 @@ export const AvailableParametersByTest: React.FC<PropsTestContents> = ({
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      items: itemSelected // Aquí usamos itemSelected en lugar de itemSelected?.toString()
+      items: itemSelected
     }
   })
 

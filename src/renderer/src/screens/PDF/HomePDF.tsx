@@ -6,8 +6,10 @@ import { ArrowLeft, FileDown } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FilePDF } from './FilePDF/FilePDF'
+import { useTestArrayList } from '@renderer/context/testByUser/testArrayByUser'
 
 export const HomePDF: React.FC = () => {
+  const { contentsArrayTestToPDF } = useTestArrayList()
   const { clientObjectInfo } = useClientIdSelected()
   const [date, setDate] = useState<string>('')
   const navigate = useNavigate()
@@ -37,24 +39,30 @@ export const HomePDF: React.FC = () => {
         </div>
 
         <div className="flex flex-row justify-between">
-          <Button onClick={() => navigate('/tests')} className="font-inter" variant={'outline'}>
+          <Button onClick={() => navigate(-1)} className="font-inter" variant={'outline'}>
             <ArrowLeft className="mr-1" />
             Regresar
           </Button>
 
           <div className="flex flex-row space-x-3">
             <PDFDownloadLink
-              document={<FilePDF customerInfo={clientObjectInfo} currentDate={date} />}
+              document={
+                <FilePDF
+                  testResults={contentsArrayTestToPDF}
+                  customerInfo={clientObjectInfo}
+                  currentDate={date}
+                />
+              }
               fileName={nameFile}
             >
               {({ loading }) =>
                 loading ? (
-                  <Button variant={'outline'}>
+                  <Button className="bg-[#4861b8]">
                     <FileDown className="mr-1" />
                     Cargando...
                   </Button>
                 ) : (
-                  <Button variant={'outline'}>
+                  <Button className="bg-[#4861b8]">
                     <FileDown className="mr-1" />
                     Descargar PDF
                   </Button>
@@ -69,7 +77,11 @@ export const HomePDF: React.FC = () => {
       <div>
         <div className="flex justify-center align-middle m-5">
           <PDFViewer height={600} width={'90%'}>
-            <FilePDF customerInfo={clientObjectInfo} currentDate={date} />
+            <FilePDF
+              testResults={contentsArrayTestToPDF}
+              customerInfo={clientObjectInfo}
+              currentDate={date}
+            />
           </PDFViewer>
         </div>
       </div>

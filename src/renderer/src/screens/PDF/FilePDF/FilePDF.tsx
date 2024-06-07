@@ -1,53 +1,16 @@
 import ImgBackground from '@/renderer/src/assets/img/back.jpg' // Assuming the image path is correct
 import { Document, Image, Page, Text, StyleSheet, View } from '@react-pdf/renderer'
 import { ClientsInterface } from '@renderer/interfaces/clients/clients'
+import { ContentsResultsInterface } from '@renderer/interfaces/contentsResults/contentsResults'
 import React from 'react'
 
 interface PropsFilePDF {
   customerInfo: ClientsInterface | null | undefined
   currentDate: string
-}
-interface InterfacelinicalAnalysis {
-  study_name: string
-  result: string
-  reference_value: string
-  units: string
+  testResults: ContentsResultsInterface[] | null | undefined
 }
 
-export const FilePDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate }) => {
-  const analysisData: InterfacelinicalAnalysis[] = [
-    {
-      study_name: 'Glucosa',
-      result: '65',
-      reference_value: '60 a 110 mg/dL',
-      units: 'mg/dL'
-    },
-    {
-      study_name: 'Urea',
-      result: '20',
-      reference_value: '15 a 45 mg/dL',
-      units: 'mg/dL'
-    },
-    {
-      study_name: 'Glucosa',
-      result: '65',
-      reference_value: '60 a 110 mg/dL',
-      units: 'mg/dL'
-    },
-    {
-      study_name: 'Urea',
-      result: '20',
-      reference_value: '15 a 45 mg/dL',
-      units: 'mg/dL'
-    },
-    {
-      study_name: 'Glucosa',
-      result: '65',
-      reference_value: '60 a 110 mg/dL',
-      units: 'mg/dL'
-    }
-  ]
-
+export const FilePDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, testResults }) => {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -55,9 +18,13 @@ export const FilePDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate }) =
 
         <View fixed style={styles.customerLayaud}>
           <View style={styles.userInfoSection}>
-            <Text style={styles.textUserInfo}>{`PACIENTE:  ${customerInfo!.name.toUpperCase()}`}</Text>
+            <Text
+              style={styles.textUserInfo}
+            >{`PACIENTE:  ${customerInfo!.name.toUpperCase()}`}</Text>
             <Text style={styles.textUserInfo}>{`EDAD:  ${customerInfo!.age} AÑOS`}</Text>
-            <Text style={styles.textUserInfo}>{`DOCTOR (A):  ${customerInfo!.doctorName.toUpperCase()}`}</Text>
+            <Text
+              style={styles.textUserInfo}
+            >{`DOCTOR (A):  ${customerInfo!.doctorName.toUpperCase()}`}</Text>
             <Text style={styles.textUserInfo}>{`FECHA:  ${currentDate}`}</Text>
           </View>
         </View>
@@ -71,25 +38,34 @@ export const FilePDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate }) =
                   <Text>RESULTADO</Text>
                 </View>
                 <View style={{ flexDirection: 'row' }}>
-                  <Text style={{ flex: 1 }}>DENTRO DE LA REFERENCIA</Text>
-                  <Text style={{ flex: 1 }}>FUERA DE LA REFERENCIA</Text>
+                  <Text
+                    style={{
+                      flex: 1,
+                      borderRight: '1px solid #111',
+                      marginRight: 0.4,
+                      fontSize: 9
+                    }}
+                  >
+                    DENTRO DE LA REFERENCIA
+                  </Text>
+                  <Text style={{ flex: 1, fontSize: 9 }}>FUERA DE LA REFERENCIA</Text>
                 </View>
               </View>
             </View>
             <Text style={styles.headerCell}>UNIDADES</Text>
             <Text style={styles.headerCell}>VALOR DE REFERENCIA</Text>
           </View>
-          {analysisData.map((row, index) => (
+          {testResults!.map((row, index) => (
             <View key={index} style={styles.dataRow}>
-              <Text style={styles.dataCellExamName}>{row.study_name}</Text>
+              <Text style={styles.dataCellExamName}>{row.contentsDTO?.name}</Text>
               <View style={styles.dataCell}>
                 <View style={{ flexDirection: 'row' }}>
-                  <Text style={{ flex: 1 }}>{row.result}</Text>
+                  <Text style={{ flex: 1, marginRight: 0.4 }}>{row.resultValue}</Text>
                   <Text style={{ flex: 1 }}>{'---'}</Text>
                 </View>
               </View>
-              <Text style={styles.dataCell}>{row.units}</Text>
-              <Text style={styles.dataCell}>{row.reference_value}</Text>
+              <Text style={styles.dataCell}>{row.contentsDTO?.contentId}</Text>
+              <Text style={styles.dataCell}>{row.contentId}</Text>
             </View>
           ))}
         </View>
