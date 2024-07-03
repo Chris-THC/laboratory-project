@@ -9,4 +9,14 @@ export interface ContentsResultsInterface {
 interface ContentsDto {
   contentId: number
   name: string
+  units: string
+  referencesDTO: ReferencesDto[]
+}
+
+interface ReferencesDto {
+  referencesId: number
+  contentId: number
+  vmin: string
+  vrefText: any
+  vmax: string
 }

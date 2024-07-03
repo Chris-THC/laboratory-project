@@ -46,26 +46,36 @@ export const FilePDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, tes
                       fontSize: 9
                     }}
                   >
-                    DENTRO DE LA REFERENCIA
+                    DENTRO DE REFERENCIA
                   </Text>
-                  <Text style={{ flex: 1, fontSize: 9 }}>FUERA DE LA REFERENCIA</Text>
+                  <Text style={{ flex: 1, fontSize: 9 }}>FUERA DE REFERENCIA</Text>
                 </View>
               </View>
             </View>
-            <Text style={styles.headerCell}>UNIDADES</Text>
-            <Text style={styles.headerCell}>VALOR DE REFERENCIA</Text>
+            <Text style={styles.unitCell}>UNIDADES</Text>
+            <Text style={styles.referenceCell}>VALOR DE REFERENCIA</Text>
           </View>
           {testResults!.map((row, index) => (
             <View key={index} style={styles.dataRow}>
               <Text style={styles.dataCellExamName}>{row.contentsDTO?.name}</Text>
               <View style={styles.dataCell}>
                 <View style={{ flexDirection: 'row' }}>
+                  {}
                   <Text style={{ flex: 1, marginRight: 0.4 }}>{row.resultValue}</Text>
                   <Text style={{ flex: 1 }}>{'---'}</Text>
                 </View>
               </View>
-              <Text style={styles.dataCell}>{row.contentsDTO?.contentId}</Text>
-              <Text style={styles.dataCell}>{row.contentId}</Text>
+              <Text style={styles.unitCell}>
+                {row.contentsDTO?.units === null ? '' : row.contentsDTO?.units}
+              </Text>
+
+              <View style={styles.referenceCell}>
+                {row.contentsDTO?.referencesDTO.map((reference, index) => (
+                  <Text key={index}>
+                    {`${reference.vrefText === null ? '' : reference.vrefText} ${reference.vmin === null ? '' : reference.vmin} - ${reference.vmax === null ? '' : reference.vmax}`}
+                  </Text>
+                ))}
+              </View>
             </View>
           ))}
         </View>
@@ -116,12 +126,63 @@ const styles = StyleSheet.create({
     height: 180
   },
   // Table section
+  // headerRow: {
+  //   flexDirection: 'row',
+  //   backgroundColor: 'transparent'
+  // },
+  // headerCell: {
+  //   flex: 1,
+  //   paddingBottom: 5,
+  //   fontWeight: 'extrabold',
+  //   textAlign: 'center',
+  //   color: '#000',
+  //   fontSize: 10
+  // },
+  // dataRow: {
+  //   flexDirection: 'row',
+  //   borderBottomWidth: 0
+  // },
+  // dataCell: {
+  //   flex: 1,
+  //   padding: 2,
+  //   textAlign: 'center',
+  //   color: '#333333',
+  //   fontSize: 10,
+  //   marginVertical: 2
+  // },
+  // dataCellExamName: {
+  //   flex: 1,
+  //   padding: 2,
+  //   textAlign: 'left',
+  //   color: '#333333',
+  //   fontSize: 10,
+  //   marginLeft: 5,
+  //   marginVertical: 2
+  // },
+
+  // Otros estilos
   headerRow: {
     flexDirection: 'row',
     backgroundColor: 'transparent'
   },
   headerCell: {
     flex: 1,
+    paddingBottom: 5,
+    fontWeight: 'extrabold',
+    textAlign: 'center',
+    color: '#000',
+    fontSize: 10
+  },
+  unitCell: {
+    flex: 0.5, // Reduce el tamaño de la celda de UNIDADES
+    paddingBottom: 5,
+    fontWeight: 'extrabold',
+    textAlign: 'center',
+    color: '#000',
+    fontSize: 10
+  },
+  referenceCell: {
+    flex: 1.5, // Aumenta el tamaño de la celda de VALOR DE REFERENCIA
     paddingBottom: 5,
     fontWeight: 'extrabold',
     textAlign: 'center',

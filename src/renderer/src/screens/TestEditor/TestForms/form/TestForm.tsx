@@ -4,7 +4,15 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from '@/components/ui/form'
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { useContentResultWasSelect } from '@renderer/context/contentResults/contentsResultContext'
@@ -13,7 +21,6 @@ import { useUpdateContentResults } from '@renderer/hooks/res/contentsResultsRes/
 import { useNavigate } from 'react-router-dom'
 
 export const TestForm: React.FC = () => {
-  
   const { contentResultsArray: contentsresults } = useContentResultWasSelect()
 
   const { testNameSelected } = useTestIdByTestContens()
@@ -64,10 +71,10 @@ export const TestForm: React.FC = () => {
     navigateToBack(-1)
   }
 
-  const handleCancel = (event: React.MouseEvent<HTMLButtonElement>):void => {
-    event.preventDefault();
+  const handleCancel = (event: React.MouseEvent<HTMLButtonElement>): void => {
+    event.preventDefault()
     navigateToBack(-1)
-  };
+  }
 
   if (contentsresults === undefined) {
     return null
@@ -102,7 +109,12 @@ export const TestForm: React.FC = () => {
                                 <FormControl>
                                   <Input {...field} />
                                 </FormControl>
-                                <FormDescription>{`Resultados para ${contentResults.contentsDTO?.name.toLowerCase()}`}</FormDescription>
+                                <FormDescription>
+                                  {contentResults.contentsDTO?.units === null
+                                    ? 'Ingresa solo los valores'
+                                    : `Referencia unidades en ${contentResults.contentsDTO?.units}`}
+                                </FormDescription>
+
                                 <FormMessage />
                               </FormItem>
                             )}
