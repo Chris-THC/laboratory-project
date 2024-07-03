@@ -1,5 +1,5 @@
 import ImgBackground from '@/renderer/src/assets/img/back.jpg' // Assuming the image path is correct
-import { Document, Image, Page, Text, StyleSheet, View } from '@react-pdf/renderer'
+import { Document, Image, Page, StyleSheet, Text, View } from '@react-pdf/renderer'
 import { ClientsInterface } from '@renderer/interfaces/clients/clients'
 import { ContentsResultsInterface } from '@renderer/interfaces/contentsResults/contentsResults'
 import React from 'react'
@@ -32,24 +32,24 @@ export const FilePDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, tes
         <View style={styles.tableInfo}>
           <View fixed style={styles.headerRow}>
             <Text style={styles.headerCell}>ESTUDIO</Text>
-            <View style={styles.headerCell}>
-              <View>
-                <View style={{ flexDirection: 'column' }}>
-                  <Text>RESULTADO</Text>
-                </View>
-                <View style={{ flexDirection: 'row' }}>
-                  <Text
-                    style={{
-                      flex: 1,
-                      borderRight: '1px solid #111',
-                      marginRight: 0.4,
-                      fontSize: 9
-                    }}
-                  >
-                    DENTRO DE REFERENCIA
-                  </Text>
-                  <Text style={{ flex: 1, fontSize: 9 }}>FUERA DE REFERENCIA</Text>
-                </View>
+            <View style={styles.resultHeaderCell}>
+              <Text style={styles.resultHeaderText}>RESULTADO</Text>
+              <View style={{ flexDirection: 'row' }}>
+                <Text
+                  style={{
+                    flex: 1,
+                    borderRightWidth: 1,
+                    borderRightColor: '#111',
+                    marginRight: 0.4,
+                    fontSize: 8,
+                    textAlign: 'center'
+                  }}
+                >
+                  {'DENTRO DE \n REFERENCIA'}
+                </Text>
+                <Text style={{ flex: 1, fontSize: 8, textAlign: 'center' }}>
+                  {'FUERA DE \n REFERENCIA'}
+                </Text>
               </View>
             </View>
             <Text style={styles.unitCell}>UNIDADES</Text>
@@ -59,19 +59,37 @@ export const FilePDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, tes
             <View key={index} style={styles.dataRow}>
               <Text style={styles.dataCellExamName}>{row.contentsDTO?.name}</Text>
               <View style={styles.dataCell}>
-                <View style={{ flexDirection: 'row' }}>
-                  {}
-                  <Text style={{ flex: 1, marginRight: 0.4 }}>{row.resultValue}</Text>
-                  <Text style={{ flex: 1 }}>{'---'}</Text>
+                <View style={{ flexDirection: 'column' }}>
+                  {row.contentsDTO?.referencesDTO.map((reference, idx) => {
+                    const resultValue = parseFloat(row.resultValue.toString())
+                    const maxValue = parseFloat(reference.vmax.toString())
+                    const minValue = parseFloat(reference.vmin.toString())
+
+                    const isWithinRange = resultValue >= minValue && resultValue <= maxValue
+
+                    return (
+                      <View key={idx} style={{ flexDirection: 'row' }}>
+                        {isWithinRange ? (
+                          <Text style={styles.textCompare}>{resultValue}</Text>
+                        ) : (
+                          <Text style={styles.textCompare}>{'---'}</Text>
+                        )}
+
+                        <Text style={styles.textCompare}>
+                          {isWithinRange ? '---' : resultValue}
+                        </Text>
+                      </View>
+                    )
+                  })}
                 </View>
+                ;
               </View>
               <Text style={styles.unitCell}>
                 {row.contentsDTO?.units === null ? '' : row.contentsDTO?.units}
               </Text>
-
               <View style={styles.referenceCell}>
-                {row.contentsDTO?.referencesDTO.map((reference, index) => (
-                  <Text key={index}>
+                {row.contentsDTO?.referencesDTO.map((reference, idx) => (
+                  <Text key={idx}>
                     {`${reference.vrefText === null ? '' : reference.vrefText} ${reference.vmin === null ? '' : reference.vmin} - ${reference.vmax === null ? '' : reference.vmax}`}
                   </Text>
                 ))}
@@ -79,7 +97,6 @@ export const FilePDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, tes
             </View>
           ))}
         </View>
-
         <View fixed style={styles.footerContent}></View>
       </Page>
     </Document>
@@ -109,11 +126,12 @@ const styles = StyleSheet.create({
     width: 350,
     top: 120,
     left: 228,
-    borderBottom: '1px solid #111'
+    borderBottomWidth: 1,
+    borderBottomColor: '#111'
   },
   textUserInfo: {
     color: '#002060',
-    fontWeight: 'extrabold',
+    fontWeight: 'bold',
     fontSize: 11,
     marginTop: 1,
     marginBottom: 2
@@ -125,42 +143,6 @@ const styles = StyleSheet.create({
   footerContent: {
     height: 180
   },
-  // Table section
-  // headerRow: {
-  //   flexDirection: 'row',
-  //   backgroundColor: 'transparent'
-  // },
-  // headerCell: {
-  //   flex: 1,
-  //   paddingBottom: 5,
-  //   fontWeight: 'extrabold',
-  //   textAlign: 'center',
-  //   color: '#000',
-  //   fontSize: 10
-  // },
-  // dataRow: {
-  //   flexDirection: 'row',
-  //   borderBottomWidth: 0
-  // },
-  // dataCell: {
-  //   flex: 1,
-  //   padding: 2,
-  //   textAlign: 'center',
-  //   color: '#333333',
-  //   fontSize: 10,
-  //   marginVertical: 2
-  // },
-  // dataCellExamName: {
-  //   flex: 1,
-  //   padding: 2,
-  //   textAlign: 'left',
-  //   color: '#333333',
-  //   fontSize: 10,
-  //   marginLeft: 5,
-  //   marginVertical: 2
-  // },
-
-  // Otros estilos
   headerRow: {
     flexDirection: 'row',
     backgroundColor: 'transparent'
@@ -168,30 +150,44 @@ const styles = StyleSheet.create({
   headerCell: {
     flex: 1,
     paddingBottom: 5,
-    fontWeight: 'extrabold',
+    fontWeight: 'bold',
     textAlign: 'center',
     color: '#000',
     fontSize: 10
   },
-  unitCell: {
-    flex: 0.5, // Reduce el tamaño de la celda de UNIDADES
+  resultHeaderCell: {
+    flex: 1.5, // Ajustar según sea necesario para alinear con el header
     paddingBottom: 5,
-    fontWeight: 'extrabold',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: '#000',
+    fontSize: 10
+  },
+  resultHeaderText: {
+    textAlign: 'center',
+    fontSize: 10,
+    marginBottom: 2
+  },
+  unitCell: {
+    flex: 0.5,
+    paddingBottom: 5,
+    fontWeight: 'bold',
     textAlign: 'center',
     color: '#000',
     fontSize: 10
   },
   referenceCell: {
-    flex: 1.5, // Aumenta el tamaño de la celda de VALOR DE REFERENCIA
+    flex: 1.5,
     paddingBottom: 5,
-    fontWeight: 'extrabold',
+    fontWeight: 'bold',
     textAlign: 'center',
     color: '#000',
     fontSize: 10
   },
   dataRow: {
-    flexDirection: 'row',
-    borderBottomWidth: 0
+    flexDirection: 'row'
+    // borderBottomWidth: 1,
+    // borderBottomColor: '#111'
   },
   dataCell: {
     flex: 1,
@@ -209,5 +205,10 @@ const styles = StyleSheet.create({
     fontSize: 10,
     marginLeft: 5,
     marginVertical: 2
+  },
+  textCompare: {
+    flex: 1,
+    marginBottom: 0.4,
+    textAlign: 'center'
   }
 })
