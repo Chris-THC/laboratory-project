@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     flex: 0.5,
     paddingBottom: 5,
     fontWeight: 'bold',
-    textAlign: 'center',
+    textAlign: 'right',
     color: '#000',
     fontSize: 10
   },
