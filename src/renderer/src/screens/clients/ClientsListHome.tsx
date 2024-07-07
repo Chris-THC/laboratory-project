@@ -1,55 +1,19 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink
-} from '@/components/ui/pagination'
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink} from '@/components/ui/pagination'
 import { Separator } from '@/components/ui/separator'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from '@/components/ui/table'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { LoadingSpinner } from '@renderer/components/LoadingSpinner/LoadingSpinner'
 import { ErrorPage } from '@renderer/components/PageNotFound/ErrorPage'
 import { useClientIdSelected } from '@renderer/context/clientContext/clientContext'
 import { useGetAllClient } from '@renderer/hooks/res/clientRes/UseClientAPI'
-import {
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  useReactTable
-} from '@tanstack/react-table'
-import {
-  AlignLeft,
-  ChevronLeft,
-  ChevronRight,
-  FlaskConical,
-  UserCog,
-  UserPlus,
-  UserX
-} from 'lucide-react'
+import { flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table'
+import { AlignLeft, ChevronLeft, ChevronRight, FlaskConical, UserCog, UserPlus, UserX } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { DelateClientsModal } from './DelteClients'
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { useModalDelete } from '@renderer/context/ModalDeleteContext/IsOpenModalDelete'
 
 export const ClientsListHome = (): JSX.Element => {
@@ -80,14 +44,6 @@ export const ClientsListHome = (): JSX.Element => {
       header: 'Doctor',
       accessorKey: 'doctorName'
     },
-
-    // {
-    //   header: 'Estatus',
-    //   accessorKey: 'status',
-    //   cell: ({ row }): string | undefined | null => {
-    //     return changeStatusTable(row.original.status)
-    //   }
-    // },
     {
       header: 'Acciones',
       cell: ({ row }): JSX.Element => {

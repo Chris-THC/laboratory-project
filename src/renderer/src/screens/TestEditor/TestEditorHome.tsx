@@ -1,11 +1,14 @@
 import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import React from 'react'
+import { Toaster } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
-import { HepatitisA } from './TestFiles/HepatitisA/HepatitisA'
+import { TestFormsEditor } from './TestForms/TestFormSelector'
+import { TestForm } from './TestForms/form/TestForm'
 
 export const TestEditorHome: React.FC = () => {
   const navigate = useNavigate()
+
   return (
     <div className="bg-white text-gray-900 mx-8 mt-4">
       <div className="mb-2">
@@ -21,8 +24,14 @@ export const TestEditorHome: React.FC = () => {
       </div>
 
       <div>
-        <HepatitisA />
+        <TestFormsEditor />
       </div>
+
+      <div>
+        <TestForm />
+      </div>
+
+      <Toaster />
     </div>
   )
 }
