@@ -1,11 +1,18 @@
-import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarSeparator, MenubarTrigger } from '@/components/ui/menubar'
-import React from 'react'
-import { UserDropMenu } from './UserDropMenu'
 import { Button } from '@/components/ui/button'
-import LogoImage from '../../assets/img/imageLogo1.png'
-import { UserPlus } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarTrigger
+} from '@/components/ui/menubar'
 import { useClientIdSelected } from '@renderer/context/clientContext/clientContext'
+import { DollarSign } from 'lucide-react'
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import LogoImage from '../../assets/img/imageLogo1.png'
+import { UserDropMenu } from './UserDropMenu'
 
 export const NavBar: React.FC = () => {
   const navigateTo = useNavigate()
@@ -29,6 +36,20 @@ export const NavBar: React.FC = () => {
         </div>
       </div>
       <div className="flex flex-row justify-center align-middle mr-1">
+        <div className="flex flex-col justify-center align-middle">
+          <Button
+            onClick={() => {
+              setIsClientCreate(true)
+              setClientObjectInfo(null)
+              navigateTo('/')
+            }}
+            variant={'ghost'}
+            className="mx-2 text-white font-inter"
+          >
+            Inicio
+          </Button>
+        </div>
+
         <div className="flex flex-col justify-center align-middle">
           <ul className="flex space-x-5 justify-center items-center">
             <li>
@@ -61,7 +82,7 @@ export const NavBar: React.FC = () => {
                 </MenubarMenu>
               </Menubar>
             </li>
-            <li>
+            {/* <li>
               <Menubar className="bg-inherit border-none">
                 <MenubarMenu>
                   <MenubarTrigger className="text-white font-semibold text-sm bg-transparent border-none font-inter cursor-pointer">
@@ -72,22 +93,22 @@ export const NavBar: React.FC = () => {
                   </MenubarContent>
                 </MenubarMenu>
               </Menubar>
-            </li>
+            </li> */}
           </ul>
         </div>
 
         <div className="flex flex-col justify-center align-middle">
           <Button
-            onClick={() => {
-              setIsClientCreate(true)
-              setClientObjectInfo(null)
-              navigateTo('/customer/form')
-            }}
+            // onClick={() => {
+            //   setIsClientCreate(true)
+            //   setClientObjectInfo(null)
+            //   navigateTo('/customer/form')
+            // }}
             variant={'ghost'}
             className="mx-2 text-white font-inter"
           >
-            <UserPlus className="mr-2 text-sm" />
-            Cliente
+            <DollarSign className="mr-2 text-sm" />
+            Caja
           </Button>
         </div>
 

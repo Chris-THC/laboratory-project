@@ -131,7 +131,7 @@ export const AddClients: React.FC = () => {
     <Card className="mx-40 my-10">
       <CardHeader className="flex flex-col justify-center align-middle">
         <CardTitle className="text-center">
-          {!clientObjectInfo ? 'Agregar Nuevo Cliente' : 'Editar Cliente'}
+          {!clientObjectInfo ? 'Agregar Cliente' : 'Editar Cliente'}
         </CardTitle>
         <Separator />
       </CardHeader>
