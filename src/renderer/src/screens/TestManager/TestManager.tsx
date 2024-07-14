@@ -65,7 +65,7 @@ export const TestManagerHome: React.FC = () => {
             INFORMACIÓN DEL PACIENTE Y EXÁMENES REGISTRADOS
           </h1>
         </div>
-        <Button onClick={() => navigate(-1)} className="font-inter" variant={'outline'}>
+        <Button onClick={() => navigate("/customer")} className="font-inter" variant={'outline'}>
           <ArrowLeft className="mr-1" />
           Regresar
         </Button>
