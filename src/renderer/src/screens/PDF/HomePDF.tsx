@@ -57,12 +57,12 @@ export const HomePDF: React.FC = () => {
             >
               {({ loading }) =>
                 loading ? (
-                  <Button className="bg-[#4861b8c]">
+                  <Button className="bg-[#4861b8]">
                     <FileDown className="mr-1" />
                     Cargando...
                   </Button>
                 ) : (
-                  <Button className="bg-[#4861b8c]">
+                  <Button className="bg-[#4861b8]">
                     <FileDown className="mr-1" />
                     Descargar PDF
                   </Button>
