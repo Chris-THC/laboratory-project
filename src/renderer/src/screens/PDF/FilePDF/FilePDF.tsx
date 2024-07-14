@@ -73,7 +73,9 @@ export const FilePDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, tes
                     if (!isResultValueNumeric || !isMaxValueNumeric || !isMinValueNumeric) {
                       return (
                         <View key={idx} style={{ flexDirection: 'row' }}>
-                          <Text style={styles.textCompare}>{resultValue}</Text>
+                          <Text style={[styles.textCompare, { fontWeight: 'bold' }]}>
+                            {resultValue.toString().toUpperCase()}
+                          </Text>
                         </View>
                       )
                     }

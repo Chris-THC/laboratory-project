@@ -1,6 +1,6 @@
 import { LogOut, User } from 'lucide-react'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 
 import {
   DropdownMenu,
@@ -12,9 +12,9 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
+import { useUserIdSelected } from '@renderer/context/userContext/UserContext'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useUserIdSelected } from '@renderer/context/userContext/UserContext'
 
 export const UserDropMenu: React.FC = () => {
   const navigateTo = useNavigate()
@@ -24,7 +24,7 @@ export const UserDropMenu: React.FC = () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className="cursor-pointer">
-          <AvatarImage src="https://avatars.githubusercontent.com/u/104177004?v=4" />
+          {/* <AvatarImage src="https://avatars.githubusercontent.com/u/otraseas" /> */}
           <AvatarFallback>CR</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
