@@ -61,11 +61,31 @@ export const FilePDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, tes
               <View style={styles.dataCell}>
                 <View style={{ flexDirection: 'column' }}>
                   {row.contentsDTO?.referencesDTO.map((reference, idx) => {
-                    const resultValue = parseFloat(row.resultValue.toString())
-                    const maxValue = parseFloat(reference.vmax.toString())
-                    const minValue = parseFloat(reference.vmin.toString())
+                    const resultValue = row.resultValue
+                    const maxValue = reference.vmax
+                    const minValue = reference.vmin
 
-                    const isWithinRange = resultValue >= minValue && resultValue <= maxValue
+                    // Verificar si todos los valores son números válidos
+                    const isResultValueNumeric = !isNaN(parseFloat(resultValue.toString()))
+                    const isMaxValueNumeric = !isNaN(parseFloat(maxValue))
+                    const isMinValueNumeric = !isNaN(parseFloat(minValue))
+
+                    if (!isResultValueNumeric || !isMaxValueNumeric || !isMinValueNumeric) {
+                      return (
+                        <View key={idx} style={{ flexDirection: 'row' }}>
+                          <Text style={[styles.textCompare, { fontWeight: 'bold' }]}>
+                            {resultValue.toString().toUpperCase()}
+                          </Text>
+                        </View>
+                      )
+                    }
+
+                    const numericResultValue = parseFloat(resultValue.toString())
+                    const numericMaxValue = parseFloat(maxValue)
+                    const numericMinValue = parseFloat(minValue)
+
+                    const isWithinRange =
+                      numericResultValue >= numericMinValue && numericResultValue <= numericMaxValue
 
                     return (
                       <View key={idx} style={{ flexDirection: 'row' }}>

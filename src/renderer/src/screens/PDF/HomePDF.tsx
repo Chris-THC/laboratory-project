@@ -39,7 +39,7 @@ export const HomePDF: React.FC = () => {
         </div>
 
         <div className="flex flex-row justify-between">
-          <Button onClick={() => navigate(-1)} className="font-inter" variant={'outline'}>
+          <Button onClick={() => navigate("/tests")} className="font-inter" variant={'outline'}>
             <ArrowLeft className="mr-1" />
             Regresar
           </Button>
@@ -57,12 +57,12 @@ export const HomePDF: React.FC = () => {
             >
               {({ loading }) =>
                 loading ? (
-                  <Button className="bg-[#4861b8c]">
+                  <Button className="bg-[#4861b8]">
                     <FileDown className="mr-1" />
                     Cargando...
                   </Button>
                 ) : (
-                  <Button className="bg-[#4861b8c]">
+                  <Button className="bg-[#4861b8]">
                     <FileDown className="mr-1" />
                     Descargar PDF
                   </Button>

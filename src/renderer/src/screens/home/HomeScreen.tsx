@@ -1,5 +1,5 @@
-import React from 'react'
 import { NavBar } from '@renderer/components/NavComponent/NavBar'
+import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { HomePDF } from '../PDF/HomePDF'
 import { TestEditorHome } from '../TestEditor/TestEditorHome'
@@ -9,20 +9,14 @@ import { AddClients } from '../clients/AddClients'
 import { ClientsListHome } from '../clients/ClientsListHome'
 import { AddUser } from '../users/AddUser'
 import { UsersListHome } from '../users/UsersListHome'
+import { HomeContainer } from './HomeContainer'
 
 export const HomeScreen: React.FC = () => {
   return (
     <div>
       <NavBar />
       <Routes>
-        <Route
-          path="/"
-          element={
-            <div>
-              <h1>Home</h1>
-            </div>
-          }
-        />
+        <Route path="/" element={<HomeContainer />} />
         <Route path="/users" element={<UsersListHome />} />
         <Route path="/users/form" element={<AddUser />} />
         <Route path="/customer" element={<ClientsListHome />} />

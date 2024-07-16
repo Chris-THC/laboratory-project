@@ -1,19 +1,54 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink} from '@/components/ui/pagination'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink
+} from '@/components/ui/pagination'
 import { Separator } from '@/components/ui/separator'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from '@/components/ui/table'
 import { LoadingSpinner } from '@renderer/components/LoadingSpinner/LoadingSpinner'
 import { ErrorPage } from '@renderer/components/PageNotFound/ErrorPage'
 import { useClientIdSelected } from '@renderer/context/clientContext/clientContext'
 import { useGetAllClient } from '@renderer/hooks/res/clientRes/UseClientAPI'
-import { flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table'
-import { AlignLeft, ChevronLeft, ChevronRight, FlaskConical, UserCog, UserPlus, UserX } from 'lucide-react'
+import {
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  useReactTable
+} from '@tanstack/react-table'
+import {
+  AlignLeft,
+  ChevronLeft,
+  ChevronRight,
+  FlaskConical,
+  UserCog,
+  UserPlus,
+  UserX
+} from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { DelateClientsModal } from './DelteClients'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
 import { useModalDelete } from '@renderer/context/ModalDeleteContext/IsOpenModalDelete'
 
 export const ClientsListHome = (): JSX.Element => {
@@ -158,16 +193,36 @@ export const ClientsListHome = (): JSX.Element => {
           <Separator />
 
           <div className="flex flex-col justify-center align-middle mx-8">
-            <div className="max-w-96 my-3">
+            <div className="w-full">
               <h2 className="font-inter text-xl mb-2">Busqueda</h2>
-              <Input
-                type="text"
-                placeholder="Buscar por normbre"
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-              />
-            </div>
 
+              <div className="flex flex-row pb-5">
+                <div className="w-[50%]">
+                  <h2>Nombre del cliente</h2>
+                  <Input
+                    placeholder="Buscar de cliente por nombre"
+                    value={(tableCostumer.getColumn('name')?.getFilterValue() as string) ?? ''}
+                    onChange={(event) =>
+                      tableCostumer.getColumn('name')?.setFilterValue(event.target.value)
+                    }
+                    className="max-w-sm"
+                  />
+                </div>
+                <div className="w-[50%]">
+                  <h2>Nombre del doctor</h2>
+                  <Input
+                    placeholder="Busqueda de doctor por nombre"
+                    value={
+                      (tableCostumer.getColumn('doctorName')?.getFilterValue() as string) ?? ''
+                    }
+                    onChange={(event) =>
+                      tableCostumer.getColumn('doctorName')?.setFilterValue(event.target.value)
+                    }
+                    className="max-w-sm"
+                  />
+                </div>
+              </div>
+            </div>
             <div className="h-full">
               <Table className="border">
                 <TableHeader>
