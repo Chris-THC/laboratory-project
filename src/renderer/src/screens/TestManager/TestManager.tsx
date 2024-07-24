@@ -13,6 +13,7 @@ import { Toaster } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { PatientCard } from './PatientCrad'
 import { TestCard, TestNewCard } from './TestCard'
+import { PricesCard } from './PricesCard'
 
 export const TestManagerHome: React.FC = () => {
   const navigate = useNavigate()
@@ -103,6 +104,9 @@ export const TestManagerHome: React.FC = () => {
             ))}
             <TestNewCard />
           </section>
+          <section>
+        <PricesCard />
+      </section>
         </CardContent>
       </Card>
 
