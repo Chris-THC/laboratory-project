@@ -104,12 +104,12 @@ export const TestManagerHome: React.FC = () => {
             ))}
             <TestNewCard />
           </section>
-          <section>
-        <PricesCard />
-      </section>
         </CardContent>
       </Card>
-
+     
+      <section>
+        <PricesCard />
+      </section>
       <Toaster />
     </div>
   )
