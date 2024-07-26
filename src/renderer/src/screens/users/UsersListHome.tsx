@@ -106,8 +106,8 @@ export const UsersListHome = (): JSX.Element => {
                 </DropdownMenuRadioItem>
 
                 <DropdownMenuRadioItem
-                  onClick={() => {
-                    setIdUserToDelete(row.original.idCustomer)
+                  onClick={() => {                   
+                    setIdUserToDelete(row.original.idUser)
                     setNameUserToDelete(row.original.name)
                     setIsOpenModalDelete(!isOpenModalDelete)
                   }}
