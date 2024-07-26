@@ -74,6 +74,7 @@ export const TestManagerHome: React.FC = () => {
       <section>
         <PatientCard />
       </section>
+
       <Card className="mt-5">
         <CardHeader>
           <div className="flex flex-row justify-between  align-middle">
@@ -107,7 +108,7 @@ export const TestManagerHome: React.FC = () => {
         </CardContent>
       </Card>
      
-      <section>
+      <section className='my-5'>
         <PricesCard />
       </section>
       <Toaster />
