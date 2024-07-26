@@ -40,9 +40,9 @@ export const DelateUserModal: React.FC<DelateUserModalProps> = ({ idUser, name, 
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle className="flex flex-row justify-center align-middle">
-            ¿Está seguro de eliminar a este cliente?
+            ¿Está seguro de eliminar a este usuario?
           </AlertDialogTitle>
-          <AlertDialogDescription className="text-center">{`El cliente registrado con el nombre ${name} se eliminará de la aplicación`}</AlertDialogDescription>
+          <AlertDialogDescription className="text-center">{`El usuario registrado con el nombre ${name} se eliminará de la aplicación`}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <div className="flex justify-center align-middle w-full">

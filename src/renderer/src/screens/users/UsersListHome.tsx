@@ -53,7 +53,6 @@ export const UsersListHome = (): JSX.Element => {
   const [nameUserToDelete, setNameUserToDelete] = useState('')
   const [filterUsers, setFilterUsers] = useState('')
 
-
   const columns = [
     {
       header: 'Nombre',
@@ -117,8 +116,6 @@ export const UsersListHome = (): JSX.Element => {
                   <UserX color="#c80800" className="mr-2 h-4 w-4" />
                   Eliminar
                 </DropdownMenuRadioItem>
-
-                <DropdownMenuSeparator />
               </DropdownMenuRadioGroup>
             </DropdownMenuContent>
           </DropdownMenu>
