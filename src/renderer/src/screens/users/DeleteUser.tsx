@@ -8,21 +8,21 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger
+  AlertDialogTitle
 } from '@/components/ui/alert-dialog'
-import { Button } from '@/components/ui/button'
-import { UserX } from 'lucide-react'
 import { useDelateUser } from '@renderer/hooks/res/usersRes/UseUsersAPI'
 import { useUserIdSelected } from '@renderer/context/userContext/UserContext'
+import { useModalDelete } from '@renderer/context/ModalDeleteContext/IsOpenModalDelete'
 interface DelateUserModalProps {
   idUser: number
   name: string
+  isOpen:boolean
 }
 
-export const DelateUserModal: React.FC<DelateUserModalProps> = ({ idUser, name }) => {
+export const DelateUserModal: React.FC<DelateUserModalProps> = ({ idUser, name, isOpen }) => {
   const navigateTo = useNavigate()
   const { setUserObjectInfo, setIsCreate } = useUserIdSelected()
+  const { isOpenModalDelete, setIsOpenModalDelete } = useModalDelete()
 
   const deleteUser = useDelateUser()
 
@@ -36,24 +36,20 @@ export const DelateUserModal: React.FC<DelateUserModalProps> = ({ idUser, name }
   }
 
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Button className="bg-inherit font-inter bg-red-600" variant="destructive">
-          <UserX />
-        </Button>
-      </AlertDialogTrigger>
+    <AlertDialog open={isOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle className="flex flex-row justify-center align-middle">
             ¿Está seguro de eliminar a este usuario?
           </AlertDialogTitle>
-          <AlertDialogDescription className="text-center">{`El usuario con el registrado con el nombre ${name} se eliminará de la aplicación`}</AlertDialogDescription>
+          <AlertDialogDescription className="text-center">{`El usuario registrado con el nombre ${name} se eliminará de la aplicación`}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <div className="flex justify-center align-middle w-full">
             <AlertDialogAction
               onClick={() => {
                 onDeleteUser(idUser)
+                setIsOpenModalDelete(!isOpenModalDelete)
               }}
               className="bg-red-600 mx-3"
             >
@@ -61,8 +57,7 @@ export const DelateUserModal: React.FC<DelateUserModalProps> = ({ idUser, name }
             </AlertDialogAction>
             <AlertDialogCancel
               onClick={() => {
-                setIsCreate(true)
-                setUserObjectInfo(null)
+                setIsOpenModalDelete(!isOpenModalDelete)
               }}
               className="mx-3"
             >
