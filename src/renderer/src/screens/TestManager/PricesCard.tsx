@@ -5,7 +5,7 @@ import { useTestArrayList } from '@renderer/context/testByUser/testArrayByUser'
 export const PricesCard: React.FC = () => {
   const { testArrayList } = useTestArrayList()
 
-  const totalTest = testArrayList!.reduce((acc, testInfo) => {
+  const totalTest = testArrayList?.reduce((acc, testInfo) => {
     return acc + testInfo.testDTO.testPrice
   }, 0)
 
