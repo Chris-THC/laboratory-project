@@ -66,7 +66,7 @@ export const TestManagerHome: React.FC = () => {
             INFORMACIÓN DEL PACIENTE Y EXÁMENES REGISTRADOS
           </h1>
         </div>
-        <Button onClick={() => navigate("/customer")} className="font-inter" variant={'outline'}>
+        <Button onClick={() => navigate('/customer')} className="font-inter" variant={'outline'}>
           <ArrowLeft className="mr-1" />
           Regresar
         </Button>
@@ -107,9 +107,17 @@ export const TestManagerHome: React.FC = () => {
           </section>
         </CardContent>
       </Card>
-     
-      <section className='my-5'>
-        <PricesCard />
+
+      <section className="my-5">
+        <Card>
+          <CardHeader>
+            <CardTitle>Productos a pagar</CardTitle>
+            <Separator className="my-5" />
+          </CardHeader>
+          <CardContent>
+            <PricesCard />
+          </CardContent>
+        </Card>
       </section>
       <Toaster />
     </div>

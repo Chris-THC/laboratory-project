@@ -1,62 +1,53 @@
-import { useState } from "react"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
+import { Input } from '@/components/ui/input'
+import { useTestArrayList } from '@renderer/context/testByUser/testArrayByUser'
 
+export const PricesCard: React.FC = () => {
+  const { testArrayList } = useTestArrayList()
 
-export const PricesCard : React.FC = () =>{
-  const [prices, setPrices] = useState([
-    { id: 1, price: 49.99 },
-    { id: 2, price: 99.99 },
-    { id: 3, price: 149.99 },
-    { id: 4, price: 199.99 },
-  ])
-  const handlePriceChange = (id, newPrice) => {
-    setPrices((prevPrices) =>
-      prevPrices.map((product) => (product.id === id ? { ...product, price: newPrice } : product)),
-    )
-  }
-  const totalPrice = prices.reduce((total, product) => total + product.price, 0)
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Productos a pagar</CardTitle>
-        <Separator className="my-5" />
-      </CardHeader>
-      <CardContent>
-  
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {prices.map((product) => (
-            <div
-              key={product.id}
-              className="rounded-lg bg-card p-4 shadow-sm transition-all duration-300 hover:shadow-lg"
-            >
-              <div className="mt-4">
-                <h3 className="text-lg font-semibold">Acme Gadget {product.id}</h3>
-                <div className="mt-1 flex items-center justify-between">
-                  <p className="text-muted-foreground">
-                    <Input
-                      type="number"
-                      value={product.price}
-                      onChange={(e) => handlePriceChange(product.id, parseFloat(e.target.value))}
-                      className="w-24 rounded-md border-none bg-transparent text-muted-foreground"
-                    />
-                  </p>
+    <div className="container mx-auto px-4 md:px-6">
+      {!testArrayList || testArrayList.length === 0 ? (
+        <p>No hay datos</p>
+      ) : (
+        <div>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {testArrayList!.map((testInfo, index) => (
+              <div
+                key={index}
+                className="rounded-lg bg-card p-4 shadow-md transition-all duration-300 hover:shadow-lg"
+              >
+                <div className="mt-4">
+                  <h3 className="text-base font-medium">{testInfo.testDTO.testName}</h3>
+
+                  <div className="mt-1 flex items-center justify-between">
+                    <div className="text-muted-foreground flex flex-row items-center h-[30px]">
+                      <p className="text-base font-inter mr-2">{'Precio:'}</p>
+                      <Input
+                        type="text"
+                        defaultValue={testInfo.testDTO.testPrice}
+                        // onChange={(e) => handlePriceChange(product.id, parseFloat(e.target.value))}
+                        className="w-24 border-b border-muted-foreground bg-transparent text-muted-foreground focus:outline-none"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
+            ))}
+          </div>
+          <div className="mt-8 flex justify-end">
+            <div>
+              <h3 className="text-base font-medium font-inter mb-2">Registrar transacción</h3>
+              <Button
+                variant={'outline'}
+                className="rounded-lg  px-6 py-4 text-xl font-medium text-[#111] shadow-lg"
+              >
+                Total: ${700}
+              </Button>
             </div>
-          ))}
+          </div>
         </div>
-        <div className="mt-8 flex justify-end">
-        <Button className="rounded-lg bg-primary px-6 py-4 text-2xl font-bold text-primary-foreground shadow-lg">
-            Total: ${totalPrice.toFixed(2)}
-          </Button>
-        </div>
-      </div>
-  
-    </CardContent>
-    </Card>
+      )}
+    </div>
   )
 }
