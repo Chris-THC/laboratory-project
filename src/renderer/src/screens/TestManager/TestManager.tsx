@@ -13,6 +13,7 @@ import { Toaster } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { PatientCard } from './PatientCrad'
 import { TestCard, TestNewCard } from './TestCard'
+import { PricesCard } from './PricesCard'
 
 export const TestManagerHome: React.FC = () => {
   const navigate = useNavigate()
@@ -65,7 +66,7 @@ export const TestManagerHome: React.FC = () => {
             INFORMACIÓN DEL PACIENTE Y EXÁMENES REGISTRADOS
           </h1>
         </div>
-        <Button onClick={() => navigate("/customer")} className="font-inter" variant={'outline'}>
+        <Button onClick={() => navigate('/customer')} className="font-inter" variant={'outline'}>
           <ArrowLeft className="mr-1" />
           Regresar
         </Button>
@@ -73,6 +74,7 @@ export const TestManagerHome: React.FC = () => {
       <section>
         <PatientCard />
       </section>
+
       <Card className="mt-5">
         <CardHeader>
           <div className="flex flex-row justify-between  align-middle">
@@ -106,6 +108,17 @@ export const TestManagerHome: React.FC = () => {
         </CardContent>
       </Card>
 
+      <section className="my-5">
+        <Card>
+          <CardHeader>
+            <CardTitle>Productos a pagar</CardTitle>
+            <Separator className="my-5" />
+          </CardHeader>
+          <CardContent>
+            <PricesCard />
+          </CardContent>
+        </Card>
+      </section>
       <Toaster />
     </div>
   )
