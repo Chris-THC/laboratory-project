@@ -92,11 +92,11 @@ export const FilePDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, tes
                         {isWithinRange ? (
                           <Text style={styles.textCompare}>{resultValue}</Text>
                         ) : (
-                          <Text style={styles.textCompare}>{'---'}</Text>
+                          <Text style={styles.textCompare}>{''}</Text>
                         )}
 
                         <Text style={styles.textCompare}>
-                          {isWithinRange ? '---' : resultValue}
+                          {isWithinRange ? '' : resultValue}
                         </Text>
                       </View>
                     )

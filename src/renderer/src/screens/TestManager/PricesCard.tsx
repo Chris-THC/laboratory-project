@@ -1,13 +1,25 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useTestArrayList } from '@renderer/context/testByUser/testArrayByUser'
+import { useState, useEffect } from 'react'
 
 export const PricesCard: React.FC = () => {
   const { testArrayList } = useTestArrayList()
+  const [prices, setPrices] = useState<number[]>([])
 
-  const totalTest = testArrayList?.reduce((acc, testInfo) => {
-    return acc + testInfo.testDTO.testPrice
-  }, 0)
+  useEffect(() => {
+    if (testArrayList) {
+      setPrices(testArrayList.map((testInfo) => testInfo.testDTO.testPrice))
+    }
+  }, [testArrayList])
+
+  const handlePriceChange = (index: number, value: number) => {
+    const newPrices = [...prices]
+    newPrices[index] = value
+    setPrices(newPrices)
+  }
+
+  const totalTest = prices.reduce((acc, price) => acc + price, 0)
 
   return (
     <div className="container mx-auto px-4 md:px-6">
@@ -30,8 +42,8 @@ export const PricesCard: React.FC = () => {
                         <p className="text-base font-inter mr-2">{'Precio sugerido $'}</p>
                         <Input
                           type="text"
-                          defaultValue={testInfo.testDTO.testPrice}
-                          // onChange={(e) => handlePriceChange(product.id, parseFloat(e.target.value))}
+                          defaultValue={prices[index]}
+                          onChange={(e) => handlePriceChange(index, parseFloat(e.target.value))}
                           className="w-24 border-b border-muted-foreground bg-transparent text-muted-foreground focus:outline-none"
                         />
                       </div>
