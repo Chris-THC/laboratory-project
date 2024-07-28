@@ -2,8 +2,10 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useTestArrayList } from '@renderer/context/testByUser/testArrayByUser'
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export const PricesCard: React.FC = () => {
+  const navigateTo = useNavigate()
   const { testArrayList } = useTestArrayList()
   const [prices, setPrices] = useState<number[]>([])
 
@@ -57,6 +59,7 @@ export const PricesCard: React.FC = () => {
             <div>
               <h3 className="text-base font-medium font-inter mb-2">Registrar transacción</h3>
               <Button
+                onClick={() => navigateTo('/caja')}
                 variant={'outline'}
                 className="rounded-lg  px-6 py-4 text-xl font-medium text-[#111] shadow-lg"
               >

@@ -15,7 +15,7 @@ export const UserTransactionsCard: React.FC = () => {
           CAJA
         </h1>
       </div>
-      <Button onClick={() => navigate("/")} className="font-inter" variant={'outline'}>
+      <Button onClick={() => navigate(-1)} className="font-inter" variant={'outline'}>
         <ArrowLeft className="mr-1" />
         Regresar
       </Button>
