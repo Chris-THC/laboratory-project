@@ -110,11 +110,10 @@ export const TestForm: React.FC = () => {
                                   <Input {...field} />
                                 </FormControl>
                                 <FormDescription>
-                                  {contentResults.contentsDTO?.units === null
-                                    ? 'Ingresa solo los valores'
-                                    : `Referencia unidades desde  ${contentResults.contentsDTO?.referencesDTO[0].vmin} a ${contentResults.contentsDTO?.referencesDTO[0].vmax} ${contentResults.contentsDTO?.units}`}
+                                  {contentResults.contentsDTO?.units
+                                    ? `Referencia unidades desde ${contentResults.contentsDTO.referencesDTO?.[0]?.vmin ?? ''} a ${contentResults.contentsDTO.referencesDTO?.[0]?.vmax ?? ''} ${contentResults.contentsDTO.units}`
+                                    : 'Ingresa solo los valores'}
                                 </FormDescription>
-
                                 <FormMessage />
                               </FormItem>
                             )}
