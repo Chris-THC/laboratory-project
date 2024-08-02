@@ -25,7 +25,7 @@ import {
   PaginationLink
 } from '@/components/ui/pagination'
 
-import { ChevronLeft, ChevronRight, UserCog, UserPlus } from 'lucide-react'
+import { ChevronLeft, AlignLeft, UserX, ChevronRight, UserCog, UserPlus } from 'lucide-react'
 import { Toaster } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { DelateUserModal } from './DeleteUser'
@@ -34,12 +34,24 @@ import { LoadingSpinner } from '@renderer/components/LoadingSpinner/LoadingSpinn
 import { useEffect, useState } from 'react'
 import { Input } from '@/components/ui/input'
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
+import { useModalDelete } from '@renderer/context/ModalDeleteContext/IsOpenModalDelete'
+
 export const UsersListHome = (): JSX.Element => {
   const { data, isLoading } = useGetAllUsers()
   const { setUserObjectInfo, setIsCreate } = useUserIdSelected()
-
+  const { isOpenModalDelete, setIsOpenModalDelete } = useModalDelete()
+  const [idUserToDelete, setIdUserToDelete] = useState(0)
+  const [nameUserToDelete, setNameUserToDelete] = useState('')
   const [filterUsers, setFilterUsers] = useState('')
-
 
   const columns = [
     {
@@ -69,20 +81,44 @@ export const UsersListHome = (): JSX.Element => {
       header: 'Acciones',
       cell: ({ row }): JSX.Element => {
         return (
-          <div>
-            <Button
-              className="bg-[#00c9b7] mr-1"
-              onClick={() => {
-                setIsCreate(false)
-                setUserObjectInfo(row.original)
-                navigateTo('/users/form')
-              }}
-            >
-              <UserCog />
-            </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button className="text-gray-800" variant="ghost">
+                <AlignLeft />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              <DropdownMenuLabel>Selecciona una opción</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuRadioGroup>
+                <DropdownMenuRadioItem
+                  onClick={() => {
+                    setIsCreate(false)
+                    setUserObjectInfo(row.original)
+                    navigateTo('/users/form')
+                  }}
+                  value="Editar"
+                  className="text-[#15658d] font-bold px-1"
+                >
+                  <UserCog color="#15658d" className="mr-2 h-4 w-4" />
+                  Editar
+                </DropdownMenuRadioItem>
 
-            <DelateUserModal idUser={row.original.idUser} name={row.original.name} />
-          </div>
+                <DropdownMenuRadioItem
+                  onClick={() => {                   
+                    setIdUserToDelete(row.original.idUser)
+                    setNameUserToDelete(row.original.name)
+                    setIsOpenModalDelete(!isOpenModalDelete)
+                  }}
+                  value="Eliminar"
+                  className="text-[#c80800] font-bold px-1"
+                >
+                  <UserX color="#c80800" className="mr-2 h-4 w-4" />
+                  Eliminar
+                </DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
         )
       }
     }
@@ -144,7 +180,7 @@ export const UsersListHome = (): JSX.Element => {
               <h2 className="font-inter text-xl mb-2">Busqueda</h2>
               <Input
                 type="text"
-                placeholder="Buscar por normbre"
+                placeholder="Buscar por nombre"
                 value={filterUsers}
                 onChange={(e) => setFilterUsers(e.target.value)}
               />
@@ -275,6 +311,11 @@ export const UsersListHome = (): JSX.Element => {
               </Pagination>
             </div>
             <Toaster />
+            <DelateUserModal
+              isOpen={isOpenModalDelete}
+              idUser={idUserToDelete}
+              name={nameUserToDelete}
+            />
           </div>
         </div>
       )}
