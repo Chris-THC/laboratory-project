@@ -76,7 +76,7 @@ export const HomePDF: React.FC = () => {
 
       <div>
         <div className="flex justify-center align-middle m-5">
-          <PDFViewer height={600} width={'90%'}>
+          <PDFViewer height={1000} width={'90%'}>
             <FilePDF
               testResults={contentsArrayTestToPDF}
               customerInfo={clientObjectInfo}

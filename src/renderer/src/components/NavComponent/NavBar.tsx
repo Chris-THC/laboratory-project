@@ -99,11 +99,9 @@ export const NavBar: React.FC = () => {
 
         <div className="flex flex-col justify-center align-middle">
           <Button
-            // onClick={() => {
-            //   setIsClientCreate(true)
-            //   setClientObjectInfo(null)
-            //   navigateTo('/customer/form')
-            // }}
+            onClick={() => {
+            navigateTo('/caja')
+            }}
             variant={'ghost'}
             className="mx-2 text-white font-inter"
           >
@@ -111,7 +109,7 @@ export const NavBar: React.FC = () => {
             Caja
           </Button>
         </div>
-
+            
         <div className="flex flex-col justify-center align-middle mx-5">
           <UserDropMenu />
         </div>
