@@ -10,6 +10,7 @@ import {
   getSortedRowModel,
   useReactTable
 } from '@tanstack/react-table'
+
 import React, { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -24,6 +25,7 @@ import {
 } from '@/components/ui/table'
 import { useGetOrderList } from '@renderer/hooks/res/CashRegister/UserCashRegister'
 import { CashRegisterI } from '@renderer/interfaces/CashRegisterInterface/CashRegisterInterface'
+import { ShowMenu } from './ShowMenu'
 
 export const TransactionFC: React.FC = () => {
   const { data } = useGetOrderList()
@@ -36,13 +38,13 @@ export const TransactionFC: React.FC = () => {
     {
       accessorFn: (row) => row.user.name,
       id: 'user.name',
-      header: 'Usario que antendio al cliente',
+      header: 'Usuario que atendió al cliente',
       cell: ({ row }) => <div className="font-inter font-medium">{row.original.user.name}</div>
     },
     {
       accessorFn: (row) => row.customer.name,
       id: 'customer.name',
-      header: 'Cliente',
+      header: 'Nombre del cliente',
       cell: ({ row }) => <div className="font-inter font-medium">{row.original.customer.name}</div>
     },
     {
@@ -54,7 +56,7 @@ export const TransactionFC: React.FC = () => {
     },
     {
       accessorKey: 'orderAmountPaid',
-      header: 'Pago con',
+      header: 'Dinero recibido',
       cell: ({ row }) => <div className="capitalize">{`$${row.getValue('orderAmountPaid')}`}</div>
     },
     {
@@ -80,8 +82,14 @@ export const TransactionFC: React.FC = () => {
     },
     {
       accessorKey: 'orderTimeStamp',
-      header: 'Fecha',
+      header: 'Fecha de la transacción',
       cell: ({ row }) => <div className="capitalize">{`${row.getValue('orderTimeStamp')}`}</div>
+    },
+    {
+      header: 'Acciones',
+      cell: ({ row }): JSX.Element => {
+        return <ShowMenu />
+      }
     }
   ]
 
@@ -135,14 +143,21 @@ export const TransactionFC: React.FC = () => {
 
   return (
     <div className="flex justify-center align-middle">
-      <div className="w-[90%]">
+      <div className="w-[98%]">
         <div className="flex items-center py-4 justify-between">
-          <Input
-            placeholder="Buscar un examen por nombre"
-            value={(table.getColumn('customer.name')?.getFilterValue() as string) ?? ''}
-            onChange={(event) => table.getColumn('customer.name')?.setFilterValue(event.target.value)}
-            className="max-w-sm"
-          />
+          <div>
+            <h3 className="font-inter font-normal text-base mb-2">
+              Búsqueda por nombre del paciente
+            </h3>
+            <Input
+              placeholder="Nombre del paciente"
+              value={(table.getColumn('customer.name')?.getFilterValue() as string) ?? ''}
+              onChange={(event) =>
+                table.getColumn('customer.name')?.setFilterValue(event.target.value)
+              }
+              className="max-w-sm"
+            />
+          </div>
         </div>
 
         <div className="rounded-md border">
