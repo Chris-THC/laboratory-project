@@ -34,12 +34,14 @@ export const TransactionFC: React.FC = () => {
 
   const columns: ColumnDef<CashRegisterI>[] = [
     {
-      accessorKey: 'user.name',
+      accessorFn: (row) => row.user.name,
+      id: 'user.name',
       header: 'Usario que antendio al cliente',
       cell: ({ row }) => <div className="font-inter font-medium">{row.original.user.name}</div>
     },
     {
-      accessorKey: 'customer.name',
+      accessorFn: (row) => row.customer.name,
+      id: 'customer.name',
       header: 'Cliente',
       cell: ({ row }) => <div className="font-inter font-medium">{row.original.customer.name}</div>
     },
@@ -137,8 +139,8 @@ export const TransactionFC: React.FC = () => {
         <div className="flex items-center py-4 justify-between">
           <Input
             placeholder="Buscar un examen por nombre"
-            value={(table.getColumn('orderNotes')?.getFilterValue() as string) ?? ''}
-            onChange={(event) => table.getColumn('orderNotes')?.setFilterValue(event.target.value)}
+            value={(table.getColumn('customer.name')?.getFilterValue() as string) ?? ''}
+            onChange={(event) => table.getColumn('customer.name')?.setFilterValue(event.target.value)}
             className="max-w-sm"
           />
         </div>
@@ -177,7 +179,7 @@ export const TransactionFC: React.FC = () => {
               ) : (
                 <TableRow>
                   <TableCell colSpan={columns.length} className="h-24 text-center">
-                    Sin resultados / Fallo en la conexion a la base de datos
+                    Sin resultados
                   </TableCell>
                 </TableRow>
               )}
