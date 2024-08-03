@@ -51,7 +51,7 @@ export const useAddCustomerTest = (): UseMutationResult<CostumerTestAddInterface
       notifyCreatedSucces()
     },
     onError: () => {
-      toast.error('No se pudo crear al usuario')
+      toast.error('No se pudo agregar el examen')
     }
   })
 }
