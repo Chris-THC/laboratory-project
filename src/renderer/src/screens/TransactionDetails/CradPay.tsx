@@ -3,12 +3,13 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { DialogClose } from '@radix-ui/react-dialog'
 import React from 'react'
 
 export const CradPlay: React.FC = () => {
   return (
-    <Card className="w-full h-[23rem] align-middle justify-center mb-5">
-      <CardHeader className="bg-[#004185] text-primary-foreground">
+    <Card className="w-full h-[23rem] align-middle justify-center my-3">
+      <CardHeader className="bg-[#004185] text-primary-foreground rounded-tl-[10px] rounded-tr-[10px]">
         <CardTitle className="font-inter text-xl font-bold">Transacción</CardTitle>
       </CardHeader>
       <CardContent className="grid grid-cols-4 gap-6 px-8 py-3">
@@ -38,8 +39,18 @@ export const CradPlay: React.FC = () => {
         </div>
       </CardContent>
       <CardFooter className="flex justify-end gap-4 px-8">
-        <Button variant="outline">Cancelar</Button>
-        <Button type="submit">Guardar</Button>
+        <DialogClose asChild>
+          <Button type="button" variant="destructive">
+            Cancelar
+          </Button>
+        </DialogClose>
+        <DialogClose asChild>
+          <Button onClick={()=>{
+            console.log("guardado")
+          }} variant="outline" type="submit">
+            Guardar
+          </Button>
+        </DialogClose>
       </CardFooter>
     </Card>
   )

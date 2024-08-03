@@ -15,7 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { AlignLeft, UserCog, UserX } from 'lucide-react'
+import { AlignLeft, FileSliders, Trash2 } from 'lucide-react'
 import React from 'react'
 import { CradPlay } from './CradPay'
 
@@ -27,7 +27,7 @@ export const ShowMenu: React.FC = () => {
           <AlignLeft />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-[100%]">
+      <DropdownMenuContent>
         <DropdownMenuLabel>Selecciona una opción</DropdownMenuLabel>
         <Dialog>
           <DialogTrigger className="w-full">
@@ -36,11 +36,11 @@ export const ShowMenu: React.FC = () => {
               value="Editar"
               className="text-[#15658d] font-bold px-1 w-full"
             >
-              <UserCog color="#15658d" className="mr-2 h-4 w-4" />
+              <FileSliders color="#15658d" className="mr-2 h-4 w-4" />
               Editar
             </DropdownMenuRadioItem>
           </DialogTrigger>
-          <DialogContent className="w-[100rem]">
+          <DialogContent className="w-[90rem] h-[30rem] max-w-[70%] max-h-[90%] m-5">
             <CradPlay />
           </DialogContent>
         </Dialog>
@@ -52,7 +52,7 @@ export const ShowMenu: React.FC = () => {
               value="Eliminar"
               className="text-[#c80800] font-bold px-1"
             >
-              <UserX color="#c80800" className="mr-2 h-4 w-4" />
+              <Trash2 color="#c80800" className="mr-2 h-4 w-4" />
               Eliminar
             </DropdownMenuRadioItem>
           </DialogTrigger>
