@@ -12,5 +12,9 @@ export interface CostumerTestAddInterface {
   idCustomer: number | null | undefined
   idTest: number
   status: string
+  priceByTest?: number
+}
+
+export interface PriceTestI {
   priceByTest: number
 }

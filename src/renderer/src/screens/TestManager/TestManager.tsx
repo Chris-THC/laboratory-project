@@ -11,9 +11,9 @@ import { ArrowLeft, FileInput } from 'lucide-react'
 import React, { useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
+import { PayComponent } from '../pay/PayComponent'
 import { PatientCard } from './PatientCrad'
 import { TestCard, TestNewCard } from './TestCard'
-import { PricesCard } from './PricesCard'
 
 export const TestManagerHome: React.FC = () => {
   const navigate = useNavigate()
@@ -111,11 +111,17 @@ export const TestManagerHome: React.FC = () => {
       <section className="my-5">
         <Card>
           <CardHeader>
-            <CardTitle>Productos a pagar</CardTitle>
+            <div>
+              <h1 className="text-2xl font-bold">Pagar exámenes</h1>
+              <p className="text-muted-foreground">
+                Completa el pago de los exámenes registrados en tu cuenta.
+              </p>
+            </div>
             <Separator className="my-5" />
           </CardHeader>
           <CardContent>
-            <PricesCard />
+            {/* <PricesCard /> */}
+            <PayComponent />
           </CardContent>
         </Card>
       </section>
