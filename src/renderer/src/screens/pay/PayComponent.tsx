@@ -41,15 +41,28 @@ export const PayComponent: React.FC = () => {
                 </TableHeader>
                 <TableBody>
                   {testArrayList.map((testInfo, index) => {
+                    const GetTestPrice = (): number => {
+                      if (testInfo.priceByTest === 0 || testInfo.priceByTest === 0.0) {
+                        return testInfo.testDTO.testPrice
+                      } else if (testInfo.priceByTest === null) {
+                        return testInfo.testDTO.testPrice
+                      } else {
+                        return testInfo.priceByTest!
+                      }
+                    }
+
                     return (
                       <TableRow key={index}>
                         <TableCell className="font-inter">{testInfo.testDTO.testName}</TableCell>
                         <TableCell className="flex justify-end align-bottom content-end font-inter text-base">
                           <Input
                             type="text"
-                            // defaultValue={prices[index]}
+                            defaultValue={GetTestPrice()}
                             onChange={(e) => {
-                              updatePrice.mutate({ idCustomerTest: 1, testPrice: { priceByTest: parseFloat(e.target.value)}})
+                              updatePrice.mutate({
+                                idCustomerTest: testInfo.idCustomersTests,
+                                testPrice: { priceByTest: parseFloat(e.target.value) }
+                              })
                             }}
                             className="w-28 border-b border-muted-foreground bg-transparent text-muted-foreground focus:outline-none text-right"
                           />

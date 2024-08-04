@@ -6,6 +6,7 @@ export interface CostumerTestInterface {
   idTest: number
   testDTO: TestInterface
   status: string
+  priceByTest?: number
 }
 
 export interface CostumerTestAddInterface {
