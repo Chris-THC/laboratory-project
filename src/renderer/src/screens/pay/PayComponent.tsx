@@ -64,7 +64,7 @@ export const PayComponent: React.FC = () => {
                                 testPrice: { priceByTest: parseFloat(e.target.value) }
                               })
                             }}
-                            className="w-28 border-b border-muted-foreground bg-transparent text-muted-foreground focus:outline-none text-right"
+                            className="w-28 h-8 m-0 pr-2 border-b border-muted-foreground bg-transparent focus:outline text-right font-inter"
                           />
                         </TableCell>
                       </TableRow>
