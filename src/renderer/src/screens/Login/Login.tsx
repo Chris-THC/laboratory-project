@@ -6,46 +6,43 @@ import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
-    const { setUserRoll, setUser, setIsLoggedIn, LoginFuntion, setToken } =
-    useContext(GetTheAppContext);
-  const navigeteTo = useNavigate();
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const navigateTo = useNavigate();
 
     const {
-        register,
-        handleSubmit,
-        formState: { errors, isValid },
-      } = useForm({ mode: "all" });
+      register,
+      handleSubmit,
+      formState: { errors, isValid },
+    } = useForm({ mode: "all" });
 
-      const TokenSeparator = (token) => {
-        const parts = token.split(".");
-        const payload = JSON.parse(atob(parts[1]));
-        return payload;
-      };
 
-      const ManagerEventSubmmit = async (data) => {
-        try {
-          const isLogin = await LoginFuntion(data);
-    
-          if (isLogin.status === 200) {
-            let loggedUserInfo = TokenSeparator(isLogin.data.token);
-            setUser(loggedUserInfo);
-            console.log(loggedUserInfo);
-            setToken(isLogin.data.token);
-            setIsLoggedIn(true);
-            setUserRoll(loggedUserInfo.role);
-            if (loggedUserInfo.role === "Doctor") {
-              navigeteTo("/doctor");
-            } else if (loggedUserInfo.role === "Patient") {
-              navigeteTo("/patient/medical/information");
-            }
-            alert("Sesión iniciada correctamente");
-          } else {
-            alert("NO se pudo iniciar sesion");
-          }
-        } catch (error) {
-          console.log("Error");
-        }
-      };
+   const ManagerEventSubmmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch('/lab/auth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        // Handle successful login, e.g., store token, redirect
+        navigateTo('/customer/form'); // Replace with your desired redirect
+      } else {
+        // Handle login error, e.g., display error message
+        console.error('Login failed');
+      }
+    } catch (error) {
+      console.error('Error during login:', error);
+    }
+  };
+
+   
 
   return (
     <div className="mx-auto max-w-sm space-y-6">

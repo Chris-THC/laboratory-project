@@ -11,6 +11,7 @@ import { AddUser } from '../users/AddUser'
 import { UsersListHome } from '../users/UsersListHome'
 import { HomeContainer } from './HomeContainer'
 import { UserTransactionsCard } from '../TransactionDetails/UserTransactionsCard'
+import { Login } from '../Login/Login'
 
 export const HomeScreen: React.FC = () => {
   return (
@@ -27,6 +28,7 @@ export const HomeScreen: React.FC = () => {
         <Route path="/tests/editor" element={<TestEditorHome />} />
         <Route path="/pdf" element={<HomePDF />} />
         <Route path="/caja" element={<UserTransactionsCard />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </div>
   )
