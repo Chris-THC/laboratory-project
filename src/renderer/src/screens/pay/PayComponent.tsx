@@ -49,7 +49,7 @@ export const PayComponent: React.FC = () => {
     setPrices(newPrices)
   }
 
-  const totalTest = prices.reduce((acc, price) => acc + price, 0)
+  const totalTest = prices?.reduce((acc, price) => acc + price, 0) ?? 0
 
   return (
     <div className="w-full max-w-4xl mx-auto p-6 md:p-8">
