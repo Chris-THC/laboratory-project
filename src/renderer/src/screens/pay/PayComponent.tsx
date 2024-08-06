@@ -10,14 +10,46 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { useTestArrayList } from '@renderer/context/testByUser/testArrayByUser'
-import { useUpdatePriceTest } from '@renderer/hooks/res/clientRes/UseClientTest'
+import { useClientIdSelected } from '@renderer/context/clientContext/clientContext'
+import {
+  useAllTestByIdCustomer,
+  useUpdatePriceTest
+} from '@renderer/hooks/res/clientRes/UseClientTest'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 export const PayComponent: React.FC = () => {
-  const { testArrayList } = useTestArrayList()
+  const { clientObjectInfo } = useClientIdSelected()
+  const { data: testArrayList } = useAllTestByIdCustomer(clientObjectInfo!.idCustomer)
+
   const updatePrice = useUpdatePriceTest()
+  const [prices, setPrices] = useState<number[]>([])
+
+  useEffect(() => {
+    const infoPrice = testArrayList?.map((testInfo) => {
+      const priceByTestValue =
+        testInfo.priceByTest === 0 || testInfo.priceByTest === null
+          ? testInfo.testDTO.testPrice
+          : testInfo.priceByTest!
+
+      updatePrice.mutate({
+        idCustomerTest: testInfo.idCustomersTests,
+        testPrice: { priceByTest: priceByTestValue }
+      })
+
+      return priceByTestValue
+    })
+
+    setPrices(infoPrice!)
+  }, [testArrayList])
+
+  const handlePriceChange = (index: number, value: number) => {
+    const newPrices = [...prices]
+    newPrices[index] = value
+    setPrices(newPrices)
+  }
+
+  const totalTest = prices.reduce((acc, price) => acc + price, 0)
 
   return (
     <div className="w-full max-w-4xl mx-auto p-6 md:p-8">
@@ -42,13 +74,9 @@ export const PayComponent: React.FC = () => {
                 <TableBody>
                   {testArrayList.map((testInfo, index) => {
                     const GetTestPrice = (): number => {
-                      if (testInfo.priceByTest === 0 || testInfo.priceByTest === 0.0) {
-                        return testInfo.testDTO.testPrice
-                      } else if (testInfo.priceByTest === null) {
-                        return testInfo.testDTO.testPrice
-                      } else {
-                        return testInfo.priceByTest!
-                      }
+                      return testInfo.priceByTest === 0 || testInfo.priceByTest === null
+                        ? testInfo.testDTO.testPrice
+                        : testInfo.priceByTest!
                     }
 
                     return (
@@ -63,6 +91,7 @@ export const PayComponent: React.FC = () => {
                                 idCustomerTest: testInfo.idCustomersTests,
                                 testPrice: { priceByTest: parseFloat(e.target.value) }
                               })
+                              handlePriceChange(index, parseFloat(e.target.value))
                             }}
                             className="w-28 h-8 m-0 pr-2 border-b border-muted-foreground bg-transparent focus:outline text-right font-inter"
                           />
@@ -79,12 +108,12 @@ export const PayComponent: React.FC = () => {
                   <h3 className="text-base font-inter">Total a pagar</h3>
                   <Button
                     onClick={async () => {
-                      // updatePrice.mutate({ idCustomerTest: 1, testPrice: { priceByTest: 123 } })
+                      console.log('Ir a la tabla')
                     }}
                     variant={'outline'}
                     className="rounded-lg  px-6 py-4 text-xl font-medium text-[#111] shadow-lg"
                   >
-                    Total: ${100}
+                    Total: ${totalTest}
                   </Button>
                 </div>
               </div>
