@@ -26,27 +26,28 @@ export const PayComponent: React.FC = () => {
   const [prices, setPrices] = useState<number[]>([])
 
   useEffect(() => {
-    const infoPrice = testArrayList?.map((testInfo) => {
-      const priceByTestValue =
-        testInfo.priceByTest === 0 || testInfo.priceByTest === null
-          ? testInfo.testDTO.testPrice
-          : testInfo.priceByTest!
-
-      updatePrice.mutate({
-        idCustomerTest: testInfo.idCustomersTests,
-        testPrice: { priceByTest: priceByTestValue }
+    if (testArrayList) {
+      const infoPrice = testArrayList.map((testInfo) => {
+        const priceByTestValue =
+          testInfo.priceByTest === 0 || testInfo.priceByTest === null
+            ? testInfo.testDTO.testPrice
+            : testInfo.priceByTest!
+        
+        return priceByTestValue
       })
-
-      return priceByTestValue
-    })
-
-    setPrices(infoPrice!)
+      setPrices(infoPrice)
+    }
   }, [testArrayList])
 
-  const handlePriceChange = (index: number, value: number) => {
+  const handlePriceChange = (index: number, value: number, idCustomersTests: number) => {
     const newPrices = [...prices]
-    newPrices[index] = value
+    newPrices[index] = isNaN(value) ? 0 : value
     setPrices(newPrices)
+    // Change the test price when you writing some number on Input and sen to DB
+    updatePrice.mutate({
+      idCustomerTest: idCustomersTests,
+      testPrice: { priceByTest: value }
+    })
   }
 
   const totalTest = prices?.reduce((acc, price) => acc + price, 0) ?? 0
@@ -73,25 +74,19 @@ export const PayComponent: React.FC = () => {
                 </TableHeader>
                 <TableBody>
                   {testArrayList.map((testInfo, index) => {
-                    const GetTestPrice = (): number => {
-                      return testInfo.priceByTest === 0 || testInfo.priceByTest === null
-                        ? testInfo.testDTO.testPrice
-                        : testInfo.priceByTest!
-                    }
-
                     return (
                       <TableRow key={index}>
                         <TableCell className="font-inter">{testInfo.testDTO.testName}</TableCell>
                         <TableCell className="flex justify-end align-bottom content-end font-inter text-base">
                           <Input
                             type="text"
-                            defaultValue={GetTestPrice()}
+                            value={prices[index]}
                             onChange={(e) => {
-                              updatePrice.mutate({
-                                idCustomerTest: testInfo.idCustomersTests,
-                                testPrice: { priceByTest: parseFloat(e.target.value) }
-                              })
-                              handlePriceChange(index, parseFloat(e.target.value))
+                              handlePriceChange(
+                                index,
+                                parseFloat(e.target.value),
+                                testInfo.idCustomersTests
+                              )
                             }}
                             className="w-28 h-8 m-0 pr-2 border-b border-muted-foreground bg-transparent focus:outline text-right font-inter"
                           />
