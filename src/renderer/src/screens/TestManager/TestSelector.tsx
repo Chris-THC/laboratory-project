@@ -150,14 +150,15 @@ export const TestSelector: React.FC = () => {
                   const customerTestInfo: CostumerTestAddInterface = {
                     idCustomer: clientObjectInfo!.idCustomer,
                     idTest: testInfo.idTest,
-                    status: '0'
+                    status: '0',
+                    priceByTest: 0
                   }
 
                   const resultsInfo = {
                     idCustomers: clientObjectInfo!.idCustomer,
                     idTests: testInfo!.idTest,
                     resultTimeStamp: fechaActual,
-                    resultNote: 'No hay notas'
+                    resultNote: 'No hay notas',
                   }
 
                   newCustomerTests.mutate(customerTestInfo)
