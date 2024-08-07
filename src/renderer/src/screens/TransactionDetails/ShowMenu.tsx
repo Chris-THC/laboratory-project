@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { AlignLeft, FileSliders, Trash2 } from 'lucide-react'
 import React from 'react'
-import { CradPlay } from './CradPay'
+import { PayCard } from '../pay/PayCard'
 
 export const ShowMenu: React.FC = () => {
   return (
@@ -41,7 +41,7 @@ export const ShowMenu: React.FC = () => {
             </DropdownMenuRadioItem>
           </DialogTrigger>
           <DialogContent className="w-[90rem] h-[30rem] max-w-[70%] max-h-[90%] m-5">
-            <CradPlay />
+            <PayCard />
           </DialogContent>
         </Dialog>
         <DropdownMenuSeparator />

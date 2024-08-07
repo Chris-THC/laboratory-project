@@ -88,6 +88,7 @@ export const TransactionFC: React.FC = () => {
     {
       header: 'Acciones',
       cell: ({ row }): JSX.Element => {
+        console.log(row)
         return <ShowMenu />
       }
     }
@@ -142,68 +143,76 @@ export const TransactionFC: React.FC = () => {
   }
 
   return (
-    <div className="flex justify-center align-middle">
-      <div className="w-[98%]">
-        <div className="flex items-center py-4 justify-between">
-          <div>
-            <h3 className="font-inter font-normal text-base mb-2">
-              Búsqueda por nombre del paciente
-            </h3>
-            <Input
-              placeholder="Nombre del paciente"
-              value={(table.getColumn('customer.name')?.getFilterValue() as string) ?? ''}
-              onChange={(event) =>
-                table.getColumn('customer.name')?.setFilterValue(event.target.value)
-              }
-              className="max-w-sm"
-            />
+    <div className="flex justify-center items-center h-full">
+      {data === null || data === undefined || data.length === 0 ? (
+        <div className="w-[98%] h-ful">
+          <h4 className="font-inter font-semibold text-base text-center">
+            Aún no hay datos disponibles en la base de datos
+          </h4>
+        </div>
+      ) : (
+        <div className="w-[98%]">
+          <div className="flex items-center py-4 justify-between">
+            <div>
+              <h3 className="font-inter font-normal text-base mb-2">
+                Búsqueda por nombre del paciente
+              </h3>
+              <Input
+                placeholder="Nombre del paciente"
+                value={(table.getColumn('customer.name')?.getFilterValue() as string) ?? ''}
+                onChange={(event) =>
+                  table.getColumn('customer.name')?.setFilterValue(event.target.value)
+                }
+                className="max-w-sm"
+              />
+            </div>
           </div>
-        </div>
 
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead
-                        className="text-gray-800 max-w-[120px] font-medium m-0 p-2 bg-[#EFFBFF]"
-                        key={header.id}
-                      >
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(header.column.columnDef.header, header.getContext())}
-                      </TableHead>
-                    )
-                  })}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </TableCell>
-                    ))}
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => {
+                      return (
+                        <TableHead
+                          className="text-gray-800 max-w-[120px] font-medium m-0 p-2 bg-[#EFFBFF]"
+                          key={header.id}
+                        >
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(header.column.columnDef.header, header.getContext())}
+                        </TableHead>
+                      )
+                    })}
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={columns.length} className="h-24 text-center">
-                    Sin resultados
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={columns.length} className="h-24 text-center">
+                      Sin resultados
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+          {/* Pagination */}
+          <Pagination />
         </div>
-        {/* Pagination */}
-        <Pagination />
-      </div>
+      )}
     </div>
   )
 }

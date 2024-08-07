@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
@@ -17,6 +16,7 @@ import {
 } from '@renderer/hooks/res/clientRes/UseClientTest'
 
 import React, { useEffect, useState } from 'react'
+import { CreateOrden } from './CreateOrden'
 
 export const PayComponent: React.FC = () => {
   const { clientObjectInfo } = useClientIdSelected()
@@ -32,7 +32,7 @@ export const PayComponent: React.FC = () => {
           testInfo.priceByTest === 0 || testInfo.priceByTest === null
             ? testInfo.testDTO.testPrice
             : testInfo.priceByTest!
-        
+
         return priceByTestValue
       })
       setPrices(infoPrice)
@@ -100,8 +100,8 @@ export const PayComponent: React.FC = () => {
               <div className="grid gap-4">
                 <Separator />
                 <div className="flex items-center justify-between font-medium mx-2">
-                  <h3 className="text-base font-inter">Total a pagar</h3>
-                  <Button
+                  <p className="text-base font-inter">Total a pagar</p>
+                  {/* <Button
                     onClick={async () => {
                       console.log('Ir a la tabla')
                     }}
@@ -109,7 +109,8 @@ export const PayComponent: React.FC = () => {
                     className="rounded-lg  px-6 py-4 text-xl font-medium text-[#111] shadow-lg"
                   >
                     Total: ${totalTest}
-                  </Button>
+                  </Button> */}
+                  <CreateOrden totalPrice={totalTest} />
                 </div>
               </div>
             </CardContent>
