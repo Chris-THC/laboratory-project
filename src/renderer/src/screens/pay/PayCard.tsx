@@ -1,66 +1,181 @@
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { DialogClose } from '@/components/ui/dialog'
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel
+} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { AddOrderTestIn, MoreInfoAddOrder } from '@renderer/interfaces/orders/OrderTest'
+import React from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { FormSchemaPay } from './FormSchemaPay'
 
-export const PayCard = () => {
+interface PayReqData {
+  ordendata: AddOrderTestIn
+  moreDataByOrder: MoreInfoAddOrder
+  nameCustomer: string
+}
+
+export const PayCard: React.FC<PayReqData> = ({ ordendata, moreDataByOrder, nameCustomer }) => {
+  const form = useForm<z.infer<typeof FormSchemaPay>>({
+    resolver: zodResolver(FormSchemaPay),
+    defaultValues: ordendata,
+    mode: 'all'
+  })
+
+  const onSubmit = (data: z.infer<typeof FormSchemaPay>): void => {
+    console.info(moreDataByOrder)
+    console.info(data)
+  }
+
   return (
     <Card className="w-full max-w-4xl">
       <CardHeader>
-        <CardTitle>Registro de Compra</CardTitle>
+        <CardTitle>{`Orden a nombre de ${nameCustomer}`}</CardTitle>
         <Separator />
       </CardHeader>
-      <CardContent className="grid gap-4 mt-3">
-        <div className="grid grid-cols-3 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="name">Nombre del Cliente</Label>
-            <Input id="name" placeholder="Ingrese el nombre" />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="total">Total de la Compra</Label>
-            <Input id="total" type="number" placeholder="0.00" />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="received">Dinero Recibido</Label>
-            <Input id="received" type="number" placeholder="0.00" />
-          </div>
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="deposit">Depósito</Label>
-            <Input id="deposit" type="number" placeholder="0.00" />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="change">Cambio</Label>
-            <Input id="change" type="number" placeholder="0.00" readOnly />
-          </div>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="notes">Notas</Label>
-          <Textarea id="notes" placeholder="Ingrese notas adicionales" />
-        </div>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="grid gap-4 mt-3">
+              <div className="grid grid-cols-4 gap-4">
+                <div className="space-y-1">
+                  <FormField
+                    control={form.control}
+                    name="orderTotal"
+                    render={({ field, fieldState }) => (
+                      <FormItem>
+                        <FormLabel>Total de la orden</FormLabel>
+                        <FormControl>
+                          <Input type="text" placeholder="Total" {...field} />
+                        </FormControl>
+                        {fieldState.error && (
+                          <FormDescription className="text-red-500">
+                            {fieldState.error.message}
+                          </FormDescription>
+                        )}
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <FormField
+                    control={form.control}
+                    name="orderAmountPaid"
+                    render={({ field, fieldState }) => (
+                      <FormItem>
+                        <FormLabel>Dinero Recibido</FormLabel>
+                        <FormControl>
+                          <Input type="text" placeholder="Dinero Recibido" {...field} />
+                        </FormControl>
+                        {fieldState.error && (
+                          <FormDescription className="text-red-500">
+                            {fieldState.error.message}
+                          </FormDescription>
+                        )}
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <FormField
+                    control={form.control}
+                    name="orderDeposit"
+                    render={({ field, fieldState }) => (
+                      <FormItem>
+                        <FormLabel>Depósito</FormLabel>
+                        <FormControl>
+                          <Input type="text" placeholder="Depósito" {...field} />
+                        </FormControl>
+                        {fieldState.error && (
+                          <FormDescription className="text-red-500">
+                            {fieldState.error.message}
+                          </FormDescription>
+                        )}
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="space-y-1">
+                  <FormField
+                    control={form.control}
+                    name="orderChange"
+                    render={({ field, fieldState }) => (
+                      <FormItem>
+                        <FormLabel>Cambio</FormLabel>
+                        <FormControl>
+                          <Input type="text" placeholder="Cambio" {...field} />
+                        </FormControl>
+                        {fieldState.error && (
+                          <FormDescription className="text-red-500">
+                            {fieldState.error.message}
+                          </FormDescription>
+                        )}
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="orderNotes"
+                  render={({ field, fieldState }) => (
+                    <FormItem>
+                      <FormLabel>Notas</FormLabel>
+                      <FormControl>
+                        <Textarea placeholder="Notas" {...field} />
+                      </FormControl>
+                      {fieldState.error && (
+                        <FormDescription className="text-red-500">
+                          {fieldState.error.message}
+                        </FormDescription>
+                      )}
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-2 mt-5">
+              <div className="mx-3">
+                <DialogClose asChild>
+                  <Button className="bg-[#4472c4]" type="submit">
+                    Agregar
+                  </Button>
+                </DialogClose>
+              </div>
+              <div className="mx-3">
+                <DialogClose asChild>
+                  <Button
+                    variant={'destructive'}
+                    type="button"
+                    className="bg-[#e32940]"
+                    onClick={() => {
+                      // setClientObjectInfo(null)
+                      // navigateTo('/customer')
+                    }}
+                  >
+                    Cancelar
+                  </Button>
+                </DialogClose>
+              </div>
+            </div>
+          </form>
+        </Form>
       </CardContent>
-      <CardFooter className="flex justify-end gap-4 px-8">
-        <DialogClose asChild>
-          <Button type="button" variant="destructive">
-            Cancelar
-          </Button>
-        </DialogClose>
-        <DialogClose asChild>
-          <Button
-            onClick={() => {
-              console.log('guardado')
-            }}
-            variant="outline"
-            type="submit"
-          >
-            Guardar
-          </Button>
-        </DialogClose>
-      </CardFooter>
     </Card>
   )
 }

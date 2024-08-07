@@ -110,7 +110,7 @@ export const PayComponent: React.FC = () => {
                   >
                     Total: ${totalTest}
                   </Button> */}
-                  <CreateOrden totalPrice={totalTest} />
+                  <CreateOrden totalPrice={totalTest} customerName={clientObjectInfo!.name} />
                 </div>
               </div>
             </CardContent>
