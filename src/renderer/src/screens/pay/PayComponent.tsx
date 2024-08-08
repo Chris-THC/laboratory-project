@@ -101,16 +101,11 @@ export const PayComponent: React.FC = () => {
                 <Separator />
                 <div className="flex items-center justify-between font-medium mx-2">
                   <p className="text-base font-inter">Total a pagar</p>
-                  {/* <Button
-                    onClick={async () => {
-                      console.log('Ir a la tabla')
-                    }}
-                    variant={'outline'}
-                    className="rounded-lg  px-6 py-4 text-xl font-medium text-[#111] shadow-lg"
-                  >
-                    Total: ${totalTest}
-                  </Button> */}
-                  <CreateOrden totalPrice={totalTest} customerName={clientObjectInfo!.name} />
+                  <CreateOrden
+                    totalPrice={totalTest}
+                    customerName={clientObjectInfo!.name}
+                    idCustomers={clientObjectInfo!.idCustomer!}
+                  />
                 </div>
               </div>
             </CardContent>

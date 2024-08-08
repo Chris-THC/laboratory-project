@@ -13,11 +13,17 @@ import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { AddOrderTestIn, MoreInfoAddOrder } from '@renderer/interfaces/orders/OrderTest'
+import { useAddNewOrder } from '@renderer/hooks/res/CashRegister/UserCashRegister'
+import {
+  AddOrderTestIn,
+  MoreInfoAddOrder,
+  OrderInterface
+} from '@renderer/interfaces/orders/OrderTest'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { FormSchemaPay } from './FormSchemaPay'
+import { useNavigate } from 'react-router-dom'
 
 interface PayReqData {
   ordendata: AddOrderTestIn
@@ -26,6 +32,9 @@ interface PayReqData {
 }
 
 export const PayCard: React.FC<PayReqData> = ({ ordendata, moreDataByOrder, nameCustomer }) => {
+  const createOrder = useAddNewOrder()
+  const navigateTo = useNavigate()
+
   const form = useForm<z.infer<typeof FormSchemaPay>>({
     resolver: zodResolver(FormSchemaPay),
     defaultValues: ordendata,
@@ -33,8 +42,12 @@ export const PayCard: React.FC<PayReqData> = ({ ordendata, moreDataByOrder, name
   })
 
   const onSubmit = (data: z.infer<typeof FormSchemaPay>): void => {
-    console.info(moreDataByOrder)
-    console.info(data)
+    const orderInfo: OrderInterface = {
+      ...data,
+      ...moreDataByOrder
+    }
+    createOrder.mutate({ orderBody: orderInfo })
+    navigateTo('/caja')
   }
 
   return (

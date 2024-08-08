@@ -1,10 +1,20 @@
-export interface OrderTestIn {
-  idOrders: number
-  idCustomers: number
-  customer?: Customer
+export interface AddOrderTestIn {
+  orderTotal: number
+  orderDeposit: number
+  orderAmountPaid: number
+  orderChange: number
+  orderNotes: string
+}
+
+export interface MoreInfoAddOrder {
   idUsers: number
-  user?: User
-  orderTest: any
+  idCustomers: number
+  orderTimeStamp: string
+}
+
+export interface SendOrderInfo {
+  idCustomers: number
+  idUsers: number
   orderTimeStamp: string
   orderAmountPaid: number
   orderChange: number
@@ -13,35 +23,17 @@ export interface OrderTestIn {
   orderNotes: string
 }
 
-interface Customer {
-  idCustomer: number
-  name: string
-  age: number
-  phoneNumber: string
-  address: string
-  dateOfBirth: string
-  doctorName: string
-}
-
-interface User {
-  idUser: number
-  name: string
-  age: number
-  phoneNumber: string
-  address: string
-  role: string
-}
-
-export interface AddOrderTestIn {
-  orderTotal: string
-  orderDeposit: string
-  orderAmountPaid: string
-  orderChange: string
-  orderNotes: string
-}
-
-export interface MoreInfoAddOrder {
-  idUsers: number
+export interface OrderInterface {
+  idOrders?: number
   idCustomers: number
+  customer?: any
+  idUsers: number
+  user?: any
+  orderTest?: any
   orderTimeStamp: string
+  orderAmountPaid: number
+  orderChange: number
+  orderDeposit: number
+  orderTotal: number
+  orderNotes: string
 }

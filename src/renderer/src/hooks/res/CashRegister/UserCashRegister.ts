@@ -1,7 +1,12 @@
 import { CashRegisterI } from '@renderer/interfaces/CashRegisterInterface/CashRegisterInterface'
-import { ResultsInterface } from '@renderer/interfaces/results/results'
-import { UseQueryResult, useQuery } from '@tanstack/react-query'
+import { SendOrderInfo } from '@renderer/interfaces/orders/OrderTest'
+import { UseMutationResult, UseQueryResult, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 import apiConection from '../../../api/ConnectionAPI'
+
+const notifyCreatedSucces = (): string => {
+  return toast.success('Ordern de pago creada exitosamente!')
+}
 
 //Here we get all users list data
 const getOrderList = async (): Promise<CashRegisterI[]> => {
@@ -16,29 +21,24 @@ export const useGetOrderList = (): UseQueryResult<CashRegisterI[]> => {
   })
 }
 
-// const addResultByCustomer = async (resultsBody: ResultsInterface): Promise<ResultsInterface> => {
-//   const { data } = await apiConection.post<ResultsInterface>('/result', resultsBody)
-//   return data
-// }
+const AddOrderFn = async (orderBody: SendOrderInfo): Promise<SendOrderInfo> => {
+  const { data } = await apiConection.post<SendOrderInfo>(`/order`, orderBody)
+  return data
+}
 
-// export const useAddResults = (): UseMutationResult<ResultsInterface, Error, ResultsInterface, unknown> => {
-//     const queryClient = useQueryClient()
-
-//     return useMutation({
-//       mutationFn: addResultByCustomer,
-//       onSuccess: () => {
-//         queryClient.invalidateQueries({ queryKey: ['testByIdCustomer'] })
-//         // notifyCreatedSucces()
-//         console.log("Se agrego un test");
-
-//       },
-//       onError: (err:Error) => {
-//         // toast.error('No se pudo crear al usuario')
-//         console.log(`Hay un error: ${err}`);
-
-//       }
-//     })
-//   }
+export const useAddNewOrder = (): UseMutationResult<SendOrderInfo, Error, { orderBody: SendOrderInfo }> => {
+  const queryClient = useQueryClient();
+  return useMutation<SendOrderInfo, Error, {orderBody: SendOrderInfo }>({
+    mutationFn: ({ orderBody }) => AddOrderFn(orderBody),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['orderInfoByApi'] });
+      notifyCreatedSucces()
+    },
+    onError: () => {
+      toast.error('No se pudo crear la orden')
+    }
+  });
+};
 
 //TODO: Delete costumer test
 // const deleteResultByIdTestAndIdCustomer = async (idTest: number, idCustomer:number): Promise<HttpStatusCode> => {
@@ -59,25 +59,3 @@ export const useGetOrderList = (): UseQueryResult<CashRegisterI[]> => {
 //     }
 //   })
 // }
-
-// TODO: In this sectio is to get Results info by idTest and IdCustomer
-
-export const getResultsByIdTestAndIdCustomer = async (
-  idTest: number | undefined | null,
-  idCustomer: number | undefined | null
-): Promise<ResultsInterface[]> => {
-  const { data } = await apiConection.get<ResultsInterface[]>(
-    `/result/customer/${idTest}/${idCustomer}`
-  )
-  return data
-}
-
-export const useGetResultsByIdTestAndIdCustomer = (
-  idTest: number | undefined | null,
-  idCustomer: number | undefined | null
-): UseQueryResult<ResultsInterface[]> => {
-  return useQuery({
-    queryKey: ['getResultsByIdTestnIdCustomer'],
-    queryFn: () => getResultsByIdTestAndIdCustomer(idTest, idCustomer)
-  })
-}

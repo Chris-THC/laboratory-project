@@ -1,19 +1,35 @@
+// import { z } from 'zod'
+
+// export const FormSchemaPay = z.object({
+//   orderAmountPaid: z.number({ message: 'Este campo solo puede contener números' }),
+//   orderChange: z.number({ message: 'Este campo solo puede contener números' }),
+//   orderDeposit: z.number({ message: 'Este campo solo puede contener números' }),
+//   orderTotal: z.number({ message: 'Este campo solo puede contener números' }),
+//   orderNotes: z.string({
+//     message: 'Notas requeridas'
+//   })
+// })
+
 import { z } from 'zod'
 
 export const FormSchemaPay = z.object({
-  orderAmountPaid: z.string().regex(/^[0-9]+$/, {
-    message: 'Este campo solo puede contener números'
-  }),
-  orderChange: z.string().regex(/^[0-9]+$/, {
-    message: 'Este campo solo puede contener números'
-  }),
-  orderDeposit: z.string().regex(/^[0-9]+$/, {
-    message: 'Este campo solo puede contener números'
-  }),
-  orderTotal: z.string().regex(/^[0-9]+$/, {
-    message: 'Este campo solo puede contener números'
-  }),
+  orderAmountPaid: z.preprocess(
+    (val) => Number(val),
+    z.number({ message: 'Este campo solo puede contener números' })
+  ),
+  orderChange: z.preprocess(
+    (val) => Number(val),
+    z.number({ message: 'Este campo solo puede contener números' })
+  ),
+  orderDeposit: z.preprocess(
+    (val) => Number(val),
+    z.number({ message: 'Este campo solo puede contener números' })
+  ),
+  orderTotal: z.preprocess(
+    (val) => Number(val),
+    z.number({ message: 'Este campo solo puede contener números' })
+  ),
   orderNotes: z.string({
-    message: 'La direccion debe de tener al menos 2 caracteres'
+    message: 'Notas requeridas'
   })
 })

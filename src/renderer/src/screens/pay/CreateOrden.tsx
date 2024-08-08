@@ -7,22 +7,27 @@ import { getDateToday } from '@renderer/utils/dates/GetDate'
 interface CreateOrdenProps {
   totalPrice: number
   customerName: string
+  idCustomers: number
 }
 
-const dataTest: AddOrderTestIn = {
-  orderTotal: '1500',
-  orderDeposit: '1000',
-  orderAmountPaid: '500',
-  orderChange: '0',
-  orderNotes: ''
-}
-const morDataInfo: MoreInfoAddOrder = {
-  idUsers: 1,
-  idCustomers: 1,
-  orderTimeStamp: getDateToday()
-}
+export const CreateOrden: React.FC<CreateOrdenProps> = ({
+  totalPrice,
+  customerName,
+  idCustomers
+}) => {
+  const dataTest: AddOrderTestIn = {
+    orderTotal: totalPrice,
+    orderDeposit: 0,
+    orderAmountPaid: 0,
+    orderChange: 0,
+    orderNotes: ''
+  }
+  const morDataInfo: MoreInfoAddOrder = {
+    idUsers: 1,
+    idCustomers: idCustomers,
+    orderTimeStamp: getDateToday()
+  }
 
-export const CreateOrden: React.FC<CreateOrdenProps> = ({ totalPrice, customerName }) => {
   return (
     <div>
       <Dialog>
