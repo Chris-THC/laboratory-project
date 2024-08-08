@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
@@ -6,8 +5,6 @@ import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
     const navigateTo = useNavigate();
 
     const {
@@ -26,7 +23,7 @@ export const Login = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password }),
+        // body: JSON.stringify({ username, password }),
       });
 
       if (response.ok) {
@@ -59,7 +56,7 @@ export const Login = () => {
             id="nombre" 
             type="text" 
             placeholder="nombre" 
-            {...register("email", {
+            {...register("nombre", {
                 required: true
             })}
         />
