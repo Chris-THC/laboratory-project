@@ -1,11 +1,14 @@
-import { useForm } from "react-hook-form";
+import { useForm } from "react-hook-form"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"
+import { LoginAuthInterface } from '@renderer/interfaces/auth/loginAuth'
+import { postLogin } from '@renderer/hooks/res/loginRes/useLoginRes';
 
-export const Login = () => {
+export const Login: React.FC = () => {
     const navigateTo = useNavigate();
+    const login = postLogin();
 
     const {
       register,
@@ -24,7 +27,8 @@ export const Login = () => {
           'Content-Type': 'application/json',
         },
         // body: JSON.stringify({ username, password }),
-      });
+      }
+    );
 
       if (response.ok) {
         const data = await response.json();
