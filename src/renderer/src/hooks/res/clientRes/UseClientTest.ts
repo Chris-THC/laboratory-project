@@ -1,8 +1,8 @@
-import { CostumerTestAddInterface, CostumerTestInterface } from '@renderer/interfaces/clients/costumersTest'
+import { CostumerTestAddInterface, CostumerTestInterface, PriceTestI } from '@renderer/interfaces/clients/costumersTest'
 import { UseMutationResult, UseQueryResult, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import apiConection from '../../../api/ConnectionAPI'
 import { HttpStatusCode } from 'axios'
 import toast from 'react-hot-toast'
+import apiConection from '../../../api/ConnectionAPI'
 
 
 const notifyCreatedSucces = (): string => {
@@ -51,7 +51,7 @@ export const useAddCustomerTest = (): UseMutationResult<CostumerTestAddInterface
       notifyCreatedSucces()
     },
     onError: () => {
-      toast.error('No se pudo crear al usuario')
+      toast.error('No se pudo agregar el examen')
     }
   })
 }
@@ -98,3 +98,23 @@ export const useUpdateTestCustomers = (): UseMutationResult<CostumerTestAddInter
     }
   })
 }
+
+// * This section is to update the price by test
+const updatePriceTest = async (idCustomerTest:number, testPrice: PriceTestI): Promise<PriceTestI> => {
+  const { data } = await apiConection.patch<PriceTestI>(`/customertest/${idCustomerTest}`, testPrice);
+  return data;
+};
+
+export const useUpdatePriceTest = (): UseMutationResult<PriceTestI, Error, { idCustomerTest: number, testPrice: PriceTestI }> => {
+  const queryClient = useQueryClient();
+  return useMutation<PriceTestI, Error, { idCustomerTest: number, testPrice: PriceTestI }>({
+    mutationFn: ({ idCustomerTest, testPrice }) => updatePriceTest(idCustomerTest, testPrice),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['contentResults'] });
+      console.log("Se ha actualizado..!");
+    },
+    onError: () => {
+      console.log("No se pudo actualizar el campo..!");
+    }
+  });
+};
