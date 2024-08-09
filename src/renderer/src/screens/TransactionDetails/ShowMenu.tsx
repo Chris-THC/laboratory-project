@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { AlignLeft, FileSliders, Trash2 } from 'lucide-react'
 import React from 'react'
-import { PayCard } from '../pay/PayCard'
+import { PayCard } from '../pay/components/PayCard'
 
 export const ShowMenu: React.FC = () => {
   return (

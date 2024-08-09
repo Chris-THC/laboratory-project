@@ -22,7 +22,7 @@ import {
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { FormSchemaPay } from './FormSchemaPay'
+import { FormSchemaPay } from '../schema/FormSchemaPay'
 import { useNavigate } from 'react-router-dom'
 
 interface PayReqData {

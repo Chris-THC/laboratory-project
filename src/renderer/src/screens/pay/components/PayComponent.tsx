@@ -53,7 +53,7 @@ export const PayComponent: React.FC = () => {
   const totalTest = prices?.reduce((acc, price) => acc + price, 0) ?? 0
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-6 md:p-8">
+    <div className="w-full max-w-5xl mx-auto p-6 md:p-8">
       {!testArrayList || testArrayList.length === 0 ? (
         <div>
           <p>No hay datos</p>
@@ -63,6 +63,12 @@ export const PayComponent: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle className="font-inter text-xl">Resumen de pago</CardTitle>
+              <div>
+                <p className="text-muted-foreground font-inter">
+                  Completa el pago de los exámenes registrados en tu cuenta.
+                </p>
+              </div>
+              <Separator />
             </CardHeader>
             <CardContent>
               <Table>
