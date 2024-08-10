@@ -1,11 +1,16 @@
 import { CashRegisterI } from '@renderer/interfaces/CashRegisterInterface/CashRegisterInterface'
 import { SendOrderInfo } from '@renderer/interfaces/orders/OrderTest'
 import { UseMutationResult, UseQueryResult, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { HttpStatusCode } from 'axios'
 import toast from 'react-hot-toast'
 import apiConection from '../../../api/ConnectionAPI'
 
 const notifyCreatedSucces = (): string => {
   return toast.success('Ordern de pago creada exitosamente!')
+}
+
+const notifyDeleteSucces = (): string => {
+  return toast.error('Cliente eliminado')
 }
 
 //Here we get all users list data
@@ -40,22 +45,22 @@ export const useAddNewOrder = (): UseMutationResult<SendOrderInfo, Error, { orde
   });
 };
 
-//TODO: Delete costumer test
-// const deleteResultByIdTestAndIdCustomer = async (idTest: number, idCustomer:number): Promise<HttpStatusCode> => {
-//   const { data } = await apiConection.delete<HttpStatusCode>(`/result/test/delete/${idTest}/${idCustomer}`)
-//   return data
-// }
+//TODO: Delete order byId
+const deleteOrder = async (idOrder: number): Promise<HttpStatusCode> => {
+  const { data } = await apiConection.delete<HttpStatusCode>(`/order/${idOrder}`)
+  return data
+}
 
-// export const useDeleteResult = (): UseMutationResult<HttpStatusCode, Error, { idTest: number, idCustomer: number }, unknown> =>{
-//   const queryClient = useQueryClient()
-//   return useMutation({
-//     mutationFn: ({ idTest, idCustomer }) => deleteResultByIdTestAndIdCustomer(idTest, idCustomer),
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: ['testByIdCustomer'] })
-//       console.log(`Se ha eliminado un resultado`);
-//     },
-//     onError: () => {
-//       console.log(`Ha ocurrido un error`);
-//     }
-//   })
-// }
+export const useDeleteOrderById = (): UseMutationResult<HttpStatusCode, Error, { idOrder: number}, unknown> =>{
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ idOrder }) => deleteOrder(idOrder),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['orderInfoByApi'] })
+      notifyDeleteSucces()
+    },
+    onError: () => {
+      toast.error('No se pudo eliminar la orden')
+    }
+  })
+}
