@@ -7,7 +7,7 @@ const strValue: string = jwtToken!;
 const api = axios.create({
   baseURL: urlAPI,
   headers: {    
-    Authorization: `Bearer ${strValue}`, 
+    ...(strValue && { Authorization: `Bearer ${strValue}` }),
     'Content-Type': 'application/json'
   }
 })

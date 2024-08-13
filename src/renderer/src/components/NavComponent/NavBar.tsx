@@ -46,7 +46,7 @@ export const NavBar: React.FC = () => {
             onClick={() => {
               setIsClientCreate(true)
               setClientObjectInfo(null)
-              navigateTo('/users/form')
+              navigateTo('/customer/form')
             }}
             variant={'ghost'}
             className="mx-2 text-white font-inter"
@@ -55,6 +55,16 @@ export const NavBar: React.FC = () => {
           </Button>
         </div>
       <div className="flex flex-col justify-center align-middle">
+      <Button
+            onClick={() => {
+              navigateTo('/customer')
+            }}
+            variant={'ghost'}
+            className="mx-2 text-white font-inter"
+          >
+            Clientes
+          </Button>
+         {/*
           <ul className="flex space-x-5 justify-center items-center">
             <li>
               <Menubar className="bg-inherit border-none">
@@ -86,7 +96,7 @@ export const NavBar: React.FC = () => {
                 </MenubarMenu>
               </Menubar>
             </li>
-            {/* <li>
+             <li>
               <Menubar className="bg-inherit border-none">
                 <MenubarMenu>
                   <MenubarTrigger className="text-white font-semibold text-sm bg-transparent border-none font-inter cursor-pointer">
@@ -97,8 +107,8 @@ export const NavBar: React.FC = () => {
                   </MenubarContent>
                 </MenubarMenu>
               </Menubar>
-            </li> */}
-          </ul>
+            </li> 
+          </ul>*/}
         </div>
 
         <div className="flex flex-col justify-center align-middle">
