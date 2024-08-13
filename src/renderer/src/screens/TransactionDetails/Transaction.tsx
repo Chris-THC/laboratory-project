@@ -74,7 +74,7 @@ export const TransactionFC: React.FC = () => {
       header: 'Notas',
       cell: ({ row }) => {
         return row.getValue('orderNotes') === null ? (
-          <div>{''}</div>
+          <div>{'******'}</div>
         ) : (
           <div className="capitalize">{row.getValue('orderNotes')}</div>
         )
@@ -88,8 +88,7 @@ export const TransactionFC: React.FC = () => {
     {
       header: 'Acciones',
       cell: ({ row }): JSX.Element => {
-        console.log(row)
-        return <ShowMenu />
+        return <ShowMenu row={row} />
       }
     }
   ]

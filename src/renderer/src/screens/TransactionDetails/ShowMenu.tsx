@@ -1,12 +1,5 @@
 import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger
-} from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,11 +8,25 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
+import { useDeleteOrderById } from '@renderer/hooks/res/CashRegister/UserCashRegister'
+import { CashRegisterI } from '@renderer/interfaces/CashRegisterInterface/CashRegisterInterface'
+import { Row } from '@tanstack/react-table'
 import { AlignLeft, FileSliders, Trash2 } from 'lucide-react'
 import React from 'react'
-import { PayCard } from '../pay/components/PayCard'
+import { DelateTransaction } from './DelateTransaction'
 
-export const ShowMenu: React.FC = () => {
+interface ShowMenuProps {
+  row: Row<CashRegisterI>
+}
+
+export const ShowMenu: React.FC<ShowMenuProps> = ({ row }) => {
+  const deleteOrder = useDeleteOrderById()
+
+  // Funciones para eliminar la orden
+  const handlerDelate = (): void => {
+    deleteOrder.mutate({ idOrder: row.original.idOrders })
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -40,9 +47,7 @@ export const ShowMenu: React.FC = () => {
               Editar
             </DropdownMenuRadioItem>
           </DialogTrigger>
-          <DialogContent className="w-[90rem] h-[30rem] max-w-[70%] max-h-[90%] m-5">
-            <PayCard />
-          </DialogContent>
+          <DialogContent className="w-[90rem] h-[30rem] max-w-[70%] max-h-[90%] m-5"></DialogContent>
         </Dialog>
         <DropdownMenuSeparator />
         <Dialog>
@@ -56,15 +61,7 @@ export const ShowMenu: React.FC = () => {
               Eliminar
             </DropdownMenuRadioItem>
           </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Are you sure absolutely sure?</DialogTitle>
-              <DialogDescription>
-                This action cannot be undone. This will permanently delete your account and remove
-                your data from our servers.
-              </DialogDescription>
-            </DialogHeader>
-          </DialogContent>
+          <DelateTransaction handlerDelate={handlerDelate} />
         </Dialog>
       </DropdownMenuContent>
     </DropdownMenu>
