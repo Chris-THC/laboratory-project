@@ -18,6 +18,8 @@ export const NavBar: React.FC = () => {
   const navigateTo = useNavigate()
   const { setClientObjectInfo, setIsClientCreate } = useClientIdSelected()
 
+  if (localStorage.getItem('authToken')) {}
+
   return (
     <div className="bg-[#005da5] h-16 flex justify-between px-5">
       <div className="flex flex-row justify-between align-middle">
@@ -35,13 +37,16 @@ export const NavBar: React.FC = () => {
           </h1>
         </div>
       </div>
+
+      {localStorage.getItem('authToken')?(
       <div className="flex flex-row justify-center align-middle mr-1">
+        
         <div className="flex flex-col justify-center align-middle">
           <Button
             onClick={() => {
               setIsClientCreate(true)
               setClientObjectInfo(null)
-              navigateTo('/')
+              navigateTo('/users/form')
             }}
             variant={'ghost'}
             className="mx-2 text-white font-inter"
@@ -49,8 +54,7 @@ export const NavBar: React.FC = () => {
             Inicio
           </Button>
         </div>
-
-        <div className="flex flex-col justify-center align-middle">
+      <div className="flex flex-col justify-center align-middle">
           <ul className="flex space-x-5 justify-center items-center">
             <li>
               <Menubar className="bg-inherit border-none">
@@ -109,11 +113,26 @@ export const NavBar: React.FC = () => {
             Caja
           </Button>
         </div>
-            
         <div className="flex flex-col justify-center align-middle mx-5">
           <UserDropMenu />
         </div>
       </div>
+       ):(
+        <div className="flex flex-col justify-center align-middle">
+        <Button
+          onClick={() => {
+            setIsClientCreate(false)
+            setClientObjectInfo(null)
+            navigateTo('/')
+          }}
+          variant={'ghost'}
+          className="mx-2 text-white font-inter"
+        >
+          Iniciar Sesión
+        </Button>
+      </div> 
+       )}
+
     </div>
   )
 }

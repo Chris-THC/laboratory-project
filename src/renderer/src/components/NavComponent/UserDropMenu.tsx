@@ -1,6 +1,6 @@
 import { LogOut, User } from 'lucide-react'
 
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 import {
   DropdownMenu,
@@ -30,7 +30,7 @@ export const UserDropMenu: React.FC = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 mx-2">
         <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
-
+{/*
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
@@ -40,7 +40,7 @@ export const UserDropMenu: React.FC = () => {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-
+*/}
         <DropdownMenuGroup>
           <DropdownMenuItem
             onClick={() => {
@@ -54,7 +54,12 @@ export const UserDropMenu: React.FC = () => {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => {
+            localStorage.removeItem('authToken');
+            navigateTo('/')
+          }}
+        >
           <LogOut className="mr-2 h-4 w-4" />
           <span>Cerrar Sesión</span>
         </DropdownMenuItem>
