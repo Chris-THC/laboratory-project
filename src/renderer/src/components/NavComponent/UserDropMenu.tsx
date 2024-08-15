@@ -1,6 +1,7 @@
 import { LogOut, User } from 'lucide-react'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { useToken } from '@renderer/context/JWTContext/JWTContext';
 
 import {
   DropdownMenu,
@@ -19,6 +20,7 @@ import { useNavigate } from 'react-router-dom'
 export const UserDropMenu: React.FC = () => {
   const navigateTo = useNavigate()
   const { setIsCreate } = useUserIdSelected()
+  const { setToken } = useToken();
 
   return (
     <DropdownMenu>
@@ -56,7 +58,8 @@ export const UserDropMenu: React.FC = () => {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={() => {
-            localStorage.removeItem('authToken');
+            //localStorage.removeItem('authToken');
+            setToken('');
             navigateTo('/')
           }}
         >
