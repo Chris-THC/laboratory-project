@@ -12,3 +12,5 @@ export const useToken = create <JWTContext>((set) =>({
             token:token
         }))
 }))
+
+export const getToken = () => useToken.getState().token;
