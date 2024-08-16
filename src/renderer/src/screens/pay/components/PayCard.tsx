@@ -19,11 +19,11 @@ import {
   MoreInfoAddOrder,
   OrderInterface
 } from '@renderer/interfaces/orders/OrderTest'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 import { FormSchemaPay } from '../schema/FormSchemaPay'
-import { useNavigate } from 'react-router-dom'
 
 interface PayReqData {
   ordendata: AddOrderTestIn
@@ -40,6 +40,22 @@ export const PayCard: React.FC<PayReqData> = ({ ordendata, moreDataByOrder, name
     defaultValues: ordendata,
     mode: 'all'
   })
+
+  const { watch, setValue } = form
+
+  const orderTotal = Number(watch('orderTotal'))
+  const orderAmountPaid = Number(watch('orderAmountPaid'))
+  const orderDeposit = Number(watch('orderDeposit'))
+
+  useEffect(() => {
+    let orderChange = 0
+
+    if (orderAmountPaid > orderDeposit) {
+      orderChange = orderAmountPaid - orderDeposit
+    }
+
+    setValue('orderChange', orderChange, { shouldValidate: true, shouldDirty: true })
+  }, [orderTotal, orderAmountPaid, orderDeposit, setValue])
 
   const onSubmit = (data: z.infer<typeof FormSchemaPay>): void => {
     const orderInfo: OrderInterface = {
@@ -69,7 +85,7 @@ export const PayCard: React.FC<PayReqData> = ({ ordendata, moreDataByOrder, name
                       <FormItem>
                         <FormLabel>Total de la orden</FormLabel>
                         <FormControl>
-                          <Input type="text" placeholder="Total" {...field} />
+                          <Input type="number" placeholder="Total" {...field} />
                         </FormControl>
                         {fieldState.error && (
                           <FormDescription className="text-red-500">
@@ -89,7 +105,7 @@ export const PayCard: React.FC<PayReqData> = ({ ordendata, moreDataByOrder, name
                       <FormItem>
                         <FormLabel>Dinero Recibido</FormLabel>
                         <FormControl>
-                          <Input type="text" placeholder="Dinero Recibido" {...field} />
+                          <Input type="number" placeholder="Dinero Recibido" {...field} />
                         </FormControl>
                         {fieldState.error && (
                           <FormDescription className="text-red-500">
@@ -109,7 +125,7 @@ export const PayCard: React.FC<PayReqData> = ({ ordendata, moreDataByOrder, name
                       <FormItem>
                         <FormLabel>Depósito</FormLabel>
                         <FormControl>
-                          <Input type="text" placeholder="Depósito" {...field} />
+                          <Input type="number" placeholder="Depósito" {...field} />
                         </FormControl>
                         {fieldState.error && (
                           <FormDescription className="text-red-500">
@@ -120,6 +136,7 @@ export const PayCard: React.FC<PayReqData> = ({ ordendata, moreDataByOrder, name
                     )}
                   />
                 </div>
+
                 <div className="space-y-1">
                   <FormField
                     control={form.control}
@@ -128,7 +145,7 @@ export const PayCard: React.FC<PayReqData> = ({ ordendata, moreDataByOrder, name
                       <FormItem>
                         <FormLabel>Cambio</FormLabel>
                         <FormControl>
-                          <Input type="text" placeholder="Cambio" {...field} />
+                          <Input type="number" placeholder="Cambio" {...field} readOnly />
                         </FormControl>
                         {fieldState.error && (
                           <FormDescription className="text-red-500">
@@ -172,15 +189,7 @@ export const PayCard: React.FC<PayReqData> = ({ ordendata, moreDataByOrder, name
               </div>
               <div className="mx-3">
                 <DialogClose asChild>
-                  <Button
-                    variant={'destructive'}
-                    type="button"
-                    className="bg-[#e32940]"
-                    onClick={() => {
-                      // setClientObjectInfo(null)
-                      // navigateTo('/customer')
-                    }}
-                  >
+                  <Button variant={'destructive'} type="button" className="bg-[#e32940]">
                     Cancelar
                   </Button>
                 </DialogClose>
