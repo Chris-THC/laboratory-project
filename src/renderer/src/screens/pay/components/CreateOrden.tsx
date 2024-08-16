@@ -15,6 +15,7 @@ export const CreateOrden: React.FC<CreateOrdenProps> = ({
   customerName,
   idCustomers
 }) => {
+
   const dataTest: AddOrderTestIn = {
     orderTotal: totalPrice,
     orderDeposit: 0,
@@ -35,7 +36,13 @@ export const CreateOrden: React.FC<CreateOrdenProps> = ({
           <p>{`$${totalPrice}`}</p>
         </DialogTrigger>
         <DialogContent className="w-[90rem] h-[26rem] max-w-[65%] max-h-[90%] m-10 flex justify-center align-middle content-center">
-          <PayCard ordendata={dataTest} moreDataByOrder={morDataInfo} nameCustomer={customerName} />
+          <PayCard
+            ordendata={dataTest}
+            moreDataByOrder={morDataInfo}
+            nameCustomer={customerName}
+            txtButon="Agregar"
+            orderId={0}
+          />
         </DialogContent>
       </Dialog>
     </div>

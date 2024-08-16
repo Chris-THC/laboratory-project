@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useAddNewOrder } from '@renderer/hooks/res/CashRegister/UserCashRegister'
+import { useAddNewOrder, useUpdateOrder } from '@renderer/hooks/res/CashRegister/UserCashRegister'
 import {
   AddOrderTestIn,
   MoreInfoAddOrder,
@@ -29,10 +29,19 @@ interface PayReqData {
   ordendata: AddOrderTestIn
   moreDataByOrder: MoreInfoAddOrder
   nameCustomer: string
+  txtButon: string
+  orderId:number
 }
 
-export const PayCard: React.FC<PayReqData> = ({ ordendata, moreDataByOrder, nameCustomer }) => {
+export const PayCard: React.FC<PayReqData> = ({
+  ordendata,
+  moreDataByOrder,
+  nameCustomer,
+  txtButon,
+  orderId
+}) => {
   const createOrder = useAddNewOrder()
+  const updateOrder = useUpdateOrder()
   const navigateTo = useNavigate()
 
   const form = useForm<z.infer<typeof FormSchemaPay>>({
@@ -49,7 +58,7 @@ export const PayCard: React.FC<PayReqData> = ({ ordendata, moreDataByOrder, name
 
   useEffect(() => {
     let orderChange = 0
-
+    // The section is to return orderChange
     if (orderAmountPaid > orderDeposit) {
       orderChange = orderAmountPaid - orderDeposit
     }
@@ -62,7 +71,11 @@ export const PayCard: React.FC<PayReqData> = ({ ordendata, moreDataByOrder, name
       ...data,
       ...moreDataByOrder
     }
-    createOrder.mutate({ orderBody: orderInfo })
+    if (txtButon === 'Agregar') {
+      createOrder.mutate({ orderBody: orderInfo })
+    } else if (txtButon === 'Editar') {
+      updateOrder.mutate({ orderInfo: orderInfo, idOrder:orderId})
+    }
     navigateTo('/caja')
   }
 
@@ -85,7 +98,7 @@ export const PayCard: React.FC<PayReqData> = ({ ordendata, moreDataByOrder, name
                       <FormItem>
                         <FormLabel>Total de la orden</FormLabel>
                         <FormControl>
-                          <Input type="number" placeholder="Total" {...field} />
+                          <Input type="text" placeholder="Total" {...field} />
                         </FormControl>
                         {fieldState.error && (
                           <FormDescription className="text-red-500">
@@ -105,7 +118,7 @@ export const PayCard: React.FC<PayReqData> = ({ ordendata, moreDataByOrder, name
                       <FormItem>
                         <FormLabel>Dinero Recibido</FormLabel>
                         <FormControl>
-                          <Input type="number" placeholder="Dinero Recibido" {...field} />
+                          <Input type="text" placeholder="Dinero Recibido" {...field} />
                         </FormControl>
                         {fieldState.error && (
                           <FormDescription className="text-red-500">
@@ -125,7 +138,7 @@ export const PayCard: React.FC<PayReqData> = ({ ordendata, moreDataByOrder, name
                       <FormItem>
                         <FormLabel>Depósito</FormLabel>
                         <FormControl>
-                          <Input type="number" placeholder="Depósito" {...field} />
+                          <Input type="text" placeholder="Depósito" {...field} />
                         </FormControl>
                         {fieldState.error && (
                           <FormDescription className="text-red-500">
@@ -145,7 +158,7 @@ export const PayCard: React.FC<PayReqData> = ({ ordendata, moreDataByOrder, name
                       <FormItem>
                         <FormLabel>Cambio</FormLabel>
                         <FormControl>
-                          <Input type="number" placeholder="Cambio" {...field} readOnly />
+                          <Input type="text" placeholder="Cambio" {...field} readOnly />
                         </FormControl>
                         {fieldState.error && (
                           <FormDescription className="text-red-500">
@@ -183,7 +196,7 @@ export const PayCard: React.FC<PayReqData> = ({ ordendata, moreDataByOrder, name
               <div className="mx-3">
                 <DialogClose asChild>
                   <Button className="bg-[#4472c4]" type="submit">
-                    Agregar
+                    {txtButon}
                   </Button>
                 </DialogClose>
               </div>

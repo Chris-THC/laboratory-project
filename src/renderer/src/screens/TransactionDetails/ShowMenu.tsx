@@ -14,6 +14,8 @@ import { Row } from '@tanstack/react-table'
 import { AlignLeft, FileSliders, Trash2 } from 'lucide-react'
 import React from 'react'
 import { DelateTransaction } from './DelateTransaction'
+import { PayCard } from '../pay/components/PayCard'
+import { MoreInfoAddOrder } from '@renderer/interfaces/orders/OrderTest'
 
 interface ShowMenuProps {
   row: Row<CashRegisterI>
@@ -26,6 +28,13 @@ export const ShowMenu: React.FC<ShowMenuProps> = ({ row }) => {
   const handlerDelate = (): void => {
     deleteOrder.mutate({ idOrder: row.original.idOrders })
   }
+
+  const moreData: MoreInfoAddOrder = {
+    idUsers: 1,
+    idCustomers: row.original.idCustomers,
+    orderTimeStamp: row.original.orderTimeStamp
+  }
+
 
   return (
     <DropdownMenu>
@@ -47,7 +56,15 @@ export const ShowMenu: React.FC<ShowMenuProps> = ({ row }) => {
               Editar
             </DropdownMenuRadioItem>
           </DialogTrigger>
-          <DialogContent className="w-[90rem] h-[30rem] max-w-[70%] max-h-[90%] m-5"></DialogContent>
+          <DialogContent className="w-[90rem] h-[30rem] max-w-[70%] max-h-[90%] m-5">
+          <PayCard
+            orderId={row.original.idOrders}
+            ordendata={row.original}
+            moreDataByOrder={moreData}
+            nameCustomer={row.original.user.name}
+            txtButon="Editar"
+          />
+          </DialogContent>
         </Dialog>
         <DropdownMenuSeparator />
         <Dialog>
