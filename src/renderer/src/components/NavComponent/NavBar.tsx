@@ -13,12 +13,13 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import LogoImage from '../../assets/img/imageLogo1.png'
 import { UserDropMenu } from './UserDropMenu'
+import { getToken } from '@renderer/context/JWTContext/JWTContext';
+
 
 export const NavBar: React.FC = () => {
   const navigateTo = useNavigate()
   const { setClientObjectInfo, setIsClientCreate } = useClientIdSelected()
-
-  if (localStorage.getItem('authToken')) {}
+  const token = getToken();
 
   return (
     <div className="bg-[#005da5] h-16 flex justify-between px-5">
@@ -38,7 +39,7 @@ export const NavBar: React.FC = () => {
         </div>
       </div>
 
-      {localStorage.getItem('authToken')?(
+      {token?(
       <div className="flex flex-row justify-center align-middle mr-1">
         
         <div className="flex flex-col justify-center align-middle">
