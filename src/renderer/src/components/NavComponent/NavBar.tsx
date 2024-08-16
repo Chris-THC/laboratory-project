@@ -1,12 +1,4 @@
 import { Button } from '@/components/ui/button'
-import {
-  Menubar,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarSeparator,
-  MenubarTrigger
-} from '@/components/ui/menubar'
 import { useClientIdSelected } from '@renderer/context/clientContext/clientContext'
 import { DollarSign } from 'lucide-react'
 import React from 'react'
@@ -15,12 +7,11 @@ import LogoImage from '../../assets/img/imageLogo1.png'
 import { UserDropMenu } from './UserDropMenu'
 import { getToken } from '@renderer/context/JWTContext/JWTContext';
 
-
 export const NavBar: React.FC = () => {
   const navigateTo = useNavigate()
   const { setClientObjectInfo, setIsClientCreate } = useClientIdSelected()
   const token = getToken();
-
+  
   return (
     <div className="bg-[#005da5] h-16 flex justify-between px-5">
       <div className="flex flex-row justify-between align-middle">
@@ -56,7 +47,7 @@ export const NavBar: React.FC = () => {
           </Button>
         </div>
       <div className="flex flex-col justify-center align-middle">
-      <Button
+         <Button
             onClick={() => {
               navigateTo('/customer')
             }}
@@ -65,51 +56,6 @@ export const NavBar: React.FC = () => {
           >
             Clientes
           </Button>
-         {/*
-          <ul className="flex space-x-5 justify-center items-center">
-            <li>
-              <Menubar className="bg-inherit border-none">
-                <MenubarMenu>
-                  <MenubarTrigger className="text-white font-semibold text-sm bg-transparent border-none font-inter cursor-pointer">
-                    Clientes
-                  </MenubarTrigger>
-                  <MenubarContent>
-                    <MenubarItem
-                      className="font-inter cursor-pointer"
-                      onClick={() => {
-                        setIsClientCreate(true)
-                        setClientObjectInfo(null)
-                        navigateTo('/customer/form')
-                      }}
-                    >
-                      Nuevo Cliente
-                    </MenubarItem>
-                    <MenubarSeparator />
-                    <MenubarItem
-                      onClick={() => {
-                        navigateTo('/customer')
-                      }}
-                      className="font-inter cursor-pointer	"
-                    >
-                      Lista de Cliente
-                    </MenubarItem>
-                  </MenubarContent>
-                </MenubarMenu>
-              </Menubar>
-            </li>
-             <li>
-              <Menubar className="bg-inherit border-none">
-                <MenubarMenu>
-                  <MenubarTrigger className="text-white font-semibold text-sm bg-transparent border-none font-inter cursor-pointer">
-                    Más Opciones
-                  </MenubarTrigger>
-                  <MenubarContent>
-                    <MenubarItem className="font-inter cursor-pointer	">Caja</MenubarItem>
-                  </MenubarContent>
-                </MenubarMenu>
-              </Menubar>
-            </li> 
-          </ul>*/}
         </div>
 
         <div className="flex flex-col justify-center align-middle">
