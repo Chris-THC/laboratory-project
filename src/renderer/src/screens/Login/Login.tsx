@@ -6,6 +6,7 @@ import { postLogin } from '@renderer/hooks/res/loginRes/useLoginRes'
 import { LoginAuthInterface } from '@renderer/interfaces/auth/loginAuth'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
+import { Toaster } from 'react-hot-toast'
 
 export const Login: React.FC = () => {
   const navigateTo = useNavigate()
@@ -70,6 +71,7 @@ export const Login: React.FC = () => {
           Iniciar Sesión
         </Button>
       </form>
+      <Toaster />
     </div>
   )
 }
