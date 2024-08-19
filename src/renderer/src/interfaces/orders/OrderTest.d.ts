@@ -21,6 +21,7 @@ export interface SendOrderInfo {
   orderDeposit: number
   orderTotal: number
   orderNotes: string
+  orderReminding: number
 }
 
 export interface OrderInterface {

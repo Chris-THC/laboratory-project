@@ -15,7 +15,8 @@ import { AlignLeft, FileSliders, Trash2 } from 'lucide-react'
 import React from 'react'
 import { DelateTransaction } from './DelateTransaction'
 import { PayCard } from '../pay/components/PayCard'
-import { MoreInfoAddOrder } from '@renderer/interfaces/orders/OrderTest'
+import { AddOrderTestIn, MoreInfoAddOrder } from '@renderer/interfaces/orders/OrderTest'
+import { getDateToday } from '@renderer/utils/dates/GetDate'
 
 interface ShowMenuProps {
   row: Row<CashRegisterI>
@@ -29,12 +30,18 @@ export const ShowMenu: React.FC<ShowMenuProps> = ({ row }) => {
     deleteOrder.mutate({ idOrder: row.original.idOrders })
   }
 
+  const dataTest: AddOrderTestIn = {
+    orderTotal: row.original.orderReminding,
+    orderDeposit: 0,
+    orderAmountPaid: 0,
+    orderChange: 0,
+    orderNotes: ''
+  }
   const moreData: MoreInfoAddOrder = {
     idUsers: 1,
     idCustomers: row.original.idCustomers,
-    orderTimeStamp: row.original.orderTimeStamp
+    orderTimeStamp: getDateToday()
   }
-
 
   return (
     <DropdownMenu>
@@ -57,13 +64,12 @@ export const ShowMenu: React.FC<ShowMenuProps> = ({ row }) => {
             </DropdownMenuRadioItem>
           </DialogTrigger>
           <DialogContent className="w-[90rem] h-[30rem] max-w-[70%] max-h-[90%] m-5">
-          <PayCard
-            orderId={row.original.idOrders}
-            ordendata={row.original}
-            moreDataByOrder={moreData}
-            nameCustomer={row.original.user.name}
-            txtButon="Editar"
-          />
+            <PayCard
+              ordenData={dataTest}
+              moreDataByOrder={moreData}
+              nameCustomer={row.original.user.name}
+              txtButon="Editar"
+            />
           </DialogContent>
         </Dialog>
         <DropdownMenuSeparator />

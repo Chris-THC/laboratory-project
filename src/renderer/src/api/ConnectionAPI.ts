@@ -1,7 +1,7 @@
 import axios from 'axios'
 const urlAPI: string = 'http://localhost:8081/lab'
 
-const jwtToken: string = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJEYXZpZCBHdXN0YXZvIExhcmEgVmVsYXpxdWV6IiwiaWRVc2VyIjoxLCJ1c2VyTmFtZSI6IkRhdmlkIEd1c3Rhdm8gTGFyYSBWZWxhenF1ZXoiLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE3MjM4MjM1MDksImV4cCI6MTcyMzg1OTUwOX0.V9Uv4-OGci0hxgfMORN0HLe_vmwQvKnqBp3u3yBKccE'
+const jwtToken: string = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBZG1pbiIsImlkVXNlciI6MSwidXNlck5hbWUiOiJBZG1pbiIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTcyNDA5ODMxOCwiZXhwIjoxNzI0MTM0MzE4fQ.dFYayQ7TVD5zFa9LjncMGhvKv02tbuep45Jv4MhAwKo'
 
 const api = axios.create({
   baseURL: urlAPI,

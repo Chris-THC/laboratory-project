@@ -11,6 +11,7 @@ export interface CashRegisterI {
   orderDeposit: number
   orderTotal: number
   orderNotes: string
+  orderReminding:number
 }
 
 interface Customer {

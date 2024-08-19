@@ -13,40 +13,37 @@ import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useAddNewOrder, useUpdateOrder } from '@renderer/hooks/res/CashRegister/UserCashRegister'
+import { useAddNewOrder } from '@renderer/hooks/res/CashRegister/UserCashRegister'
 import {
   AddOrderTestIn,
   MoreInfoAddOrder,
   OrderInterface
 } from '@renderer/interfaces/orders/OrderTest'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 import { FormSchemaPay } from '../schema/FormSchemaPay'
 
 interface PayReqData {
-  ordendata: AddOrderTestIn
+  ordenData: AddOrderTestIn
   moreDataByOrder: MoreInfoAddOrder
   nameCustomer: string
   txtButon: string
-  orderId:number
 }
 
 export const PayCard: React.FC<PayReqData> = ({
-  ordendata,
+  ordenData,
   moreDataByOrder,
   nameCustomer,
-  txtButon,
-  orderId
+  txtButon
 }) => {
   const createOrder = useAddNewOrder()
-  const updateOrder = useUpdateOrder()
   const navigateTo = useNavigate()
 
   const form = useForm<z.infer<typeof FormSchemaPay>>({
     resolver: zodResolver(FormSchemaPay),
-    defaultValues: ordendata,
+    defaultValues: ordenData,
     mode: 'all'
   })
 
@@ -55,6 +52,7 @@ export const PayCard: React.FC<PayReqData> = ({
   const orderTotal = Number(watch('orderTotal'))
   const orderAmountPaid = Number(watch('orderAmountPaid'))
   const orderDeposit = Number(watch('orderDeposit'))
+  const [orderReminding, setOrderReminding] = useState<number>(0)
 
   useEffect(() => {
     let orderChange = 0
@@ -62,6 +60,7 @@ export const PayCard: React.FC<PayReqData> = ({
     if (orderAmountPaid > orderDeposit) {
       orderChange = orderAmountPaid - orderDeposit
     }
+    setOrderReminding(orderTotal - orderDeposit)
 
     setValue('orderChange', orderChange, { shouldValidate: true, shouldDirty: true })
   }, [orderTotal, orderAmountPaid, orderDeposit, setValue])
@@ -72,9 +71,9 @@ export const PayCard: React.FC<PayReqData> = ({
       ...moreDataByOrder
     }
     if (txtButon === 'Agregar') {
-      createOrder.mutate({ orderBody: orderInfo })
+      createOrder.mutate({ orderBody: { ...orderInfo, orderReminding: orderReminding } })
     } else if (txtButon === 'Editar') {
-      updateOrder.mutate({ orderInfo: orderInfo, idOrder:orderId})
+      createOrder.mutate({ orderBody: { ...orderInfo, orderReminding: orderReminding } })
     }
     navigateTo('/caja')
   }
