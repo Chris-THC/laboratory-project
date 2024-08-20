@@ -60,14 +60,14 @@ export const ShowMenu: React.FC<ShowMenuProps> = ({ row }) => {
               className="text-[#15658d] font-bold px-1 w-full"
             >
               <FileSliders color="#15658d" className="mr-2 h-4 w-4" />
-              Editar
+              Modificar transacción
             </DropdownMenuRadioItem>
           </DialogTrigger>
-          <DialogContent className="w-[90rem] h-[30rem] max-w-[70%] max-h-[90%] m-5">
+          <DialogContent>
             <PayCard
               ordenData={dataTest}
               moreDataByOrder={moreData}
-              nameCustomer={row.original.user.name}
+              nameCustomer={row.original.customer.name}
               txtButon="Editar"
             />
           </DialogContent>
@@ -81,7 +81,7 @@ export const ShowMenu: React.FC<ShowMenuProps> = ({ row }) => {
               className="text-[#c80800] font-bold px-1"
             >
               <Trash2 color="#c80800" className="mr-2 h-4 w-4" />
-              Eliminar
+              Eliminar transacción
             </DropdownMenuRadioItem>
           </DialogTrigger>
           <DelateTransaction handlerDelate={handlerDelate} />

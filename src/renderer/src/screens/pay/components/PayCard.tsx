@@ -53,16 +53,27 @@ export const PayCard: React.FC<PayReqData> = ({
   const orderAmountPaid = Number(watch('orderAmountPaid'))
   const orderDeposit = Number(watch('orderDeposit'))
   const [orderReminding, setOrderReminding] = useState<number>(0)
+  const [changeMoney, setChangeMoney] = useState<number>(0)
 
   useEffect(() => {
     let orderChange = 0
+
     // The section is to return orderChange
     if (orderAmountPaid > orderDeposit) {
       orderChange = orderAmountPaid - orderDeposit
     }
-    setOrderReminding(orderTotal - orderDeposit)
 
-    setValue('orderChange', orderChange, { shouldValidate: true, shouldDirty: true })
+    setChangeMoney(orderChange)
+    const valueTest = orderTotal - orderDeposit
+    setOrderReminding(valueTest)
+
+    const message =
+      valueTest === 0
+        ? `Pagado`
+        : `Quedó a deber $${valueTest}`
+
+    setValue('orderNotes', message, { shouldValidate: true, shouldDirty: true })
+
   }, [orderTotal, orderAmountPaid, orderDeposit, setValue])
 
   const onSubmit = (data: z.infer<typeof FormSchemaPay>): void => {
@@ -79,36 +90,41 @@ export const PayCard: React.FC<PayReqData> = ({
   }
 
   return (
-    <Card className="w-full max-w-4xl">
+    <Card className="">
       <CardHeader>
-        <CardTitle>{`Orden a nombre de ${nameCustomer}`}</CardTitle>
+        <CardTitle className="font-inter font-semibold text-[1.2rem]">{`Orden a nombre de ${nameCustomer}`}</CardTitle>
         <Separator />
       </CardHeader>
       <CardContent>
+        <div className="grid gap-2">
+          <div className="flex items-center justify-between">
+            <div className="text-base font-inter">Total a Pagar</div>
+            <div className="text-base font-inter">{`$${ordenData.orderTotal}`}</div>
+          </div>
+        </div>
+
+        <div className="grid gap-2">
+          <div className="flex items-center justify-between">
+            <div className="text-base font-inter">Depósito</div>
+            <div className="text-base font-inter">{`$${orderDeposit}`}</div>
+          </div>
+        </div>
+
+        <Separator />
+
+        <div className="grid gap-2">
+          <div className="flex items-center justify-between">
+            <div className="text-base font-inter">Resatante</div>
+            <div className="text-base font-inter">{`$${orderReminding}`}</div>
+          </div>
+        </div>
+
+        <Separator className="my-5" />
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="grid gap-4 mt-3">
-              <div className="grid grid-cols-4 gap-4">
-                <div className="space-y-1">
-                  <FormField
-                    control={form.control}
-                    name="orderTotal"
-                    render={({ field, fieldState }) => (
-                      <FormItem>
-                        <FormLabel>Total de la orden</FormLabel>
-                        <FormControl>
-                          <Input type="text" placeholder="Total" {...field} />
-                        </FormControl>
-                        {fieldState.error && (
-                          <FormDescription className="text-red-500">
-                            {fieldState.error.message}
-                          </FormDescription>
-                        )}
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
+            <div className="grid gap-4">
+              <div className="grid grid-cols-1 gap-4">
                 <div className="space-y-1">
                   <FormField
                     control={form.control}
@@ -148,29 +164,9 @@ export const PayCard: React.FC<PayReqData> = ({
                     )}
                   />
                 </div>
-
-                <div className="space-y-1">
-                  <FormField
-                    control={form.control}
-                    name="orderChange"
-                    render={({ field, fieldState }) => (
-                      <FormItem>
-                        <FormLabel>Cambio</FormLabel>
-                        <FormControl>
-                          <Input type="text" placeholder="Cambio" {...field} readOnly />
-                        </FormControl>
-                        {fieldState.error && (
-                          <FormDescription className="text-red-500">
-                            {fieldState.error.message}
-                          </FormDescription>
-                        )}
-                      </FormItem>
-                    )}
-                  />
-                </div>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-1">
                 <FormField
                   control={form.control}
                   name="orderNotes"
@@ -189,9 +185,16 @@ export const PayCard: React.FC<PayReqData> = ({
                   )}
                 />
               </div>
+
+              <div className="flex items-center justify-between">
+                <div className="text-lg font-medium">Cambio</div>
+                <div className="text-lg font-medium">{`$${changeMoney}`}</div>
+              </div>
             </div>
 
-            <div className="flex justify-end gap-2 mt-5">
+            <Separator />
+
+            <div className="flex justify-end gap-1 mt-5">
               <div className="mx-3">
                 <DialogClose asChild>
                   <Button className="bg-[#4472c4]" type="submit">

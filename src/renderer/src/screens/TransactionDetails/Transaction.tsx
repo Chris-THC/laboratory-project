@@ -63,7 +63,7 @@ export const TransactionFC: React.FC = () => {
     },
     {
       accessorKey: 'orderAmountPaid',
-      header: 'Cantidad recibida',
+      header: 'Importe Recibido',
       cell: ({ row }) => <div className="capitalize">{`$${row.getValue('orderAmountPaid')}`}</div>
     },
     {
@@ -79,17 +79,11 @@ export const TransactionFC: React.FC = () => {
     {
       accessorKey: 'orderNotes',
       header: 'Notas',
-      cell: ({ row }) => {
-        return row.getValue('orderNotes') === "" ? (
-          <div>{'******'}</div>
-        ) : (
-          <div className="capitalize">{row.getValue('orderNotes')}</div>
-        )
-      }
+      cell: ({ row }) => <div className="capitalize">{row.getValue('orderNotes')}</div>
     },
     {
       accessorKey: 'orderTimeStamp',
-      header: 'Fecha',
+      header: 'Fecha de transacción',
       cell: ({ row }) => <div className="capitalize">{`${row.getValue('orderTimeStamp')}`}</div>
     },
     {
@@ -192,7 +186,7 @@ export const TransactionFC: React.FC = () => {
                 table.getRowModel().rows.map((row) => (
                   <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className='text-center'>
+                      <TableCell key={cell.id} className="text-center">
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </TableCell>
                     ))}
