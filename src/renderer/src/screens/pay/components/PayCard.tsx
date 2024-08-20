@@ -57,19 +57,23 @@ export const PayCard: React.FC<PayReqData> = ({
 
   useEffect(() => {
     let orderChange = 0
-
     // The section is to return orderChange
     if (orderAmountPaid > orderDeposit) {
       orderChange = orderAmountPaid - orderDeposit
     }
-
     setChangeMoney(orderChange)
-    const valueTest = orderTotal - orderDeposit
-    setOrderReminding(valueTest)
 
-    const message = valueTest === 0 ? `Pagado` : `Quedó a deber $${valueTest}`
-
-    setValue('orderNotes', message, { shouldValidate: true, shouldDirty: true })
+    if (txtButon === 'Agregar') {
+      const changeValue = orderTotal - orderDeposit
+      setOrderReminding(changeValue)
+      const message = changeValue === 0 ? `Pagado` : `Quedó a deber $${changeValue}`
+      setValue('orderNotes', message, { shouldValidate: true, shouldDirty: true })
+    } else if (txtButon === 'Editar') {
+      const changeValue = ordenData.orderReminding - orderDeposit
+      setOrderReminding(changeValue)
+      const message = changeValue === 0 ? `Pagado` : `Quedó a deber $${changeValue}`
+      setValue('orderNotes', message, { shouldValidate: true, shouldDirty: true })
+    }
   }, [orderTotal, orderAmountPaid, orderDeposit, setValue])
 
   const onSubmit = (data: z.infer<typeof FormSchemaPay>): void => {
@@ -79,12 +83,12 @@ export const PayCard: React.FC<PayReqData> = ({
     }
     if (txtButon === 'Agregar') {
       createOrder.mutate({
-        orderBody: { ...orderInfo, orderReminding: changeMoney, orderChange: changeMoney }
+        orderBody: { ...orderInfo, orderReminding: orderReminding, orderChange: changeMoney }
       })
       navigateTo('/caja')
     } else if (txtButon === 'Editar') {
       createOrder.mutate({
-        orderBody: { ...orderInfo, orderReminding: changeMoney, orderChange: changeMoney }
+        orderBody: { ...orderInfo, orderReminding: orderReminding, orderChange: changeMoney }
       })
     }
   }
@@ -99,7 +103,9 @@ export const PayCard: React.FC<PayReqData> = ({
         <div className="grid gap-2">
           <div className="flex items-center justify-between">
             <div className="text-base font-inter">Total a pagar</div>
-            <div className="text-base font-inter">{`$${ordenData.orderTotal}`}</div>
+            <div className="text-base font-inter">
+              {txtButon === 'Agregar' ? `$${ordenData.orderTotal}` : `$${ordenData.orderReminding}`}
+            </div>
           </div>
         </div>
 

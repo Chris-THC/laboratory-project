@@ -31,11 +31,12 @@ export const ShowMenu: React.FC<ShowMenuProps> = ({ row }) => {
   }
 
   const dataTest: AddOrderTestIn = {
-    orderTotal: row.original.orderReminding,
+    orderTotal: row.original.orderTotal,
     orderDeposit: 0,
     orderAmountPaid: 0,
     orderChange: 0,
-    orderNotes: ''
+    orderNotes: '',
+    orderReminding: row.original.orderReminding
   }
   const moreData: MoreInfoAddOrder = {
     idUsers: 1,

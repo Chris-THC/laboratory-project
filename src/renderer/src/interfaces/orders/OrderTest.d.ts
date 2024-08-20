@@ -4,6 +4,7 @@ export interface AddOrderTestIn {
   orderAmountPaid: number
   orderChange: number
   orderNotes: string
+  orderReminding: number
 }
 
 export interface MoreInfoAddOrder {

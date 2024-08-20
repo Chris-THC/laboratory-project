@@ -20,7 +20,8 @@ export const CreateOrden: React.FC<CreateOrdenProps> = ({
     orderDeposit: 0,
     orderAmountPaid: 0,
     orderChange: 0,
-    orderNotes: ''
+    orderNotes: '',
+    orderReminding: 0
   }
   const morDataInfo: MoreInfoAddOrder = {
     idUsers: 1,
