@@ -67,13 +67,9 @@ export const PayCard: React.FC<PayReqData> = ({
     const valueTest = orderTotal - orderDeposit
     setOrderReminding(valueTest)
 
-    const message =
-      valueTest === 0
-        ? `Pagado`
-        : `Quedó a deber $${valueTest}`
+    const message = valueTest === 0 ? `Pagado` : `Quedó a deber $${valueTest}`
 
     setValue('orderNotes', message, { shouldValidate: true, shouldDirty: true })
-
   }, [orderTotal, orderAmountPaid, orderDeposit, setValue])
 
   const onSubmit = (data: z.infer<typeof FormSchemaPay>): void => {
@@ -82,11 +78,15 @@ export const PayCard: React.FC<PayReqData> = ({
       ...moreDataByOrder
     }
     if (txtButon === 'Agregar') {
-      createOrder.mutate({ orderBody: { ...orderInfo, orderReminding: orderReminding } })
+      createOrder.mutate({
+        orderBody: { ...orderInfo, orderReminding: changeMoney, orderChange: changeMoney }
+      })
+      navigateTo('/caja')
     } else if (txtButon === 'Editar') {
-      createOrder.mutate({ orderBody: { ...orderInfo, orderReminding: orderReminding } })
+      createOrder.mutate({
+        orderBody: { ...orderInfo, orderReminding: changeMoney, orderChange: changeMoney }
+      })
     }
-    navigateTo('/caja')
   }
 
   return (
