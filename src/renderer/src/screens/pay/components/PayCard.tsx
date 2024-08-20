@@ -114,7 +114,7 @@ export const PayCard: React.FC<PayReqData> = ({
 
         <div className="grid gap-2">
           <div className="flex items-center justify-between">
-            <div className="text-base font-inter">Resatante</div>
+            <div className="text-base font-inter">Restante</div>
             <div className="text-base font-inter">{`$${orderReminding}`}</div>
           </div>
         </div>
