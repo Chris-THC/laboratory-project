@@ -98,7 +98,7 @@ export const PayCard: React.FC<PayReqData> = ({
       <CardContent>
         <div className="grid gap-2">
           <div className="flex items-center justify-between">
-            <div className="text-base font-inter">Total a Pagar</div>
+            <div className="text-base font-inter">Total a pagar</div>
             <div className="text-base font-inter">{`$${ordenData.orderTotal}`}</div>
           </div>
         </div>
