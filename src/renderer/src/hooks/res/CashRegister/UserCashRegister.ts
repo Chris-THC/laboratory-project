@@ -1,7 +1,27 @@
 import { CashRegisterI } from '@renderer/interfaces/CashRegisterInterface/CashRegisterInterface'
-import { ResultsInterface } from '@renderer/interfaces/results/results'
-import { UseQueryResult, useQuery } from '@tanstack/react-query'
+import { SendOrderInfo } from '@renderer/interfaces/orders/OrderTest'
+import {
+  UseMutationResult,
+  UseQueryResult,
+  useMutation,
+  useQuery,
+  useQueryClient
+} from '@tanstack/react-query'
+import { HttpStatusCode } from 'axios'
+import toast from 'react-hot-toast'
 import apiConection from '../../../api/ConnectionAPI'
+
+const notifyCreatedSucces = (): string => {
+  return toast.success('Ordern de pago creada exitosamente!')
+}
+
+const notifyUpdateSucces = (): string => {
+  return toast.success('Ordern se ha editado exitosamente!')
+}
+
+const notifyDeleteSucces = (): string => {
+  return toast.error('Cliente eliminado')
+}
 
 //Here we get all users list data
 const getOrderList = async (): Promise<CashRegisterI[]> => {
@@ -16,68 +36,62 @@ export const useGetOrderList = (): UseQueryResult<CashRegisterI[]> => {
   })
 }
 
-// const addResultByCustomer = async (resultsBody: ResultsInterface): Promise<ResultsInterface> => {
-//   const { data } = await apiConection.post<ResultsInterface>('/result', resultsBody)
-//   return data
-// }
-
-// export const useAddResults = (): UseMutationResult<ResultsInterface, Error, ResultsInterface, unknown> => {
-//     const queryClient = useQueryClient()
-
-//     return useMutation({
-//       mutationFn: addResultByCustomer,
-//       onSuccess: () => {
-//         queryClient.invalidateQueries({ queryKey: ['testByIdCustomer'] })
-//         // notifyCreatedSucces()
-//         console.log("Se agrego un test");
-
-//       },
-//       onError: (err:Error) => {
-//         // toast.error('No se pudo crear al usuario')
-//         console.log(`Hay un error: ${err}`);
-
-//       }
-//     })
-//   }
-
-//TODO: Delete costumer test
-// const deleteResultByIdTestAndIdCustomer = async (idTest: number, idCustomer:number): Promise<HttpStatusCode> => {
-//   const { data } = await apiConection.delete<HttpStatusCode>(`/result/test/delete/${idTest}/${idCustomer}`)
-//   return data
-// }
-
-// export const useDeleteResult = (): UseMutationResult<HttpStatusCode, Error, { idTest: number, idCustomer: number }, unknown> =>{
-//   const queryClient = useQueryClient()
-//   return useMutation({
-//     mutationFn: ({ idTest, idCustomer }) => deleteResultByIdTestAndIdCustomer(idTest, idCustomer),
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: ['testByIdCustomer'] })
-//       console.log(`Se ha eliminado un resultado`);
-//     },
-//     onError: () => {
-//       console.log(`Ha ocurrido un error`);
-//     }
-//   })
-// }
-
-// TODO: In this sectio is to get Results info by idTest and IdCustomer
-
-export const getResultsByIdTestAndIdCustomer = async (
-  idTest: number | undefined | null,
-  idCustomer: number | undefined | null
-): Promise<ResultsInterface[]> => {
-  const { data } = await apiConection.get<ResultsInterface[]>(
-    `/result/customer/${idTest}/${idCustomer}`
-  )
+const AddOrderFn = async (orderBody: SendOrderInfo): Promise<SendOrderInfo> => {
+  const { data } = await apiConection.post<SendOrderInfo>(`/order`, orderBody)
   return data
 }
 
-export const useGetResultsByIdTestAndIdCustomer = (
-  idTest: number | undefined | null,
-  idCustomer: number | undefined | null
-): UseQueryResult<ResultsInterface[]> => {
-  return useQuery({
-    queryKey: ['getResultsByIdTestnIdCustomer'],
-    queryFn: () => getResultsByIdTestAndIdCustomer(idTest, idCustomer)
+export const useAddNewOrder = (): UseMutationResult<SendOrderInfo, Error, { orderBody: SendOrderInfo }> => {
+  const queryClient = useQueryClient()
+
+  return useMutation<SendOrderInfo, Error, { orderBody: SendOrderInfo }>({
+    mutationFn: ({ orderBody }) => AddOrderFn(orderBody),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['orderInfoByApi'] })
+      notifyCreatedSucces()
+    },
+    onError: () => {
+      toast.error('No se pudo crear la orden')
+    }
+  })
+}
+
+//TODO: Delete order byId
+const deleteOrder = async (idOrder: number): Promise<HttpStatusCode> => {
+  const { data } = await apiConection.delete<HttpStatusCode>(`/order/${idOrder}`)
+  return data
+}
+
+export const useDeleteOrderById = (): UseMutationResult< HttpStatusCode, Error, { idOrder: number }, unknown> => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ idOrder }) => deleteOrder(idOrder),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['orderInfoByApi'] })
+      notifyDeleteSucces()
+    },
+    onError: () => {
+      toast.error('No se pudo eliminar la orden')
+    }
+  })
+}
+
+//TODO: Update user
+const updateUser = async ({orderInfo, idOrder}: { orderInfo: SendOrderInfo, idOrder: number}): Promise<CashRegisterI> => {
+  const { data } = await apiConection.patch<CashRegisterI>(`/order/${idOrder}`, orderInfo)
+  return data
+}
+
+export const useUpdateOrder = (): UseMutationResult<SendOrderInfo, Error,{ orderInfo: SendOrderInfo; idOrder: number },unknown> => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (variables: { orderInfo: SendOrderInfo; idOrder: number }) => updateUser(variables),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['orderInfoByApi'] })
+      notifyUpdateSucces()
+    },
+    onError: () => {
+      toast.error('No se pudo actualizar al usuario')
+    }
   })
 }

@@ -7,13 +7,12 @@ import { useAllTestByIdCustomer } from '@renderer/hooks/res/clientRes/UseClientT
 import { getContentsResultByIdResut } from '@renderer/hooks/res/contentsResultsRes/useContentsResultsRes'
 import { getResultsByIdTestAndIdCustomer } from '@renderer/hooks/res/resultsRes/useResults'
 import { ContentsResultsInterface } from '@renderer/interfaces/contentsResults/contentsResults'
-import { ArrowLeft, FileInput } from 'lucide-react'
+import { ArrowLeft, CircleDollarSign, FileInput } from 'lucide-react'
 import React, { useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { PatientCard } from './PatientCrad'
 import { TestCard, TestNewCard } from './TestCard'
-import { PricesCard } from './PricesCard'
 
 export const TestManagerHome: React.FC = () => {
   const navigate = useNavigate()
@@ -58,6 +57,10 @@ export const TestManagerHome: React.FC = () => {
     }
   }
 
+  const handelGoPay = (): void => {
+    navigate('/pay')
+  }
+
   return (
     <div className="bg-white text-gray-900 mx-8 mt-4">
       <div className="mb-2">
@@ -79,14 +82,25 @@ export const TestManagerHome: React.FC = () => {
         <CardHeader>
           <div className="flex flex-row justify-between  align-middle">
             <CardTitle className="py-2">Exámenes Registrados</CardTitle>
-            <Button
-              onClick={handelgeneretePDF}
-              className="font-inter px-1 bg-[#0074cc]"
-              variant={'default'}
-            >
-              <FileInput className="mr-2" />
-              Generar PDF
-            </Button>
+            <div className="space-x-4">
+              <Button
+                onClick={handelGoPay}
+                className="font-inter px-1"
+                variant={'outline'}
+              >
+                <CircleDollarSign className="mr-2" />
+                Registrar Orden
+              </Button>
+
+              <Button
+                onClick={handelgeneretePDF}
+                className="font-inter px-1 bg-[#0074cc]"
+                variant={'default'}
+              >
+                <FileInput className="mr-2" />
+                Generar PDF
+              </Button>
+            </div>
           </div>
           <Separator className="my-5" />
         </CardHeader>
@@ -107,18 +121,6 @@ export const TestManagerHome: React.FC = () => {
           </section>
         </CardContent>
       </Card>
-
-      <section className="my-5">
-        <Card>
-          <CardHeader>
-            <CardTitle>Productos a pagar</CardTitle>
-            <Separator className="my-5" />
-          </CardHeader>
-          <CardContent>
-            <PricesCard />
-          </CardContent>
-        </Card>
-      </section>
       <Toaster />
     </div>
   )

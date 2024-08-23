@@ -1,12 +1,5 @@
 import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger
-} from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,11 +8,42 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { AlignLeft, UserCog, UserX } from 'lucide-react'
+import { useDeleteOrderById } from '@renderer/hooks/res/CashRegister/UserCashRegister'
+import { CashRegisterI } from '@renderer/interfaces/CashRegisterInterface/CashRegisterInterface'
+import { Row } from '@tanstack/react-table'
+import { AlignLeft, FileSliders, Trash2 } from 'lucide-react'
 import React from 'react'
-import { CradPlay } from './CradPay'
+import { DelateTransaction } from './DelateTransaction'
+import { PayCard } from '../pay/components/PayCard'
+import { AddOrderTestIn, MoreInfoAddOrder } from '@renderer/interfaces/orders/OrderTest'
+import { getDateToday } from '@renderer/utils/dates/GetDate'
 
-export const ShowMenu: React.FC = () => {
+interface ShowMenuProps {
+  row: Row<CashRegisterI>
+}
+
+export const ShowMenu: React.FC<ShowMenuProps> = ({ row }) => {
+  const deleteOrder = useDeleteOrderById()
+
+  // Funciones para eliminar la orden
+  const handlerDelate = (): void => {
+    deleteOrder.mutate({ idOrder: row.original.idOrders })
+  }
+
+  const dataTest: AddOrderTestIn = {
+    orderTotal: row.original.orderTotal,
+    orderDeposit: 0,
+    orderAmountPaid: 0,
+    orderChange: 0,
+    orderNotes: '',
+    orderReminding: row.original.orderReminding
+  }
+  const moreData: MoreInfoAddOrder = {
+    idUsers: 1,
+    idCustomers: row.original.idCustomers,
+    orderTimeStamp: getDateToday()
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -27,7 +51,7 @@ export const ShowMenu: React.FC = () => {
           <AlignLeft />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-[100%]">
+      <DropdownMenuContent>
         <DropdownMenuLabel>Selecciona una opción</DropdownMenuLabel>
         <Dialog>
           <DialogTrigger className="w-full">
@@ -36,12 +60,17 @@ export const ShowMenu: React.FC = () => {
               value="Editar"
               className="text-[#15658d] font-bold px-1 w-full"
             >
-              <UserCog color="#15658d" className="mr-2 h-4 w-4" />
-              Editar
+              <FileSliders color="#15658d" className="mr-2 h-4 w-4" />
+              Modificar transacción
             </DropdownMenuRadioItem>
           </DialogTrigger>
-          <DialogContent className="w-[100rem]">
-            <CradPlay />
+          <DialogContent>
+            <PayCard
+              ordenData={dataTest}
+              moreDataByOrder={moreData}
+              nameCustomer={row.original.customer.name}
+              txtButon="Editar"
+            />
           </DialogContent>
         </Dialog>
         <DropdownMenuSeparator />
@@ -52,19 +81,11 @@ export const ShowMenu: React.FC = () => {
               value="Eliminar"
               className="text-[#c80800] font-bold px-1"
             >
-              <UserX color="#c80800" className="mr-2 h-4 w-4" />
-              Eliminar
+              <Trash2 color="#c80800" className="mr-2 h-4 w-4" />
+              Eliminar transacción
             </DropdownMenuRadioItem>
           </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Are you sure absolutely sure?</DialogTitle>
-              <DialogDescription>
-                This action cannot be undone. This will permanently delete your account and remove
-                your data from our servers.
-              </DialogDescription>
-            </DialogHeader>
-          </DialogContent>
+          <DelateTransaction handlerDelate={handlerDelate} />
         </Dialog>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -38,25 +38,32 @@ export const TransactionFC: React.FC = () => {
     {
       accessorFn: (row) => row.user.name,
       id: 'user.name',
-      header: 'Usuario que atendió al cliente',
+      header: 'Usuario',
       cell: ({ row }) => <div className="font-inter font-medium">{row.original.user.name}</div>
     },
     {
       accessorFn: (row) => row.customer.name,
       id: 'customer.name',
-      header: 'Nombre del cliente',
+      header: 'Cliente',
       cell: ({ row }) => <div className="font-inter font-medium">{row.original.customer.name}</div>
     },
     {
       accessorKey: 'orderTotal',
-      header: 'Precio Total',
+      header: 'Total',
       cell: ({ row }) => (
         <div className="font-inter font-medium">{`$${row.getValue('orderTotal')}`}</div>
       )
     },
     {
+      accessorKey: 'orderReminding',
+      header: 'Restante',
+      cell: ({ row }) => (
+        <div className="font-inter font-medium">{`$${row.getValue('orderReminding')}`}</div>
+      )
+    },
+    {
       accessorKey: 'orderAmountPaid',
-      header: 'Dinero recibido',
+      header: 'Importe Recibido',
       cell: ({ row }) => <div className="capitalize">{`$${row.getValue('orderAmountPaid')}`}</div>
     },
     {
@@ -72,23 +79,17 @@ export const TransactionFC: React.FC = () => {
     {
       accessorKey: 'orderNotes',
       header: 'Notas',
-      cell: ({ row }) => {
-        return row.getValue('orderNotes') === null ? (
-          <div>{''}</div>
-        ) : (
-          <div className="capitalize">{row.getValue('orderNotes')}</div>
-        )
-      }
+      cell: ({ row }) => <div className="capitalize">{row.getValue('orderNotes')}</div>
     },
     {
       accessorKey: 'orderTimeStamp',
-      header: 'Fecha de la transacción',
+      header: 'Fecha de transacción',
       cell: ({ row }) => <div className="capitalize">{`${row.getValue('orderTimeStamp')}`}</div>
     },
     {
       header: 'Acciones',
       cell: ({ row }): JSX.Element => {
-        return <ShowMenu />
+        return <ShowMenu row={row} />
       }
     }
   ]
@@ -142,7 +143,7 @@ export const TransactionFC: React.FC = () => {
   }
 
   return (
-    <div className="flex justify-center align-middle">
+    <div className="flex justify-center items-center h-full">
       <div className="w-[98%]">
         <div className="flex items-center py-4 justify-between">
           <div>
@@ -168,7 +169,7 @@ export const TransactionFC: React.FC = () => {
                   {headerGroup.headers.map((header) => {
                     return (
                       <TableHead
-                        className="text-gray-800 max-w-[120px] font-medium m-0 p-2 bg-[#EFFBFF]"
+                        className="text-gray-800 text-center max-w-[120px] font-medium m-0 p-2 bg-[#EFFBFF]"
                         key={header.id}
                       >
                         {header.isPlaceholder
@@ -185,7 +186,7 @@ export const TransactionFC: React.FC = () => {
                 table.getRowModel().rows.map((row) => (
                   <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
+                      <TableCell key={cell.id} className="text-center">
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </TableCell>
                     ))}

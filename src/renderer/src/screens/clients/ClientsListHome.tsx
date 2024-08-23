@@ -183,16 +183,6 @@ export const ClientsListHome = (): JSX.Element => {
             <div>
               <h2 className="text-2xl font-inter font-bold">CLIENTES REGISTRADOS EN EL SISTEMA</h2>
             </div>
-            <div>
-              <Button
-                onClick={onCreateNewUser}
-                className="bg-[#0a95ed] text-white"
-                variant={'ghost'}
-              >
-                <UserPlus className="mr-2" />
-                Cliente
-              </Button>
-            </div>
           </div>
           <Separator />
 
@@ -224,6 +214,19 @@ export const ClientsListHome = (): JSX.Element => {
                     }
                     className="max-w-sm"
                   />
+                </div>
+
+                <div className="w-[15%] flex-col justify-end align-bottom flex">
+                  <div>
+                    <Button
+                      onClick={onCreateNewUser}
+                      className="bg-[#0a95ed] text-white"
+                      variant={'ghost'}
+                    >
+                      <UserPlus className="mr-2" />
+                      Cliente
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>

@@ -5,12 +5,13 @@ import { HomePDF } from '../PDF/HomePDF'
 import { TestEditorHome } from '../TestEditor/TestEditorHome'
 import { AddTest } from '../TestManager/AddTest'
 import { TestManagerHome } from '../TestManager/TestManager'
+import { UserTransactionsCard } from '../TransactionDetails/UserTransactionsCard'
 import { AddClients } from '../clients/AddClients'
 import { ClientsListHome } from '../clients/ClientsListHome'
+import { PayScreen } from '../pay/screen/PayScreen'
 import { AddUser } from '../users/AddUser'
 import { UsersListHome } from '../users/UsersListHome'
 import { HomeContainer } from './HomeContainer'
-import { UserTransactionsCard } from '../TransactionDetails/UserTransactionsCard'
 import { Login } from '../Login/Login'
 
 export const HomeScreen: React.FC = () => {
@@ -29,6 +30,7 @@ export const HomeScreen: React.FC = () => {
         <Route path="/pdf" element={<HomePDF />} />
         <Route path="/caja" element={<UserTransactionsCard />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/pay" element={<PayScreen />} />
       </Routes>
     </div>
   )
