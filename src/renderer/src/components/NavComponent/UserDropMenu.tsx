@@ -1,6 +1,7 @@
 import { LogOut, User } from 'lucide-react'
 
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { useToken } from '@renderer/context/JWTContext/JWTContext';
 
 import {
   DropdownMenu,
@@ -9,17 +10,22 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { useUserIdSelected } from '@renderer/context/userContext/UserContext'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import { getToken } from '@renderer/context/JWTContext/JWTContext';
+import { decodeToken } from 'react-jwt'
 
 export const UserDropMenu: React.FC = () => {
   const navigateTo = useNavigate()
   const { setIsCreate } = useUserIdSelected()
-
+  const { setToken } = useToken();
+  const token = getToken();
+  const decodedToken: { [key: string]: any } = decodeToken(token)!;
+  const userRole = decodedToken.role as string;
+  const userName = decodedToken.userName as string;
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -29,18 +35,8 @@ export const UserDropMenu: React.FC = () => {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 mx-2">
-        <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
-
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <User className="mr-2 h-4 w-4" />
-            <span>Perfil</span>
-            <DropdownMenuShortcut>{'(Admin)'}</DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-
+        <DropdownMenuLabel>{userName}</DropdownMenuLabel>
+       {userRole === 'Admin'&&(
         <DropdownMenuGroup>
           <DropdownMenuItem
             onClick={() => {
@@ -52,9 +48,15 @@ export const UserDropMenu: React.FC = () => {
             <span>Gestionar Usuarios</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
+        )}
         <DropdownMenuSeparator />
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => {
+            setToken('');
+            navigateTo('/')
+          }}
+        >
           <LogOut className="mr-2 h-4 w-4" />
           <span>Cerrar Sesión</span>
         </DropdownMenuItem>

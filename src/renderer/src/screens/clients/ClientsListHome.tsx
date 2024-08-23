@@ -50,9 +50,13 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { useModalDelete } from '@renderer/context/ModalDeleteContext/IsOpenModalDelete'
+import { useToken } from '@renderer/context/JWTContext/JWTContext'
 
 export const ClientsListHome = (): JSX.Element => {
-  const { data, isLoading } = useGetAllClient()
+  const { token } = useToken()
+  console.log(`UserData: ${token}`);
+  
+  const { data, isLoading } = useGetAllClient(token)
   const { setClientObjectInfo, setIsClientCreate } = useClientIdSelected()
   const { isOpenModalDelete, setIsOpenModalDelete } = useModalDelete()
   const [idUserToDelete, setIdUserToDelete] = useState(0)

@@ -26,6 +26,14 @@ import {
 import { useGetOrderList } from '@renderer/hooks/res/CashRegister/UserCashRegister'
 import { CashRegisterI } from '@renderer/interfaces/CashRegisterInterface/CashRegisterInterface'
 import { ShowMenu } from './ShowMenu'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+import {
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  Pagination,
+  PaginationEllipsis
+} from '@/components/ui/pagination'
 
 export const TransactionFC: React.FC = () => {
   const { data } = useGetOrderList()
@@ -33,6 +41,7 @@ export const TransactionFC: React.FC = () => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 8 })
 
   const columns: ColumnDef<CashRegisterI>[] = [
     {
@@ -97,47 +106,97 @@ export const TransactionFC: React.FC = () => {
   const table = useReactTable({
     data: data ?? [],
     columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
+    pageCount: data ? Math.ceil(data.length / pagination.pageSize) : 0,
+    onPaginationChange: setPagination,
+    manualPagination: false, // Paginación manual habilitada
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
-      rowSelection
+      rowSelection,
+      pagination // Se pasa el estado de paginación
     }
   })
 
-  const Pagination: React.FC = () => {
+  const PaginationComponent: React.FC = () => {
     return (
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} de{' '}
-          {table.getFilteredRowModel().rows.length} fila(s) seleccionadas
-        </div>
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Anterior
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Siguiente
-          </Button>
-        </div>
+      <div className="mt-3">
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <Button
+                disabled={!table.getCanPreviousPage()}
+                variant={'ghost'}
+                onClick={() => table.previousPage()}
+              >
+                <ChevronLeft className="mr-1" />
+                Anterior
+              </Button>
+            </PaginationItem>
+
+            {table.getState().pagination.pageIndex > 0 && (
+              <PaginationItem>
+                <PaginationLink
+                  onClick={() => table.setPageIndex(table.getState().pagination.pageIndex - 1)}
+                >
+                  {table.getState().pagination.pageIndex}
+                </PaginationLink>
+              </PaginationItem>
+            )}
+
+            <PaginationItem>
+              <PaginationLink
+                isActive={true}
+                onClick={() => table.setPageIndex(table.getState().pagination.pageIndex)}
+              >
+                {table.getState().pagination.pageIndex + 1}
+              </PaginationLink>
+            </PaginationItem>
+
+            {table.getState().pagination.pageIndex < table.getPageCount() - 1 && (
+              <PaginationItem>
+                <PaginationLink
+                  onClick={() => table.setPageIndex(table.getState().pagination.pageIndex + 1)}
+                >
+                  {table.getState().pagination.pageIndex + 2}
+                </PaginationLink>
+              </PaginationItem>
+            )}
+
+            {table.getPageCount() > 3 && table.getState().pagination.pageIndex > 1 && (
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
+            )}
+
+            {table.getState().pagination.pageIndex < table.getPageCount() - 1 && (
+              <PaginationItem>
+                <PaginationLink onClick={() => table.setPageIndex(table.getPageCount() - 1)}>
+                  {table.getPageCount()}
+                </PaginationLink>
+              </PaginationItem>
+            )}
+
+            <PaginationItem>
+              <Button
+                variant={'ghost'}
+                disabled={!table.getCanNextPage()}
+                onClick={() => table.nextPage()}
+              >
+                Siguiente
+                <ChevronRight className="ml-1" />
+              </Button>
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </div>
     )
   }
@@ -203,7 +262,7 @@ export const TransactionFC: React.FC = () => {
           </Table>
         </div>
         {/* Pagination */}
-        <Pagination />
+        <PaginationComponent />
       </div>
     </div>
   )

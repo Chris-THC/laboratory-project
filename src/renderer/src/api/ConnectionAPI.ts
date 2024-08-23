@@ -1,14 +1,27 @@
-import axios from 'axios'
-const urlAPI: string = 'http://localhost:8081/lab'
+import { getToken } from '@renderer/context/JWTContext/JWTContext';
+import axios from 'axios';
 
-const jwtToken: string = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBZG1pbiIsImlkVXNlciI6MSwidXNlck5hbWUiOiJBZG1pbiIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTcyNDE3NTQzMCwiZXhwIjoxNzI0MjExNDMwfQ.IeIoBUnVXBOp-pp6roJ3OtNmBjW_KHaw2XfN8gtQm-w'
+const urlAPI: string = 'http://localhost:8081/lab';
 
 const api = axios.create({
   baseURL: urlAPI,
   headers: {
-    Authorization: `Bearer ${jwtToken}`,
-    'Content-Type': 'application/json'
-  }
-})
+    'Content-Type': 'application/json',
+  },
+});
 
-export default api
+// Configura el interceptor para agregar el token antes de cada solicitud
+api.interceptors.request.use(
+  (config) => {
+    const token = getToken(); // Obtén el token dinámicamente
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+export default api;
