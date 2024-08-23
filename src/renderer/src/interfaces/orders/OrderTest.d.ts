@@ -4,6 +4,7 @@ export interface AddOrderTestIn {
   orderAmountPaid: number
   orderChange: number
   orderNotes: string
+  orderReminding: number
 }
 
 export interface MoreInfoAddOrder {
@@ -21,6 +22,7 @@ export interface SendOrderInfo {
   orderDeposit: number
   orderTotal: number
   orderNotes: string
+  orderReminding: number
 }
 
 export interface OrderInterface {

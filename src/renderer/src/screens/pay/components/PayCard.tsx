@@ -19,68 +19,118 @@ import {
   MoreInfoAddOrder,
   OrderInterface
 } from '@renderer/interfaces/orders/OrderTest'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 import { FormSchemaPay } from '../schema/FormSchemaPay'
-import { useNavigate } from 'react-router-dom'
 
 interface PayReqData {
-  ordendata: AddOrderTestIn
+  ordenData: AddOrderTestIn
   moreDataByOrder: MoreInfoAddOrder
   nameCustomer: string
+  txtButon: string
 }
 
-export const PayCard: React.FC<PayReqData> = ({ ordendata, moreDataByOrder, nameCustomer }) => {
+export const PayCard: React.FC<PayReqData> = ({
+  ordenData,
+  moreDataByOrder,
+  nameCustomer,
+  txtButon
+}) => {
   const createOrder = useAddNewOrder()
   const navigateTo = useNavigate()
 
   const form = useForm<z.infer<typeof FormSchemaPay>>({
     resolver: zodResolver(FormSchemaPay),
-    defaultValues: ordendata,
+    defaultValues: ordenData,
     mode: 'all'
   })
+
+  const { watch, setValue } = form
+
+  const orderTotal = Number(watch('orderTotal'))
+  const orderAmountPaid = Number(watch('orderAmountPaid'))
+  const orderDeposit = Number(watch('orderDeposit'))
+  const [orderReminding, setOrderReminding] = useState<number>(0)
+  const [changeMoney, setChangeMoney] = useState<number>(0)
+
+  useEffect(() => {
+    let orderChange = 0
+    // The section is to return orderChange
+    if (orderAmountPaid > orderDeposit) {
+      orderChange = orderAmountPaid - orderDeposit
+    }
+    setChangeMoney(orderChange)
+
+    if (txtButon === 'Agregar') {
+      const changeValue = orderTotal - orderDeposit
+      setOrderReminding(changeValue)
+      const message = changeValue === 0 ? `Pagado` : `Quedó a deber $${changeValue}`
+      setValue('orderNotes', message, { shouldValidate: true, shouldDirty: true })
+    } else if (txtButon === 'Editar') {
+      const changeValue = ordenData.orderReminding - orderDeposit
+      setOrderReminding(changeValue)
+      const message = changeValue === 0 ? `Pagado` : `Quedó a deber $${changeValue}`
+      setValue('orderNotes', message, { shouldValidate: true, shouldDirty: true })
+    }
+  }, [orderTotal, orderAmountPaid, orderDeposit, setValue])
 
   const onSubmit = (data: z.infer<typeof FormSchemaPay>): void => {
     const orderInfo: OrderInterface = {
       ...data,
       ...moreDataByOrder
     }
-    createOrder.mutate({ orderBody: orderInfo })
-    navigateTo('/caja')
+    if (txtButon === 'Agregar') {
+      createOrder.mutate({
+        orderBody: { ...orderInfo, orderReminding: orderReminding, orderChange: changeMoney }
+      })
+      navigateTo('/caja')
+    } else if (txtButon === 'Editar') {
+      createOrder.mutate({
+        orderBody: { ...orderInfo, orderReminding: orderReminding, orderChange: changeMoney }
+      })
+    }
   }
 
   return (
-    <Card className="w-full max-w-4xl">
+    <Card className="">
       <CardHeader>
-        <CardTitle>{`Orden a nombre de ${nameCustomer}`}</CardTitle>
+        <CardTitle className="font-inter font-semibold text-[1.2rem]">{`Orden a nombre de ${nameCustomer}`}</CardTitle>
         <Separator />
       </CardHeader>
       <CardContent>
+        <div className="grid gap-2">
+          <div className="flex items-center justify-between">
+            <div className="text-base font-inter">Total a pagar</div>
+            <div className="text-base font-inter">
+              {txtButon === 'Agregar' ? `$${ordenData.orderTotal}` : `$${ordenData.orderReminding}`}
+            </div>
+          </div>
+        </div>
+
+        <div className="grid gap-2">
+          <div className="flex items-center justify-between">
+            <div className="text-base font-inter">Depósito</div>
+            <div className="text-base font-inter">{`$${orderDeposit}`}</div>
+          </div>
+        </div>
+
+        <Separator />
+
+        <div className="grid gap-2">
+          <div className="flex items-center justify-between">
+            <div className="text-base font-inter">Restante</div>
+            <div className="text-base font-inter">{`$${orderReminding}`}</div>
+          </div>
+        </div>
+
+        <Separator className="my-5" />
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="grid gap-4 mt-3">
-              <div className="grid grid-cols-4 gap-4">
-                <div className="space-y-1">
-                  <FormField
-                    control={form.control}
-                    name="orderTotal"
-                    render={({ field, fieldState }) => (
-                      <FormItem>
-                        <FormLabel>Total de la orden</FormLabel>
-                        <FormControl>
-                          <Input type="text" placeholder="Total" {...field} />
-                        </FormControl>
-                        {fieldState.error && (
-                          <FormDescription className="text-red-500">
-                            {fieldState.error.message}
-                          </FormDescription>
-                        )}
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
+            <div className="grid gap-4">
+              <div className="grid grid-cols-1 gap-4">
                 <div className="space-y-1">
                   <FormField
                     control={form.control}
@@ -120,28 +170,9 @@ export const PayCard: React.FC<PayReqData> = ({ ordendata, moreDataByOrder, name
                     )}
                   />
                 </div>
-                <div className="space-y-1">
-                  <FormField
-                    control={form.control}
-                    name="orderChange"
-                    render={({ field, fieldState }) => (
-                      <FormItem>
-                        <FormLabel>Cambio</FormLabel>
-                        <FormControl>
-                          <Input type="text" placeholder="Cambio" {...field} />
-                        </FormControl>
-                        {fieldState.error && (
-                          <FormDescription className="text-red-500">
-                            {fieldState.error.message}
-                          </FormDescription>
-                        )}
-                      </FormItem>
-                    )}
-                  />
-                </div>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-1">
                 <FormField
                   control={form.control}
                   name="orderNotes"
@@ -160,27 +191,26 @@ export const PayCard: React.FC<PayReqData> = ({ ordendata, moreDataByOrder, name
                   )}
                 />
               </div>
+
+              <div className="flex items-center justify-between">
+                <div className="text-lg font-medium">Cambio</div>
+                <div className="text-lg font-medium">{`$${changeMoney}`}</div>
+              </div>
             </div>
 
-            <div className="flex justify-end gap-2 mt-5">
+            <Separator />
+
+            <div className="flex justify-end gap-1 mt-5">
               <div className="mx-3">
                 <DialogClose asChild>
                   <Button className="bg-[#4472c4]" type="submit">
-                    Agregar
+                    {txtButon}
                   </Button>
                 </DialogClose>
               </div>
               <div className="mx-3">
                 <DialogClose asChild>
-                  <Button
-                    variant={'destructive'}
-                    type="button"
-                    className="bg-[#e32940]"
-                    onClick={() => {
-                      // setClientObjectInfo(null)
-                      // navigateTo('/customer')
-                    }}
-                  >
+                  <Button variant={'destructive'} type="button" className="bg-[#e32940]">
                     Cancelar
                   </Button>
                 </DialogClose>
