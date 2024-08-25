@@ -10,7 +10,7 @@ interface PropsFilePDF {
   testResults: ContentsResultsInterface[] | null | undefined
 }
 
-export const NewFilePDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, testResults }) => {
+export const NewFilePDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate }) => {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -29,7 +29,9 @@ export const NewFilePDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, 
           </View>
         </View>
 
-        {/* <View fixed style={styles.footerContent}></View> */}
+        <View style={styles.contentTable}>
+          <Text>Contenido de la tabla</Text>
+        </View>
       </Page>
     </Document>
   )
@@ -53,12 +55,13 @@ const styles = StyleSheet.create({
   },
   userInfoSection: {
     flexDirection: 'column',
-    height: 80,
+    height: 'auto',
     width: 350,
     top: 120,
     left: 228,
     border: 0.5,
-    borderBottomColor: '#111'
+    borderBottomColor: '#111',
+    borderBottom: 'none'
   },
   textUserInfo: {
     color: '#002060',
@@ -68,5 +71,11 @@ const styles = StyleSheet.create({
     marginBottom: 2,
     borderBottomWidth: 0.5,
     borderBottomColor: '#111'
+  },
+  // tables styles
+  contentTable: {
+    backgroundColor: 'blue',
+    flex: 1,
+    marginHorizontal: 8
   }
 })

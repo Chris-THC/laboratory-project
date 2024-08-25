@@ -95,9 +95,7 @@ export const FilePDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, tes
                           <Text style={styles.textCompare}>{''}</Text>
                         )}
 
-                        <Text style={styles.textCompare}>
-                          {isWithinRange ? '' : resultValue}
-                        </Text>
+                        <Text style={styles.textCompare}>{isWithinRange ? '' : resultValue}</Text>
                       </View>
                     )
                   })}
@@ -146,15 +144,19 @@ const styles = StyleSheet.create({
     width: 350,
     top: 120,
     left: 228,
-    borderBottomWidth: 1,
-    borderBottomColor: '#111'
+    border: 0.5,
+    borderBottomColor: '#111',
+    borderBottom: 'none'
   },
   textUserInfo: {
     color: '#002060',
     fontWeight: 'bold',
     fontSize: 11,
-    marginTop: 1,
-    marginBottom: 2
+    paddingVertical: 3,
+    paddingLeft: 5,
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#111',
+    height: 25
   },
   tableInfo: {
     flex: 1,

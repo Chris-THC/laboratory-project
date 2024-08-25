@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FilePDF } from './FilePDF/FilePDF'
 import { useTestArrayList } from '@renderer/context/testByUser/testArrayByUser'
-import { NewFilePDF } from './FilePDF/NewFilePDF'
+// import { NewFilePDF } from './FilePDF/NewFilePDF'
 
 export const HomePDF: React.FC = () => {
   const { contentsArrayTestToPDF } = useTestArrayList()
@@ -78,17 +78,17 @@ export const HomePDF: React.FC = () => {
       <div>
         <div className="flex justify-center align-middle m-5">
           <PDFViewer height={1000} width={'90%'}>
-            {/* <FilePDF
-              testResults={contentsArrayTestToPDF}
-              customerInfo={clientObjectInfo}
-              currentDate={date}
-            /> */}
-
-            <NewFilePDF
+            <FilePDF
               testResults={contentsArrayTestToPDF}
               customerInfo={clientObjectInfo}
               currentDate={date}
             />
+
+            {/* <NewFilePDF
+              testResults={contentsArrayTestToPDF}
+              customerInfo={clientObjectInfo}
+              currentDate={date}
+            /> */}
           </PDFViewer>
         </div>
       </div>
