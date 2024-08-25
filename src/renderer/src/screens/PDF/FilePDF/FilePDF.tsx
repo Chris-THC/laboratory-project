@@ -29,24 +29,14 @@ export const FilePDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, tes
           </View>
         </View>
 
+        {/* comenzar aqui */}
         <View style={styles.tableInfo}>
           <View fixed style={styles.headerRow}>
             <Text style={styles.headerCell}>ESTUDIO</Text>
             <View style={styles.resultHeaderCell}>
               <Text style={styles.resultHeaderText}>RESULTADO</Text>
               <View style={{ flexDirection: 'row' }}>
-                <Text
-                  style={{
-                    flex: 1,
-                    borderRightWidth: 1,
-                    borderRightColor: '#111',
-                    marginRight: 0.4,
-                    fontSize: 8,
-                    textAlign: 'center'
-                  }}
-                >
-                  {'DENTRO DE \n REFERENCIA'}
-                </Text>
+                <Text style={styles.textRow}>{'DENTRO DE \n REFERENCIA'}</Text>
                 <Text style={{ flex: 1, fontSize: 8, textAlign: 'center' }}>
                   {'FUERA DE \n REFERENCIA'}
                 </Text>
@@ -55,6 +45,9 @@ export const FilePDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, tes
             <Text style={styles.unitCell}>UNIDADES</Text>
             <Text style={styles.referenceCell}>VALOR DE REFERENCIA</Text>
           </View>
+
+          {/* Terminar aqui */}
+
           {testResults!.map((row, index) => (
             <View key={index} style={styles.dataRow}>
               <Text style={styles.dataCellExamName}>{row.contentsDTO?.name}</Text>
@@ -231,6 +224,15 @@ const styles = StyleSheet.create({
   textCompare: {
     flex: 1,
     marginBottom: 0.4,
+    textAlign: 'center'
+  },
+  // add new styles
+  textRow: {
+    flex: 1,
+    borderRightWidth: 1,
+    borderRightColor: '#111',
+    marginRight: 0.4,
+    fontSize: 8,
     textAlign: 'center'
   }
 })
