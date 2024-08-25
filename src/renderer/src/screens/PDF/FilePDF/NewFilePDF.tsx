@@ -49,7 +49,6 @@ const styles = StyleSheet.create({
   },
   customerLayaud: {
     flexDirection: 'row',
-    height: 210,
     marginBottom: 2
   },
   userInfoSection: {
@@ -67,7 +66,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
     marginTop: 1,
     marginBottom: 2,
-    borderBottomWidth: 2,
+    borderBottomWidth: 0.5,
     borderBottomColor: '#111'
   }
 })
