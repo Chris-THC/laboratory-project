@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
     color: '#333333',
     fontSize: 10,
     marginLeft: 5,
-    borderRightWidth: 1, // Aplica el borde a las celdas de nombre también
+    borderRightWidth: 1, 
     borderRightColor: '#111',
     borderStyle: "solid", 
   },
