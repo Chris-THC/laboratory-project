@@ -152,15 +152,20 @@ const styles = StyleSheet.create({
     height: 25
   },
   tableInfo: {
-    flex: 1,
-    marginHorizontal: 8
+    displayflex: "table",
+    width: "auto",
+    marginHorizontal: 8,
+    borderStyle:"solid",
+    borderWidth: 1
   },
   footerContent: {
     height: 180
   },
   headerRow: {
     flexDirection: 'row',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
+    borderStyle:"solid",
+    borderBottom:1
   },
   headerCell: {
     flex: 1,
@@ -168,15 +173,19 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     color: '#000',
-    fontSize: 10
+    fontSize: 10,
+    borderStyle:"solid",
+    borderRightWidth:1
   },
   resultHeaderCell: {
-    flex: 1.5, // Ajustar según sea necesario para alinear con el header
+    flex: 1.1, // Ajustar según sea necesario para alinear con el header
     paddingBottom: 5,
     fontWeight: 'bold',
     textAlign: 'center',
     color: '#000',
-    fontSize: 10
+    fontSize: 10,
+    borderStyle:"solid",
+    borderRight:1
   },
   resultHeaderText: {
     textAlign: 'center',
@@ -187,9 +196,11 @@ const styles = StyleSheet.create({
     flex: 0.5,
     paddingBottom: 5,
     fontWeight: 'bold',
-    textAlign: 'right',
+    textAlign: 'center',
     color: '#000',
-    fontSize: 10
+    fontSize: 10,
+    borderStyle:"solid",
+    borderRight:1
   },
   referenceCell: {
     flex: 1.5,
@@ -200,8 +211,8 @@ const styles = StyleSheet.create({
     fontSize: 10
   },
   dataRow: {
-    flexDirection: 'row'
-    // borderBottomWidth: 1,
+    flexDirection: 'row',
+    borderBottomWidth: 1,
     // borderBottomColor: '#111'
   },
   dataCell: {
@@ -210,6 +221,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#333333',
     fontSize: 10,
+    borderRightWidth: 1, // Aplica el borde a las celdas de datos también
+    borderRightColor: '#111',
+    borderStyle: "solid",
     marginVertical: 2
   },
   dataCellExamName: {
@@ -219,7 +233,9 @@ const styles = StyleSheet.create({
     color: '#333333',
     fontSize: 10,
     marginLeft: 5,
-    marginVertical: 2
+    borderRightWidth: 1, // Aplica el borde a las celdas de nombre también
+    borderRightColor: '#111',
+    borderStyle: "solid", 
   },
   textCompare: {
     flex: 1,
