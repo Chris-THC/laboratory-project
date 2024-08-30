@@ -7,7 +7,6 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FilePDF } from './FilePDF/FilePDF'
 import { useTestArrayList } from '@renderer/context/testByUser/testArrayByUser'
-// import { NewFilePDF } from './FilePDF/NewFilePDF'
 
 export const HomePDF: React.FC = () => {
   const { contentsArrayTestToPDF } = useTestArrayList()
@@ -19,7 +18,7 @@ export const HomePDF: React.FC = () => {
     const formatDate = (): void => {
       const date = new Date()
       const day = date.getDate().toString().padStart(2, '0')
-      const month = (date.getMonth() + 1).toString().padStart(2, '0') // getMonth() devuelve un valor de 0 a 11
+      const month = (date.getMonth() + 1).toString().padStart(2, '0')
       const year = date.getFullYear().toString()
 
       setDate(`${day}/${month}/${year}`)
@@ -83,12 +82,6 @@ export const HomePDF: React.FC = () => {
               customerInfo={clientObjectInfo}
               currentDate={date}
             />
-
-            {/* <NewFilePDF
-              testResults={contentsArrayTestToPDF}
-              customerInfo={clientObjectInfo}
-              currentDate={date}
-            /> */}
           </PDFViewer>
         </div>
       </div>
