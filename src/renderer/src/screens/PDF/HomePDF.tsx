@@ -34,7 +34,7 @@ export const HomePDF: React.FC = () => {
       <div className="mb-2">
         <div className="flex flex-row justify-center align-middle">
           <h1 className="font-semibold mb-1 font-inter text-[1.4rem] ml-1" id="development-heading">
-            VISTA PREVIA DEL PDF Y OPCIONE DE DESCARGA
+            VISTA PREVIA DEL PDF Y OPCIÓN DE DESCARGA
           </h1>
         </div>
 
