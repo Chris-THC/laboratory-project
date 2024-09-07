@@ -1,4 +1,13 @@
 import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import {
   Pagination,
@@ -18,6 +27,7 @@ import {
 } from '@/components/ui/table'
 import { LoadingSpinner } from '@renderer/components/LoadingSpinner/LoadingSpinner'
 import { ErrorPage } from '@renderer/components/PageNotFound/ErrorPage'
+import { useModalDelete } from '@renderer/context/ModalDeleteContext/IsOpenModalDelete'
 import { useClientIdSelected } from '@renderer/context/clientContext/clientContext'
 import { useGetAllClient } from '@renderer/hooks/res/clientRes/UseClientAPI'
 import {
@@ -40,23 +50,9 @@ import { useEffect, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { DelateClientsModal } from './DelteClients'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
-import { useModalDelete } from '@renderer/context/ModalDeleteContext/IsOpenModalDelete'
-import { useToken } from '@renderer/context/JWTContext/JWTContext'
 
 export const ClientsListHome = (): JSX.Element => {
-  const { token } = useToken()
-  console.log(`UserData: ${token}`);
-  
-  const { data, isLoading } = useGetAllClient(token)
+  const { data, isLoading } = useGetAllClient()
   const { setClientObjectInfo, setIsClientCreate } = useClientIdSelected()
   const { isOpenModalDelete, setIsOpenModalDelete } = useModalDelete()
   const [idUserToDelete, setIdUserToDelete] = useState(0)
