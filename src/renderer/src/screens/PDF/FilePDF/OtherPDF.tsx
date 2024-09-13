@@ -89,9 +89,24 @@ export const OtherPDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, te
                   <Text style={styles.textHeader}>{test.contentsDTO?.units}</Text>
                 </View>
 
-                <View style={[styles.headerTableCont, { width: 230 }]}>
+                <View
+                  style={[
+                    {
+                      width: 230,
+                      borderWidth: 1,
+                      borderColor: '#000',
+                      alignContent: 'center',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderLeft: 'none',
+                      padding: 0,
+                      margin: 0,
+                      borderTop: 'none'
+                    }
+                  ]}
+                >
                   {test.contentsDTO?.referencesDTO.map((reference, idx) => (
-                    <Text key={idx}>
+                    <Text style={{ fontSize: 9 }} key={idx}>
                       {reference.vrefText
                         ? `${reference.vrefText}`
                         : `${reference.vmin !== null ? reference.vmin : ''} ${reference.vmin !== null && reference.vmax !== null ? '-' : ''} ${reference.vmax !== null ? reference.vmax : ''}`}
