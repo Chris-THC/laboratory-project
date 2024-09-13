@@ -2,11 +2,12 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer'
 import { useClientIdSelected } from '@renderer/context/clientContext/clientContext'
+import { useTestArrayList } from '@renderer/context/testByUser/testArrayByUser'
 import { ArrowLeft, FileDown } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FilePDF } from './FilePDF/FilePDF'
-import { useTestArrayList } from '@renderer/context/testByUser/testArrayByUser'
+import { OtherPDF } from './FilePDF/OtherPDF'
 
 export const HomePDF: React.FC = () => {
   const { contentsArrayTestToPDF } = useTestArrayList()
@@ -18,7 +19,7 @@ export const HomePDF: React.FC = () => {
     const formatDate = (): void => {
       const date = new Date()
       const day = date.getDate().toString().padStart(2, '0')
-      const month = (date.getMonth() + 1).toString().padStart(2, '0')
+      const month = (date.getMonth() + 1).toString().padStart(2, '0') // getMonth() devuelve un valor de 0 a 11
       const year = date.getFullYear().toString()
 
       setDate(`${day}/${month}/${year}`)
@@ -34,7 +35,7 @@ export const HomePDF: React.FC = () => {
       <div className="mb-2">
         <div className="flex flex-row justify-center align-middle">
           <h1 className="font-semibold mb-1 font-inter text-[1.4rem] ml-1" id="development-heading">
-            VISTA PREVIA DEL PDF Y OPCIÓN DE DESCARGA
+            VISTA PREVIA DEL PDF Y OPCIONE DE DESCARGA
           </h1>
         </div>
 
@@ -77,7 +78,12 @@ export const HomePDF: React.FC = () => {
       <div>
         <div className="flex justify-center align-middle m-5">
           <PDFViewer height={1000} width={'90%'}>
-            <FilePDF
+            {/* <FilePDF
+              testResults={contentsArrayTestToPDF}
+              customerInfo={clientObjectInfo}
+              currentDate={date}
+            /> */}
+            <OtherPDF
               testResults={contentsArrayTestToPDF}
               customerInfo={clientObjectInfo}
               currentDate={date}

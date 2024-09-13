@@ -5,12 +5,14 @@ import { ContentsResultsInterface } from '@renderer/interfaces/contentsResults/c
 import React from 'react'
 
 interface PropsFilePDF {
-  customerInfo: ClientsInterface
+  customerInfo: ClientsInterface | null | undefined
   currentDate: string
-  testResults: ContentsResultsInterface[]
+  testResults: ContentsResultsInterface[] | null | undefined
 }
 
-export const NewFilePDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, testResults }) => {
+export const OtherPDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, testResults }) => {
+  console.info(JSON.stringify(testResults, null, 2))
+
   return (
     <Document>
       <Page size="A4" style={{ position: 'relative' }}>
@@ -48,7 +50,7 @@ export const NewFilePDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, 
               </View>
             </View>
 
-            <View style={styles.headerTableCont}>
+            <View style={[styles.headerTableCont, { width: 55 }]}>
               <Text style={styles.textHeader}>UNIDADES</Text>
             </View>
 
@@ -56,6 +58,49 @@ export const NewFilePDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, 
               <Text style={styles.textHeader}>VALOR DE REFERENCIA</Text>
             </View>
           </View>
+
+          {testResults!.map((test, index) => {
+            return (
+              <View key={index} style={styles.bodyTable}>
+                <View
+                  style={{ width: 140, borderWidth: 1, borderColor: '#000', borderTop: 'none' }}
+                >
+                  <Text style={styles.textHeader}>{test.contentsDTO?.name}</Text>
+                </View>
+
+                <View style={[styles.bodyTableCont, { width: 140 }]}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      width: '100%',
+                      height: '100%'
+                    }}
+                  >
+                    <View style={styles.referenceBody}>
+                      <Text style={{ fontSize: 9 }}>{'1'}</Text>
+                    </View>
+                    <View style={styles.referenceBody}>
+                      <Text style={{ fontSize: 9 }}>{'0'}</Text>
+                    </View>
+                  </View>
+                </View>
+
+                <View style={[styles.bodyTableCont, { width: 55 }]}>
+                  <Text style={styles.textHeader}>{test.contentsDTO?.units}</Text>
+                </View>
+
+                <View style={[styles.headerTableCont, { width: 230 }]}>
+                  {test.contentsDTO?.referencesDTO.map((reference, idx) => (
+                    <Text key={idx}>
+                      {reference.vrefText
+                        ? `${reference.vrefText}`
+                        : `${reference.vmin !== null ? reference.vmin : ''} ${reference.vmin !== null && reference.vmax !== null ? '-' : ''} ${reference.vmax !== null ? reference.vmax : ''}`}
+                    </Text>
+                  ))}
+                </View>
+              </View>
+            )
+          })}
         </View>
       </Page>
     </Document>
@@ -129,5 +174,30 @@ const styles = StyleSheet.create({
     borderRight: 0.5,
     borderColor: '#000',
     borderTop: 1
+  },
+  // BodyReference
+  referenceBody: {
+    flex: 1,
+    borderRight: 0.5,
+    borderColor: '#000',
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center'
+  },
+  bodyTableCont: {
+    borderWidth: 1,
+    borderColor: '#000',
+    alignContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderLeft: 'none',
+    padding: 0,
+    margin: 0,
+    borderTop: 'none'
+  },
+  bodyTable: {
+    marginHorizontal: 10,
+    flexDirection: 'row',
+    height: 20
   }
 })
