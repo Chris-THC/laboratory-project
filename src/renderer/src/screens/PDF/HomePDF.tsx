@@ -6,7 +6,6 @@ import { useTestArrayList } from '@renderer/context/testByUser/testArrayByUser'
 import { ArrowLeft, FileDown } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { FilePDF } from './FilePDF/FilePDF'
 import { OtherPDF } from './FilePDF/OtherPDF'
 
 export const HomePDF: React.FC = () => {
@@ -48,7 +47,7 @@ export const HomePDF: React.FC = () => {
           <div className="flex flex-row space-x-3">
             <PDFDownloadLink
               document={
-                <FilePDF
+                <OtherPDF
                   testResults={contentsArrayTestToPDF}
                   customerInfo={clientObjectInfo}
                   currentDate={date}
