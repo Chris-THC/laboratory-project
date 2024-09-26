@@ -15,7 +15,8 @@ export const OtherPDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, te
     <Document>
       <Page size="A4" style={{ position: 'relative' }}>
         <Image fixed src={ImgBackground} style={styles.backgroundImage} />
-        <View style={styles.headerContainer}>
+
+        <View fixed style={styles.headerContainer}>
           <View style={styles.customerContainer}>
             <Text
               style={styles.textUserInfo}
@@ -28,6 +29,8 @@ export const OtherPDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, te
           </View>
         </View>
 
+        <View fixed style={{ top: 28, left: 0, right: 0, height: 30 }}></View>
+
         <View style={styles.tableContainer}>
           <View style={styles.headerTable}>
             <View style={{ width: 140, borderWidth: 1, borderColor: '#000' }}>
@@ -38,14 +41,7 @@ export const OtherPDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, te
               <View>
                 <Text style={styles.textHeader}>RESULTADO</Text>
               </View>
-              <View style={{ flexDirection: 'row', width: '100%' }}>
-                {/* <View style={styles.referenceStyles}>
-                  <Text style={{ fontSize: 9 }}>{'DENTRO DE \n REFERENCIA'}</Text>
-                </View>
-                <View style={styles.referenceStyles}>
-                  <Text style={{ fontSize: 9 }}>{'FUERA DE \n REFERENCIA'}</Text>
-                </View> */}
-              </View>
+              <View style={{ flexDirection: 'row', width: '100%' }}></View>
             </View>
 
             <View style={[styles.headerTableCont, { width: 55 }]}>
@@ -74,26 +70,9 @@ export const OtherPDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, te
                   <Text style={styles.textHeader}>{test.contentsDTO?.name}</Text>
                 </View>
 
-                {/* Esto es lo que falta */}
-
                 <View style={[styles.bodyTableCont, { width: 140 }]}>
-                  {/* <View
-                    style={{
-                      flexDirection: 'row',
-                      width: '100%',
-                      height: '100%'
-                    }}
-                  >
-                    <View style={styles.referenceBody}>
-                      <Text style={{ fontSize: 9 }}>{'1'}</Text>
-                    </View>
-                    <View style={styles.referenceBody}>
-                      <Text style={{ fontSize: 9 }}>{'0'}</Text>
-                    </View>
-                  </View> */}
-                  <Text style={{ fontSize: 9 }}>{'1'}</Text>
+                  <Text style={{ fontSize: 9 }}>{test.resultValue}</Text>
                 </View>
-                {/* Hasta aqui termina XD*/}
 
                 <View style={[styles.bodyTableCont, { width: 55 }]}>
                   <Text style={styles.textHeader}>{test.contentsDTO?.units}</Text>
@@ -127,6 +106,7 @@ export const OtherPDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, te
             )
           })}
         </View>
+        <View fixed style={{ bottom: 0, left: 0, right: 0, height: 150 }}></View>
       </Page>
     </Document>
   )
