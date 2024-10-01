@@ -32,7 +32,7 @@ export const OtherPDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, te
         <View fixed style={{ top: 28, left: 0, right: 0, height: 30 }}></View>
 
         <View style={styles.tableContainer}>
-          <View style={styles.headerTable}>
+          <View fixed style={styles.headerTable}>
             <View style={{ width: 140, borderWidth: 1, borderColor: '#000' }}>
               <Text style={styles.textHeader}>ESTUDIO</Text>
             </View>
