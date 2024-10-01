@@ -33,7 +33,7 @@ export const OtherPDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, te
 
         <View style={styles.tableContainer}>
           <View fixed style={styles.headerTable}>
-            <View style={{ width: 140, borderWidth: 1, borderColor: '#000' }}>
+            <View style={{ width: 185, borderWidth: 1, borderColor: '#000' }}>
               <Text style={styles.textHeader}>ESTUDIO</Text>
             </View>
 
@@ -55,18 +55,8 @@ export const OtherPDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, te
 
           {testResults!.map((test, index) => {
             return (
-              <View key={index} style={styles.bodyTable}>
-                <View
-                  style={{
-                    width: 140,
-                    borderWidth: 1,
-                    borderColor: '#000',
-                    borderTop: 'none',
-                    alignContent: 'center',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
-                >
+              <View key={index} style={[styles.bodyTable]}>
+                <View style={styles.ContainerNameByName}>
                   <Text style={styles.textHeader}>{test.contentsDTO?.name}</Text>
                 </View>
 
@@ -78,22 +68,7 @@ export const OtherPDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, te
                   <Text style={styles.textHeader}>{test.contentsDTO?.units}</Text>
                 </View>
 
-                <View
-                  style={[
-                    {
-                      width: 230,
-                      borderWidth: 1,
-                      borderColor: '#000',
-                      alignContent: 'center',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      borderLeft: 'none',
-                      padding: 0,
-                      margin: 0,
-                      borderTop: 'none'
-                    }
-                  ]}
-                >
+                <View style={styles.containerReference}>
                   {test.contentsDTO?.referencesDTO.map((reference, idx) => (
                     <Text style={{ fontSize: 9 }} key={idx}>
                       {reference.vrefText
@@ -169,7 +144,8 @@ const styles = StyleSheet.create({
   },
   textHeader: {
     fontSize: 10,
-    textAlign: 'center'
+    textAlign: 'center',
+    paddingVertical: 6
   },
   //   seccion de las referencias
   referenceStyles: {
@@ -196,11 +172,37 @@ const styles = StyleSheet.create({
     borderLeft: 'none',
     padding: 0,
     margin: 0,
-    borderTop: 'none'
+    borderTop: 'none',
+    minHeight: 20
   },
   bodyTable: {
     marginHorizontal: 10,
-    flexDirection: 'row',
-    height: 20
+    flexDirection: 'row'
+    // height: 20
+  },
+  // TextName container
+  ContainerNameByName: {
+    width: 185,
+    borderWidth: 1,
+    borderColor: '#000',
+    borderTop: 'none',
+    alignContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 20
+  },
+  // Reference container
+  containerReference: {
+    width: 230,
+    borderWidth: 1,
+    borderColor: '#000',
+    alignContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderLeft: 'none',
+    padding: 0,
+    margin: 0,
+    borderTop: 'none',
+    minHeight: 20
   }
 })
