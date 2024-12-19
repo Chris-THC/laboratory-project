@@ -81,7 +81,7 @@ export const OtherPDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, te
 
                   {test.contentsDTO?.referencesDTO.map((reference, idx) => (
                     <Text style={{ fontSize: 9 }} key={idx}>
-                      {`${reference.vrefText === null ? ' ' : reference.vrefText} ${reference.vmin === null ? '' : reference.vmin} - ${reference.vmax === null ? '' : reference.vmax}`}
+                      {`${reference.vmin === null ? '' : reference.vmin} - ${reference.vmax === null ? '' : reference.vmax} ${reference.vrefText === null ? ' ' : reference.vrefText} `}
                     </Text>
                   ))}
                 </View>
