@@ -1,4 +1,4 @@
-import ImgBackground from '@/renderer/src/assets/img/back.jpg' // Assuming the image path is correct
+import ImgBackground from '@/renderer/src/assets/img/back2.jpg' // Assuming the image path is correct
 import { Document, Image, Page, StyleSheet, Text, View } from '@react-pdf/renderer'
 import { ClientsInterface } from '@renderer/interfaces/clients/clients'
 import { ContentsResultsInterface } from '@renderer/interfaces/contentsResults/contentsResults'
@@ -31,34 +31,62 @@ export const FilePDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, tes
 
         <View style={styles.tableInfo}>
           <View fixed style={styles.headerRow}>
-            <Text style={styles.headerCell}>ESTUDIO</Text>
-            <View style={styles.resultHeaderCell}>
+            <Text
+              style={[
+                styles.headerCell,
+                {
+                  borderTopColor: '#111',
+                  borderTopWidth: 1
+                }
+              ]}
+            >
+              ESTUDIO
+            </Text>
+            <View
+              style={[
+                styles.resultHeaderCell,
+                {
+                  borderTopColor: '#111',
+                  borderTopWidth: 1
+                }
+              ]}
+            >
               <Text style={styles.resultHeaderText}>RESULTADO</Text>
               <View style={{ flexDirection: 'row' }}>
-                <Text
-                  style={{
-                    flex: 1,
-                    borderRightWidth: 1,
-                    borderRightColor: '#111',
-                    marginRight: 0.4,
-                    fontSize: 8,
-                    textAlign: 'center'
-                  }}
-                >
-                  {'DENTRO DE \n REFERENCIA'}
-                </Text>
+                <Text style={styles.textRow}>{'DENTRO DE \n REFERENCIA'}</Text>
                 <Text style={{ flex: 1, fontSize: 8, textAlign: 'center' }}>
                   {'FUERA DE \n REFERENCIA'}
                 </Text>
               </View>
             </View>
-            <Text style={styles.unitCell}>UNIDADES</Text>
-            <Text style={styles.referenceCell}>VALOR DE REFERENCIA</Text>
+            <Text
+              style={[
+                styles.unitCell,
+                {
+                  borderTopColor: '#111',
+                  borderTopWidth: 1
+                }
+              ]}
+            >
+              UNIDADES
+            </Text>
+            <Text
+              style={[
+                styles.referenceCell,
+                {
+                  borderTopColor: '#111',
+                  borderTopWidth: 1
+                }
+              ]}
+            >
+              VALOR DE REFERENCIA
+            </Text>
           </View>
+
           {testResults!.map((row, index) => (
-            <View key={index} style={styles.dataRow}>
-              <Text style={styles.dataCellExamName}>{row.contentsDTO?.name}</Text>
-              <View style={styles.dataCell}>
+            <View key={index} style={styles.dataCell}>
+              <Text style={styles.headerCell}>{row.contentsDTO?.name}</Text>
+              <View style={styles.resultHeaderCell}>
                 <View style={{ flexDirection: 'column' }}>
                   {row.contentsDTO?.referencesDTO.map((reference, idx) => {
                     const resultValue = row.resultValue
@@ -90,19 +118,23 @@ export const FilePDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, tes
                     return (
                       <View key={idx} style={{ flexDirection: 'row' }}>
                         {isWithinRange ? (
-                          <Text style={styles.textCompare}>{resultValue}</Text>
+                          <Text
+                            style={[
+                              styles.textCompare
+                              // { borderRightWidth: 1, borderRightColor: '#111', marginRight: 0.4 }
+                            ]}
+                          >
+                            {resultValue}
+                          </Text>
                         ) : (
                           <Text style={styles.textCompare}>{''}</Text>
                         )}
 
-                        <Text style={styles.textCompare}>
-                          {isWithinRange ? '' : resultValue}
-                        </Text>
+                        <Text style={styles.textCompare}>{isWithinRange ? '' : resultValue}</Text>
                       </View>
                     )
                   })}
                 </View>
-                ;
               </View>
               <Text style={styles.unitCell}>
                 {row.contentsDTO?.units === null ? '' : row.contentsDTO?.units}
@@ -117,7 +149,7 @@ export const FilePDF: React.FC<PropsFilePDF> = ({ customerInfo, currentDate, tes
             </View>
           ))}
         </View>
-        <View fixed style={styles.footerContent}></View>
+        <View fixed style={{ bottom: 0, left: 0, right: 0, height: 150 }}></View>
       </Page>
     </Document>
   )
@@ -146,26 +178,35 @@ const styles = StyleSheet.create({
     width: 350,
     top: 120,
     left: 228,
-    borderBottomWidth: 1,
-    borderBottomColor: '#111'
+    border: 0.5,
+    borderBottomColor: '#111',
+    borderBottom: 'none'
   },
   textUserInfo: {
     color: '#002060',
     fontWeight: 'bold',
     fontSize: 11,
-    marginTop: 1,
-    marginBottom: 2
+    paddingVertical: 3,
+    paddingLeft: 5,
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#111',
+    height: 25
   },
   tableInfo: {
-    flex: 1,
-    marginHorizontal: 8
+    displayflex: 'table',
+    width: 'auto',
+    marginHorizontal: 8,
+    marginVertical: 15,
+    borderStyle: 'solid',
+    borderWidth: 1,
+    top: 15
   },
-  footerContent: {
-    height: 180
-  },
+
   headerRow: {
     flexDirection: 'row',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
+    borderStyle: 'solid',
+    borderBottom: 1
   },
   headerCell: {
     flex: 1,
@@ -173,15 +214,20 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     color: '#000',
-    fontSize: 10
+    fontSize: 10,
+    borderStyle: 'solid',
+    borderRightWidth: 1,
+    maxWidth: 141
   },
   resultHeaderCell: {
-    flex: 1.5, // Ajustar según sea necesario para alinear con el header
-    paddingBottom: 5,
+    flex: 2.2, // Ajustar según sea necesario para alinear con el header
+    // paddingBottom: 5,
     fontWeight: 'bold',
     textAlign: 'center',
     color: '#000',
-    fontSize: 10
+    fontSize: 10,
+    borderStyle: 'solid',
+    borderRight: 1
   },
   resultHeaderText: {
     textAlign: 'center',
@@ -192,9 +238,11 @@ const styles = StyleSheet.create({
     flex: 0.5,
     paddingBottom: 5,
     fontWeight: 'bold',
-    textAlign: 'right',
+    textAlign: 'center',
     color: '#000',
-    fontSize: 10
+    fontSize: 10,
+    borderStyle: 'solid',
+    borderRight: 1
   },
   referenceCell: {
     flex: 1.5,
@@ -205,17 +253,20 @@ const styles = StyleSheet.create({
     fontSize: 10
   },
   dataRow: {
-    flexDirection: 'row'
-    // borderBottomWidth: 1,
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
+    padding: 0,
+    margin: 0,
+    height: 35
     // borderBottomColor: '#111'
   },
   dataCell: {
-    flex: 1,
-    padding: 2,
-    textAlign: 'center',
-    color: '#333333',
-    fontSize: 10,
-    marginVertical: 2
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    padding: 0,
+    margin: 0,
+    height: 'auto'
   },
   dataCellExamName: {
     flex: 1,
@@ -224,11 +275,23 @@ const styles = StyleSheet.create({
     color: '#333333',
     fontSize: 10,
     marginLeft: 5,
-    marginVertical: 2
+    borderRightWidth: 1,
+    borderRightColor: '#111',
+    borderStyle: 'solid',
+    maxWidth: 140
   },
   textCompare: {
     flex: 1,
-    marginBottom: 0.4,
+    textAlign: 'center',
+    height: 35
+  },
+  // add new styles
+  textRow: {
+    flex: 1,
+    borderRightWidth: 1,
+    borderRightColor: '#111',
+    marginRight: 0.4,
+    fontSize: 8,
     textAlign: 'center'
   }
 })
